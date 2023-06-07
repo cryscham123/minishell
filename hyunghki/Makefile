@@ -1,0 +1,41 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
+#    Updated: 2023/06/07 09:44:11 by hyunghki         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME= minishell
+CFLAGS= -Wall -Werror -Wextra
+LIBS= -lreadline \
+	  -ltermcap
+INCLUDE= -Iincludes
+SRC_DIR= ./srcs/
+SRCS= $(SRC_DIR)main.c
+OBJS= $(SRCS:.c=.o)
+
+all: $(NAME)
+
+.PHONY: re clean fclean
+
+re:
+	make fclean
+	make all
+
+clean:
+	rm -f $(OBJS)
+
+fclean:
+	make clean
+	rm -f $(NAME)
+
+$(NAME): $(OBJS)
+	$(CC) -o $@ $^ $(LIBS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
