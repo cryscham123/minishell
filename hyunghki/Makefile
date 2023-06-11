@@ -6,17 +6,19 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/07 09:44:11 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/11 15:38:51 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
 CFLAGS= -Wall -Werror -Wextra
-LIBS= -lreadline \
-	  -ltermcap
+LIBS= -lreadline
 INCLUDE= -Iincludes
 SRC_DIR= ./srcs/
-SRCS= $(SRC_DIR)main.c
+SRCS= $(SRC_DIR)main.c \
+	  $(SRC_DIR)utils.c \
+	  $(SRC_DIR)split.c \
+	  $(SRC_DIR)token_produce.c
 OBJS= $(SRCS:.c=.o)
 
 all: $(NAME)
