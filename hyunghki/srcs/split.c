@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/11 15:36:09 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/11 15:47:11 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ static char	**ft_free_all(char **target, int n)
 		i++;
 	}
 	free(target);
-	return (NULL)
+	return (NULL);
 }
 
 static int	is_meta(char c, char *meta)
 {
-	static	is_quote;
+	static int	is_quote;
 
 	if (c == '\'')
 	{
@@ -66,7 +66,7 @@ static int	chk_word_cnt(char *s, char *meta)
 		i = 0;
 		while (s[i] && is_meta(s[i], meta) != 1)
 			i++;
-		if (s[i] && (!s[i + 1]) || is_meta(s[i + 1]) == 1)
+		if (s[i] && ((!s[i + 1]) || is_meta(s[i + 1], meta) == 1))
 			return (-1);
 		if (i > 0)
 			cnt++;
