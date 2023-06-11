@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/07 09:43:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/11 15:38:38 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,36 @@
 // int closedir(DIR *dirp)
 # include <string.h>
 // char *strerror(int errnum)
-# include <term.h>
-// int tgetent(char *bp, const char *name)
-// int tgetflag(char *id)
-// int tgetnum(char *id)
-// char *tgetstr(char *id, char **area)
-// char *tgoto(const char *cap, int col, int row)
-// int tputs(const char *str, int affcnt, int (*putc)(int))
+
+# define f_input 1
+# define f_output 2
+# define f_heredoc 3
+# define f_appand 4
+
+typedef struct s_file
+{
+	char			*file_name;
+	int				mode;
+	struct s_file	*nxt_file;
+}	t_file;
+
+typedef struct s_token
+{
+	char			**argv;
+	t_file			*redirection;
+	int				arg_size;
+	struct s_token	*nxt_token;
+}	t_token;
+
+typedef struct s_token_v
+{
+	t_token	*cur_token;
+	int		cur_token_len;
+}	t_token_v;
+
+char	**ft_split(char **s, char *meta);
+void	*ft_calloc(int size);
+void	ft_strncpy(char *dst, char *src, int n);
+int		ft_parse_data(t_token_v *tv, char *line);
 
 #endif
