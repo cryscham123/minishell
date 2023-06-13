@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/11 15:46:12 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:18:00 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,33 +14,26 @@
 
 int	main(int argc, char **argv, char **env)
 {
-	char		*line;
-	t_token_v	tv;
+	t_lst		*ev;
 
 	(void)argv;
-	(void)env;
 	if (argc != 1)
 	{
-		printf("argument error\n");
+		printf("Too Many Arguments.\n");
 		return (0);
 	}
-	while (1)
+	// signal handle
+	ev = NULL;
+	while (*env)
 	{
-		tv.cur_token = NULL;
-		tv.cur_token_len = 0;
-		line = readline("$ ");
-		if (line != NULL && *line)
+		if (lst_push(&ev, mk_lst(*env, 0, 0)) != 0)
 		{
-			add_history(line);
-			if (ft_parse_data(&tv, line) != 0)
-			{
-				printf("error occured...\n");
-				return (0);
-			}
-			//ft_exe(&tv, env);
+			printf("Memmory Allocation Failed...\n");
+			return (0);
 		}
-		free(line);
-		//ft_free_all(line, tv->cur_token);
+		env++;
 	}
+	while (1)
+		ft_parse(ev);
 	return (0);
 }

@@ -6,102 +6,133 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/11 15:47:11 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:03:36 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	**ft_free_all(char **target, int n)
+static int	ft_word_chk(char c, char *meta, int mode)
 {
-	int	i;
+	static int	quote_flag;
 
-	i = 0;
-	while (i < n)
+	if (mode == f_get)
+		return (quote_flag);
+	if (mode == f_reset)
 	{
-		free(target[i]);
-		i++;
+		quote_flag = 0;
+		return (1);
 	}
-	free(target);
-	return (NULL);
-}
-
-static int	is_meta(char c, char *meta)
-{
-	static int	is_quote;
-
-	if (c == '\'')
+	if (mode == f_word)
 	{
-		if (is_quote == 0)
-			is_quote = 1;
-		else if (is_quote == 1)
-			is_quote = 0;
+		if (c == '\'' && (quote_flag & f_dequote) == 0)
+			quote_flag ^= f_quote;
+		if (c == '\"' && (quote_flag & f_quote) == 0)
+			quote_flag ^= f_dequote;
+		if ((quote_flag & (f_quote + f_dequote)) != 0)
+			return (1);
 	}
-	else if (c == '\"')
-	{
-		if (is_quote == 0)
-			is_quote = 2;
-		else if (is_quote == 2)
-			is_quote = 0;
-	}
-	if (is_quote != 0)
-		return (2);
 	while (*meta)
 	{
 		if (c == *meta)
-			return (1);
+			return (0);
 		meta++;
 	}
-	return (0);
+	return (1);
 }
 
-static int	chk_word_cnt(char *s, char *meta)
+static int	dir_validate(char **s, int i, int *dir)
 {
-	int	cnt;
+	if ((*s)[i] == '|' && ((*dir) & f_pipe) == 0)
+		(*dir) |= f_pipe;
+	else if ((*s)[i] == '<' && ((*dir) & f_output) == 0)
+	{
+		if (((*dir) & f_input) == 0)
+			(*dir) |= f_input;
+		else if (((*dir) & f_heredoc) == 0 && (*s)[i - 1] == '<')
+			(*dir) |= f_heredoc;
+		else
+			return (-1);
+	}
+	else if ((*s)[i] == '>' && ((*dir) & f_input) == 0)
+	{
+		if (((*dir) & f_output) == 0)
+			(*dir) |= f_output;
+		else if (((*dir) & f_appand) == 0 && (*s)[i - 1] == '>')
+			(*dir) |= f_appand;
+		else
+			return (-1);
+	}
+	else if ((*s)[i] != ' ' && (*s)[i] != '\t')
+		return (-1);
+	return (1);
+}
+
+static int	ft_dir_chk(char **s, char *meta)
+{
 	int	i;
-	
-	cnt = 0;
+	int	dir;
+
+	i = 0;
+	dir = 0;
+	while ((*s)[i] && !ft_word_chk((*s)[i], meta, f_dir))
+	{
+		if (dir_validate(s, i, &dir) < 0)
+			return (-1);
+		i++;
+	}
+	if (dir != 0 && !(*s)[i])
+		return (-1);
+	(*s) += i;
+	return (dir);
+}
+
+static int	ft_split_push_back(void *target, char *s, int i, int dir_chk)
+{
+	char	*word;
+	t_token	*tmp;
+
+	if (i == 0)
+		return (dir_chk != 0);
+	word = ft_substr(s, i);
+	if (word == NULL)
+		return (1);
+	if (s[i] == '|' || dir_chk == f_pipe)
+		return (lst_push(target, mk_lst(word, 0, 0)));
+	tmp = target;
+	if ((dir_chk & f_input) != 0)
+	{
+		if ((dir_chk & f_heredoc) != 0)
+			return (lst_push(&tmp->redirection, mk_lst(word, 2, f_heredoc)));
+		return (lst_push(&tmp->redirection, mk_lst(word, 2, f_input)));
+	}
+	if ((dir_chk & f_output) != 0)
+	{
+		if ((dir_chk & f_appand) != 0)
+			return (lst_push(&tmp->redirection, mk_lst(word, 2, f_appand)));
+		return (lst_push(&tmp->redirection, mk_lst(word, 2, f_output)));
+	}
+	return (lst_push(&tmp->argv, mk_lst(word, 0, 0)));
+}
+
+int	ft_split(void *target, char *s, char *meta)
+{
+	int		dir_chk;
+	int		i;
+
 	while (*s)
 	{
 		i = 0;
-		while (s[i] && is_meta(s[i], meta) != 1)
+		dir_chk = ft_dir_chk(&s, meta);
+		if (dir_chk < 0)
+			return (ft_word_chk(0, meta, f_reset));
+		while (s[i] && ft_word_chk(s[i], meta, f_word))
 			i++;
-		if (s[i] && ((!s[i + 1]) || is_meta(s[i + 1], meta) == 1))
-			return (-1);
-		if (i > 0)
-			cnt++;
-		s += (i + (i == 0));
+		if (ft_split_push_back(target, s, i, dir_chk) != 0)
+			return (ft_word_chk(0, meta, f_reset));
+		s += i;
 	}
-	if (is_meta(*s, meta) == 2)
-		return (-1);
-	return (cnt);
-}
-
-char	**ft_split(char **s, char *meta)
-{
-	char	**target;
-	int		i;
-	int		j;
-	int		cnt;
-
-	cnt = chk_word_cnt(*s, meta);
-	if (cnt < 0)
-		return (NULL);
-	target = ft_calloc(sizeof(char *) * (cnt + 1));
-	j = 0;
-	while (target != NULL && j < cnt)
-	{
-		i = 0;
-		while ((*s)[i] && is_meta((*s)[i], meta) != 1)
-			i++;
-		if (i > 0)
-		{
-			target[j] = ft_calloc(i + 1);
-			if (target[j] == NULL)
-				return (ft_free_all(target, j));
-			ft_strncpy(target[j++], *s, i);
-		}
-		(*s) += (i + (i == 0));
-	}
-	return (target);
+	if (ft_word_chk(0, meta, f_get) != 0)
+		return (ft_word_chk(0, meta, f_reset));
+	return (0);
 }
