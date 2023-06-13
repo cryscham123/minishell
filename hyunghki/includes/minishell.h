@@ -6,14 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/11 15:45:42 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 13:51:13 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// ioctl <- ?
 # include <stdio.h>
 // int printf(const char *format, ...)
 // void perror(const char *s)
@@ -33,7 +32,6 @@
 // pid_t wait3(int *statloc, int options, struct rusage *rusage)
 // pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage)
 // pid_t waitpid(pid_t pid, int *status, int options);
-// char *getenv(const char *name);
 # include <unistd.h>
 // int access(const char *path_name, int mode)
 // ssize_t read(int fd, void *buf, size_t nbyte)
@@ -66,38 +64,44 @@
 // DIR *opendir(const char *name)
 // struct dirent *readdir(DIR *dirp)
 // int closedir(DIR *dirp)
-# include <string.h>
-// char *strerror(int errnum)
 
-# define f_input 1
-# define f_output 2
-# define f_heredoc 3
-# define f_appand 4
+# define f_get 0
+# define f_reset 1
+# define f_dir 2
+# define f_word 3
+# define f_quote 1
+# define f_dequote 2
+# define f_pipe 4
+# define f_input 8
+# define f_heredoc 16
+# define f_output 32
+# define f_appand 64
+
+typedef struct s_lst
+{
+	void			*data;
+	int				size;
+	struct s_lst	*nxt;
+}	t_lst;
 
 typedef struct s_file
 {
-	char			*file_name;
-	int				mode;
-	struct s_file	*nxt_file;
+	char	*file_name;
+	int		mode;
 }	t_file;
 
 typedef struct s_token
 {
-	char			**argv;
-	t_file			*redirection;
-	int				arg_size;
-	struct s_token	*nxt_token;
+	t_lst	*argv;
+	t_lst	*redirection;
 }	t_token;
 
-typedef struct s_token_v
-{
-	t_token	*cur_token;
-	int		cur_token_len;
-}	t_token_v;
-
-char	**ft_split(char **s, char *meta);
+int		ft_split(void *target, char *s, char *meta);
+char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
-void	ft_strncpy(char *dst, char *src, int n);
-int		ft_parse_data(t_token_v *tv, char *line);
+void	ft_parse(t_lst *ev);
+t_lst	*mk_lst(void *data, int data_type, int file_type);
+int		lst_push(t_lst **lst, t_lst *data);
+void	*ft_lst_free(t_lst *lst, int data_type);
 
 #endif

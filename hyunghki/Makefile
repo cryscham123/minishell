@@ -6,7 +6,7 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/11 15:38:51 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/13 13:45:23 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,8 @@ SRC_DIR= ./srcs/
 SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)utils.c \
 	  $(SRC_DIR)split.c \
-	  $(SRC_DIR)token_produce.c
+	  $(SRC_DIR)parse.c \
+	  $(SRC_DIR)lst_utils.c
 OBJS= $(SRCS:.c=.o)
 
 all: $(NAME)
