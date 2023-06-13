@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 13:51:13 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:10:31 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,10 @@ typedef struct s_token
 	t_lst	*redirection;
 }	t_token;
 
-int		ft_split(void *target, char *s, char *meta);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
 void	ft_parse(t_lst *ev);
+int		ft_split(void *target, char *s, char *meta);
 t_lst	*mk_lst(void *data, int data_type, int file_type);
 int		lst_push(t_lst **lst, t_lst *data);
 void	*ft_lst_free(t_lst *lst, int data_type);

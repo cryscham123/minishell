@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 13:31:34 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:03:36 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ static int	ft_split_push_back(void *target, char *s, int i, int dir_chk)
 	char	*word;
 	t_token	*tmp;
 
-	if (dir_chk != 0 && i == 0)
-		return (1);
+	if (i == 0)
+		return (dir_chk != 0);
 	word = ft_substr(s, i);
 	if (word == NULL)
 		return (1);

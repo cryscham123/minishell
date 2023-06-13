@@ -6,13 +6,18 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 10:23:00 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 13:54:37 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/13 14:17:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static t_token	*mk_token(t_lst *target)
+static int	ft_expansion(t_lst *lst, t_lst *ev)
+{
+
+}
+
+static t_token	*mk_token(t_lst *target, t_lst *ev)
 {
 	t_token	*token;
 
@@ -24,22 +29,19 @@ static t_token	*mk_token(t_lst *target)
 		ft_lst_free(token->argv, 0);
 		return (ft_lst_free(token->redirection, 2));
 	}
-	if (token->argv == NULL && token->redirection == NULL)
+	if (token->argv == NULL && token->redirection == NULL && target->size != 1)
 	{
 		ft_lst_free(token->argv, 0);
 		return (ft_lst_free(token->redirection, 2));
 	}
-	/**
 	if (ft_expansion(token->argv, ev) == 0 \
 		&& ft_expansion(token->redirection, ev) == 0)
 		return (token);
 	ft_lst_free(token->argv, 0);
 	return (ft_lst_free(token->redirection, 2));
-	**/
-	return (token);
 }
 
-static t_lst	*ft_produce_token(char *line)
+static t_lst	*ft_produce_token(char *line, t_lst *ev)
 {
 	t_token	*token;
 	t_lst	*line_lst;
@@ -53,7 +55,7 @@ static t_lst	*ft_produce_token(char *line)
 	tmp = line_lst;
 	while (tmp != NULL)
 	{
-		token = mk_token(tmp);
+		token = mk_token(tmp, ev);
 		if (token == NULL || lst_push(&target, mk_lst(token, 1, 0)) != 0)
 		{
 			ft_lst_free(target, 1);
@@ -65,7 +67,7 @@ static t_lst	*ft_produce_token(char *line)
 	return (target);
 }
 
-void	ft_test(t_lst *tv, t_lst *ev)
+static void	ft_test(t_lst *tv, t_lst *ev)
 {
 	(void)ev;
 	while (tv != NULL)
@@ -99,12 +101,13 @@ void	ft_parse(t_lst *ev)
 	if (line != NULL && *line)
 	{
 		add_history(line);
-		tv = ft_produce_token(line);
+		tv = ft_produce_token(line, ev);
 		if (tv == NULL)
-			printf("Error ocurred\n");
+			printf("Error ocurred...\n");
 		else
 		{
-			ft_test(tv, ev);
+			ft_text(tv, ev);
+			// ft_exe(tv, ev);
 			ft_lst_free(tv, 1);
 		}
 	}
