@@ -6,13 +6,90 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 14:03:36 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:24:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_word_chk(char c, char *meta, int mode)
+static int	meta_validate(char **s, int i, int *data_type)
+{
+	if ((*s)[i] == '|' && ((*data_type) & f_pipe) == 0)
+		(*data_type) |= f_pipe;
+	else if ((*s)[i] == '<' && ((*data_type) & f_output) == 0)
+	{
+		if (((*data_type) & f_input) == 0)
+			(*data_type) |= f_input;
+		else if (((*data_type) & f_heredoc) == 0 && (*s)[i - 1] == '<')
+			(*data_type) |= f_heredoc;
+		else
+			return (-1);
+	}
+	else if ((*s)[i] == '>' && ((*data_type) & f_input) == 0)
+	{
+		if (((*data_type) & f_output) == 0)
+			(*data_type) |= f_output;
+		else if (((*data_type) & f_appand) == 0 && (*s)[i - 1] == '>')
+			(*data_type) |= f_appand;
+		else
+			return (-1);
+	}
+	else if ((*s)[i] != ' ' && (*s)[i] != '\t')
+		return (-1);
+	return (1);
+}
+
+static int	ft_meta_chk(char **s, char *meta)
+{
+	int	i;
+	int	data_type;
+
+	i = 0;
+	data_type = 0;
+	while ((*s)[i] && !ft_word_chk((*s)[i], meta, f_chk))
+	{
+		if (meta_validate(s, i, &data_type) < 0)
+		{
+			ft_word_chk(0, meta, f_reset);
+			return (-1);
+		}
+		i++;
+	}
+	if (data_type != 0 && !(*s)[i])
+	{
+		ft_word_chk(0, meta, f_reset);
+		return (-1);
+	}
+	(*s) += i;
+	return (data_type);
+}
+
+static int	ft_inject_data(void *lst, char *s, int i, int d)
+{
+	char	*word;
+	int		flag;
+
+	if (i == 0 && d != 0)
+		return (ft_error(f_error_syntax));
+	if (i == 0)
+		return (0);
+	word = ft_substr(s, i);
+	if (word == NULL)
+		return (ft_error(f_error_mem));
+	if (d == f_pipe)
+		flag = lst_push(lst, mk_lst(word, 0));
+	else if ((d & f_input) != 0 || (d & f_output) != 0)
+		flag = lst_push(&((t_token *)lst)->redirection, mk_file_lst(word, d));
+	else
+		flag = lst_push(&((t_token *)lst)->argv, mk_lst(mk_str_lst(word), 1));
+	if (s[i] != '|' && d != f_pipe)
+		free(word);
+	if (flag != 0)
+		free(word);
+	return (flag);
+}
+
+int	ft_word_chk(char c, char *meta, int mode)
 {
 	static int	quote_flag;
 
@@ -30,7 +107,7 @@ static int	ft_word_chk(char c, char *meta, int mode)
 		if (c == '\"' && (quote_flag & f_quote) == 0)
 			quote_flag ^= f_dequote;
 		if ((quote_flag & (f_quote + f_dequote)) != 0)
-			return (1);
+			return (quote_flag);
 	}
 	while (*meta)
 	{
@@ -41,98 +118,31 @@ static int	ft_word_chk(char c, char *meta, int mode)
 	return (1);
 }
 
-static int	dir_validate(char **s, int i, int *dir)
+int	ft_split(void *target, char *s, char *meta, int flag)
 {
-	if ((*s)[i] == '|' && ((*dir) & f_pipe) == 0)
-		(*dir) |= f_pipe;
-	else if ((*s)[i] == '<' && ((*dir) & f_output) == 0)
-	{
-		if (((*dir) & f_input) == 0)
-			(*dir) |= f_input;
-		else if (((*dir) & f_heredoc) == 0 && (*s)[i - 1] == '<')
-			(*dir) |= f_heredoc;
-		else
-			return (-1);
-	}
-	else if ((*s)[i] == '>' && ((*dir) & f_input) == 0)
-	{
-		if (((*dir) & f_output) == 0)
-			(*dir) |= f_output;
-		else if (((*dir) & f_appand) == 0 && (*s)[i - 1] == '>')
-			(*dir) |= f_appand;
-		else
-			return (-1);
-	}
-	else if ((*s)[i] != ' ' && (*s)[i] != '\t')
-		return (-1);
-	return (1);
-}
-
-static int	ft_dir_chk(char **s, char *meta)
-{
-	int	i;
-	int	dir;
-
-	i = 0;
-	dir = 0;
-	while ((*s)[i] && !ft_word_chk((*s)[i], meta, f_dir))
-	{
-		if (dir_validate(s, i, &dir) < 0)
-			return (-1);
-		i++;
-	}
-	if (dir != 0 && !(*s)[i])
-		return (-1);
-	(*s) += i;
-	return (dir);
-}
-
-static int	ft_split_push_back(void *target, char *s, int i, int dir_chk)
-{
-	char	*word;
-	t_token	*tmp;
-
-	if (i == 0)
-		return (dir_chk != 0);
-	word = ft_substr(s, i);
-	if (word == NULL)
-		return (1);
-	if (s[i] == '|' || dir_chk == f_pipe)
-		return (lst_push(target, mk_lst(word, 0, 0)));
-	tmp = target;
-	if ((dir_chk & f_input) != 0)
-	{
-		if ((dir_chk & f_heredoc) != 0)
-			return (lst_push(&tmp->redirection, mk_lst(word, 2, f_heredoc)));
-		return (lst_push(&tmp->redirection, mk_lst(word, 2, f_input)));
-	}
-	if ((dir_chk & f_output) != 0)
-	{
-		if ((dir_chk & f_appand) != 0)
-			return (lst_push(&tmp->redirection, mk_lst(word, 2, f_appand)));
-		return (lst_push(&tmp->redirection, mk_lst(word, 2, f_output)));
-	}
-	return (lst_push(&tmp->argv, mk_lst(word, 0, 0)));
-}
-
-int	ft_split(void *target, char *s, char *meta)
-{
-	int		dir_chk;
+	int		data_type;
 	int		i;
 
+	data_type = f_pipe;
 	while (*s)
 	{
 		i = 0;
-		dir_chk = ft_dir_chk(&s, meta);
-		if (dir_chk < 0)
-			return (ft_word_chk(0, meta, f_reset));
+		if (flag == 0)
+			data_type = ft_meta_chk(&s, meta);
+		else
+			flag = 0;
+		if (data_type < 0)
+			return (ft_error(f_error_syntax));
 		while (s[i] && ft_word_chk(s[i], meta, f_word))
 			i++;
-		if (ft_split_push_back(target, s, i, dir_chk) != 0)
+		if (ft_inject_data(target, s, i, data_type) != 0)
 			return (ft_word_chk(0, meta, f_reset));
 		s += i;
 	}
 	if (ft_word_chk(0, meta, f_get) != 0)
-		return (ft_word_chk(0, meta, f_reset));
+	{
+		ft_word_chk(0, meta, f_reset);
+		return (ft_error(f_error_syntax));
+	}
 	return (0);
 }
