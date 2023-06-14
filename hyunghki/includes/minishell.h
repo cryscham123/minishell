@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 14:10:31 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:23:27 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,18 @@
 // struct dirent *readdir(DIR *dirp)
 // int closedir(DIR *dirp)
 
+# define f_error_mem "Memmory Allocation Failed..."
+# define f_error_syntax "Unexpected Token..."
+# define f_error_arg "Too Many Arguments..."
 # define f_get 0
 # define f_reset 1
-# define f_dir 2
+# define f_chk 2
 # define f_word 3
+# define f_data_char 0
+# define f_data_string 1
+# define f_data_file 2
+# define f_data_hash 3
+# define f_data_token 4
 # define f_quote 1
 # define f_dequote 2
 # define f_pipe 4
@@ -84,9 +92,15 @@ typedef struct s_lst
 	struct s_lst	*nxt;
 }	t_lst;
 
+typedef struct s_hash
+{
+	char	*key;
+	t_lst	*value;
+}	t_hash;
+
 typedef struct s_file
 {
-	char	*file_name;
+	t_lst	*file_name;
 	int		mode;
 }	t_file;
 
@@ -98,10 +112,21 @@ typedef struct s_token
 
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
-void	ft_parse(t_lst *ev);
-int		ft_split(void *target, char *s, char *meta);
-t_lst	*mk_lst(void *data, int data_type, int file_type);
+int		ft_strcmp(char *s1, char *s2);
+int		ft_word_chk(char c, char *meta, int mode);
+int		ft_split(void *target, char *s, char *meta, int flag);
+int		ft_error(const char *msg);
+
+// data_structure
+t_lst	*mk_str_lst(char *s);
+t_lst	*mk_hash_lst(char *s);
+t_lst	*mk_token_lst(char *line, t_lst *ev);
+t_lst	*mk_file_lst(char *s, int dir_type);
+
+// lst_utils
+t_lst	*mk_lst(void *data, int is_argv);
+void	*ft_node_free(void *data, int data_info);
+void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
-void	*ft_lst_free(t_lst *lst, int data_type);
 
 #endif

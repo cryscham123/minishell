@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:28:28 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/13 11:59:32 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/14 18:15:56 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,20 @@ char	*ft_substr(char *src, int n)
 	return (target);
 }
 
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (s1[i] - s2[i]);
+}
+
 void	*ft_calloc(int size)
 {
 	int				i;
@@ -44,4 +58,10 @@ void	*ft_calloc(int size)
 		i++;
 	}
 	return (target);
+}
+
+int	ft_error(const char *msg)
+{
+	printf("Error: %s\n", msg);
+	return (1);
 }
