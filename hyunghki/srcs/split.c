@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 14:38:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/14 18:24:14 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:41:56 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static int	meta_validate(char **s, int i, int *data_type)
 	{
 		if (((*data_type) & f_output) == 0)
 			(*data_type) |= f_output;
-		else if (((*data_type) & f_appand) == 0 && (*s)[i - 1] == '>')
-			(*data_type) |= f_appand;
+		else if (((*data_type) & f_append) == 0 && (*s)[i - 1] == '>')
+			(*data_type) |= f_append;
 		else
 			return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/14 18:23:27 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/16 19:13:50 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,13 @@
 # define MINISHELL_H
 
 # include <stdio.h>
-// int printf(const char *format, ...)
-// void perror(const char *s)
 # include <readline/readline.h>
-// char *readline(const char *prompt)
 // int rl_on_new_line(void)
 // void rl_redisplay(void)
 // void rl_replace_line(const char *, int)
 # include <readline/history.h>
-// void add_history(char *line)
 // void rl_clear_history(void)
 # include <stdlib.h>
-// void *malloc(size_t size)
-// void free(void *ptr)
-// void exit(int status)
 // pid_t wait(int *status)
 // pid_t wait3(int *statloc, int options, struct rusage *rusage)
 // pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage)
@@ -52,8 +45,6 @@
 // int tcgetattr(int fd, struct termios *termios_p)
 // int tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
 # include <fcntl.h>
-// int open(const char *path_name, int o_flag)
-// int close(int fd)
 # include <signal.h>
 // int kill(pid_t pid, int sig)
 // sighandler_t signal(int signum, sighandler_t handler)
@@ -67,7 +58,9 @@
 
 # define f_error_mem "Memmory Allocation Failed..."
 # define f_error_syntax "Unexpected Token..."
+# define f_error_amb "Ambiguos Arguments..."
 # define f_error_arg "Too Many Arguments..."
+# define f_error_file "Failed To Access File Or Directory..."
 # define f_get 0
 # define f_reset 1
 # define f_chk 2
@@ -83,7 +76,7 @@
 # define f_input 8
 # define f_heredoc 16
 # define f_output 32
-# define f_appand 64
+# define f_append 64
 
 typedef struct s_lst
 {
@@ -108,25 +101,31 @@ typedef struct s_token
 {
 	t_lst	*argv;
 	t_lst	*redirection;
+	int		fd[2];
 }	t_token;
 
+t_lst	*ft_itoa(int a);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_word_chk(char c, char *meta, int mode);
 int		ft_split(void *target, char *s, char *meta, int flag);
 int		ft_error(const char *msg);
-
-// data_structure
+int		ft_expansion(t_lst *lst, int is_redir, t_lst *ev);
+int		ft_trans_ev(t_lst **cur, t_lst **prev, t_lst **lst, t_lst *ev);
+int		ft_resplit(t_token *token, t_lst *lst, int n);
+int		ft_redirection(t_token *token, t_lst *redir, t_lst *ev);
 t_lst	*mk_str_lst(char *s);
 t_lst	*mk_hash_lst(char *s);
 t_lst	*mk_token_lst(char *line, t_lst *ev);
 t_lst	*mk_file_lst(char *s, int dir_type);
-
-// lst_utils
+t_lst	*ft_hash_find(t_lst *hash, char *to_find);
+int		dup_str_lst(t_lst **lst, t_lst *to_dup);
+char	*ft_c_str(t_lst *str, int n, int del_quote);
 t_lst	*mk_lst(void *data, int is_argv);
 void	*ft_node_free(void *data, int data_info);
 void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
+t_lst	*ft_lst_back(t_lst *lst);
 
 #endif

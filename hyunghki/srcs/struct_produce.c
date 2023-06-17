@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   data_structure.c                                   :+:      :+:    :+:   */
+/*   struct_produce.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/14 09:19:30 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/14 18:29:33 by hyunghki         ###   ########.fr       */
+/*   Created: 2023/06/15 14:44:45 by hyunghki          #+#    #+#             */
+/*   Updated: 2023/06/16 17:27:42 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 {
 	t_token	*token;
 
-	(void)ev;
 	token = ft_calloc(sizeof(t_token));
 	if (token == NULL)
 		return (NULL);
@@ -27,7 +26,14 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 		ft_error(f_error_syntax);
 		return (ft_node_free(token, f_data_token));
 	}
-	// word expansion except heredoc
+	if (ft_expansion(token->argv, 0, ev) != 0)
+		return (ft_node_free(token, f_data_token));
+	if (ft_expansion(token->redirection, 1, ev) != 0)
+		return (ft_node_free(token, f_data_token));
+	if (token->argv != NULL \
+			&& ft_resplit(token, token->argv, token->argv->size) != 0)
+		return (ft_node_free(token, f_data_token));
+	token->fd[1] = 1;
 	return (token);
 }
 
@@ -73,7 +79,7 @@ t_lst	*mk_file_lst(char *s, int dir_type)
 		return (ft_node_free(f, f_data_file));
 	if ((dir_type & f_heredoc) != 0)
 		dir_type &= ~f_input;
-	if ((dir_type & f_appand) != 0)
+	if ((dir_type & f_append) != 0)
 		dir_type &= ~f_output;
 	f->mode = dir_type;
 	target = mk_lst(f, 0);
@@ -90,8 +96,6 @@ t_lst	*mk_str_lst(char *s)
 	target = NULL;
 	while (*s)
 	{
-		if (*s == '\n')
-			break ;
 		data = ft_substr(s, 1);
 		if (data == NULL || lst_push(&target, mk_lst(data, 0)) != 0)
 		{
@@ -119,9 +123,12 @@ t_lst	*mk_hash_lst(char *s)
 	if (target->key == NULL)
 		return (ft_node_free(target, f_data_hash));
 	s += (i + 1);
-	target->value = mk_str_lst(s);
-	if (target->value == NULL)
-		return (ft_node_free(target, f_data_hash));
+	if (*s != '\0')
+	{
+		target->value = mk_str_lst(s);
+		if (target->value == NULL)
+			return (ft_node_free(target, f_data_hash));
+	}
 	target_lst = mk_lst(target, 0);
 	if (target_lst == NULL)
 		return (ft_node_free(target, f_data_hash));

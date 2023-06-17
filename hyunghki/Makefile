@@ -6,7 +6,7 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/14 13:34:57 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/16 18:50:42 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,8 +18,11 @@ SRC_DIR= ./srcs/
 SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)utils.c \
 	  $(SRC_DIR)split.c \
+	  $(SRC_DIR)expansion.c \
 	  $(SRC_DIR)lst_utils.c \
-	  $(SRC_DIR)data_structure.c
+	  $(SRC_DIR)struct_produce.c \
+	  $(SRC_DIR)redirection.c \
+	  $(SRC_DIR)struct_utils.c
 OBJS= $(SRCS:.c=.o)
 
 all: $(NAME)

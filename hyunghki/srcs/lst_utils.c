@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:56:01 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/14 18:24:50 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/16 17:26:21 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,19 @@ t_lst	*mk_lst(void *data, int is_argv)
 	}
 	target->data = data;
 	return (target);
+}
+
+t_lst	*ft_lst_back(t_lst *lst)
+{
+	t_lst	*prev;
+
+	prev = lst;
+	while (lst != NULL)
+	{
+		prev = lst;
+		lst = lst->nxt;
+	}
+	return (prev);
 }
 
 int	lst_push(t_lst **lst, t_lst *data)
