@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 12:32:51 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:11:47 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,14 @@ static void	ft_exe(t_lst *tv, t_lst *ev)
 		data = tv->data;
 		if (ft_redirection(data, data->redirection, ev) != 0)
 		{
-			if (data->fd[0] != 0)
-				close(data->fd[0]);
-			if (data->fd[1] != 1)
-				close(data->fd[0]);
-			return ;
+			tv = tv->nxt;
+			continue ;
 		}
-		/**
-		if (ft_cmd(tv, ev) != 0)
-		{
-			unlink("heredoc.txt");
+		dup2(data->fd[0], 0);
+		dup2(data->fd[1], 1);
+		if (data->argv == NULL)
 			return ;
-		}
-		**/
+		//g_status = ft_cmd(data->argv, ev, (tv->size == 1));
 		tv = tv->nxt;
 	}
 }
