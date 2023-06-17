@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 14:44:45 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/16 17:27:42 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:13:21 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 	token = ft_calloc(sizeof(t_token));
 	if (token == NULL)
 		return (NULL);
+	token->fd[1] = 1;
 	if (ft_split(token, target->data, " \t><", 0) != 0)
 		return (ft_node_free(token, f_data_token));
 	if (token->argv == NULL && token->redirection == NULL && target->size != 1)
@@ -33,7 +34,6 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 	if (token->argv != NULL \
 			&& ft_resplit(token, token->argv, token->argv->size) != 0)
 		return (ft_node_free(token, f_data_token));
-	token->fd[1] = 1;
 	return (token);
 }
 

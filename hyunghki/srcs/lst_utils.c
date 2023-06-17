@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:56:01 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/16 17:26:21 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:11:24 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,16 @@ void	*ft_node_free(void *data, int data_info)
 		return (ft_lst_free(data, f_data_char, NULL));
 	if (data_info == f_data_token)
 	{
+		ft_close(((t_token *)data)->fd);
 		ft_lst_free(((t_token *)data)->argv, f_data_string, NULL);
 		ft_lst_free(((t_token *)data)->redirection, f_data_file, NULL);
 	}
 	else if (data_info == f_data_file)
+	{
+		if (((t_file *)data)->mode == f_heredoc)
+			unlink(ft_c_str(((t_file *)data)->file_name, -1, 0));
 		ft_lst_free(((t_file *)data)->file_name, f_data_char, NULL);
+	}
 	else if (data_info == f_data_hash)
 	{
 		free(((t_hash *)data)->key);

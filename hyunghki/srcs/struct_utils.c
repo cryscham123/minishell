@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 13:53:06 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:48:23 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ char	*ft_c_str(t_lst *str, int n, int del_quote)
 	target = ft_calloc(n + 1);
 	if (target == NULL)
 		return (NULL);
-	while (i < n)
+	while (str != NULL && i < n)
 	{
 		c = *(char *)str->data;
 		if (!(del_quote && (c == '\"' || c == '\'')))

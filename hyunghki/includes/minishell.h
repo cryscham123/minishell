@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/16 19:13:50 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:59:45 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,5 +127,7 @@ void	*ft_node_free(void *data, int data_info);
 void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
+int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
+void	ft_close(int *fd);
 
 #endif
