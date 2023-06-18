@@ -6,11 +6,29 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 12:37:08 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:47:05 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	ft_chk_validate(char *s, int cmd)
+{
+	int	i;
+
+	i = 0;
+	while (s[i] && ft_word_chk(s[i], "=", f_chk) != 0)
+	{
+		if (!(i != 0 && s[i] >= '0' && s[i] <= '9') \
+			&& !(s[i] >= 'a' && s[i] <= 'z') \
+			&& !(s[i] >= 'A' && s[i] <= 'Z') && s[i] != '_')
+			return (-1);
+		i++;
+	}
+	if (i == 0 || (cmd == 1 && s[i] == '='))
+		return (-1);
+	return (i);
+}
 
 static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 {
@@ -18,10 +36,10 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 	char	tmp;
 	t_lst	*prev;
 
-	i = 0;
-	while (s[i] && ft_word_chk(s[i], "$=", f_chk) != 0)
-		i++;
-	if ((cmd == 0 && i == 0) || (cmd == 1 && s[i] == '=') || s[i] == '$')
+	if (*s >= '0' && *s <= '9')
+		return (ft_error(f_error_export));
+	i = ft_chk_validate(s, cmd);
+	if (i < 0)
 		return (ft_error(f_error_export));
 	tmp = s[i];
 	s[i] = '\0';
@@ -44,6 +62,8 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 {
 	char	*tmp;
 
+	if (argv == NULL)
+		return (ft_env(ev));
 	while (argv != NULL)
 	{
 		tmp = ft_c_str(argv->data, -1, 1);
@@ -93,33 +113,5 @@ int	ft_env(t_lst *ev)
 		printf("\n");
 		ev = ev->nxt;
 	}
-	return (0);
-}
-
-int ft_echo(t_lst *argv, char *tmp, int flag)
-{
-	if (argv != NULL)
-	{
-		tmp = ft_c_str(argv->data, -1, 1);
-		if (tmp == NULL)
-			return (ft_error(f_error_mem));
-		flag = ft_strcmp(tmp, "-n");
-		free(tmp);
-	}
-	if (flag == 0)
-		argv = argv->nxt;
-	while (argv != NULL)
-	{
-		tmp = ft_c_str(argv->data, -1, 1);
-		if (tmp == NULL)
-			return (ft_error(f_error_mem));
-		printf("%s", tmp);
-		free(tmp);
-		if (argv->nxt != NULL)
-			printf(" ");
-		argv = argv->nxt;
-	}
-	if (flag)
-		printf("\n");
 	return (0);
 }

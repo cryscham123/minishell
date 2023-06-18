@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 13:52:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 13:55:31 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	g_status;
 
-static void	*ft_parse(t_lst *ev)
+static void	*ft_parse(t_lst *ev, char **env)
 {
 	char	*line;
 	t_lst	*tv;
@@ -30,7 +30,7 @@ static void	*ft_parse(t_lst *ev)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev);
+		g_status = ft_exe(tv, ev, env);
 		ft_lst_free(tv, f_data_token, NULL);
 	}
 	free(line);
@@ -65,6 +65,6 @@ int	main(int argc, char **argv, char **env)
 	if (ev == NULL)
 		return (1);
 	while (1)
-		ft_parse(ev);
+		ft_parse(ev, env);
 	return (0);
 }

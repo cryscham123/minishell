@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 12:50:17 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:29:25 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,31 +63,60 @@ int	ft_pwd(t_lst **buf)
 	return (0);
 }
 
-int	ft_exit(t_lst *argv)
+int	ft_exit(t_lst *argv, int i)
 {
 	char	*tmp;
-	int		i;
 	int		num;
 
-	if (argv->nxt->nxt != NULL)
-		return (ft_error(f_error_arg));
-	tmp = ft_c_str(((t_lst *)argv->nxt)->data, -1, 1);
-	if (tmp == NULL)
-		return (ft_error(f_error_mem));
 	num = 0;
-	i = 0;
-	while (tmp[i])
+	if (argv->nxt != NULL)
 	{
-		if (!(tmp[i] >= '0' && tmp[i] <= '9'))
+		if (argv->nxt->nxt != NULL)
+			return (ft_error(f_error_arg));
+		tmp = ft_c_str(((t_lst *)argv->nxt)->data, -1, 1);
+		if (tmp == NULL)
+			return (ft_error(f_error_mem));
+		while (tmp[i])
 		{
-			free(tmp);
-			return (ft_error(f_error_exit));
+			if (!(tmp[i] >= '0' && tmp[i] <= '9'))
+			{
+				free(tmp);
+				return (ft_error(f_error_exit));
+			}
+			num = num * 10 + tmp[i++] - '0';
 		}
-		num = num * 10 + tmp[i++] - '0';
+		free(tmp);
 	}
-	free(tmp);
-	printf("exit %d\n", num);
+	printf("exit");
 	exit(num);
+}
+
+int ft_echo(t_lst *argv, char *tmp, int flag)
+{
+	if (argv != NULL)
+	{
+		tmp = ft_c_str(argv->data, -1, 1);
+		if (tmp == NULL)
+			return (ft_error(f_error_mem));
+		flag = ft_strcmp(tmp, "-n");
+		free(tmp);
+	}
+	if (flag == 0)
+		argv = argv->nxt;
+	while (argv != NULL)
+	{
+		tmp = ft_c_str(argv->data, -1, 1);
+		if (tmp == NULL)
+			return (ft_error(f_error_mem));
+		printf("%s", tmp);
+		free(tmp);
+		if (argv->nxt != NULL)
+			printf(" ");
+		argv = argv->nxt;
+	}
+	if (flag)
+		printf("\n");
+	return (0);
 }
 
 int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
@@ -110,6 +139,6 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	if (ft_strcmp(cmd, "env") == 0)
 		return (ft_env((ev->nxt)));
 	if (ft_strcmp(cmd, "exit") == 0)
-		return (ft_exit((argv)));
+		return (ft_exit(argv, 0));
 	return (2);
 }

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 12:06:24 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:28:11 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ static int	ft_open(t_token *token, char *s, int mode, t_lst *ev)
 	if (mode == f_input || mode == f_heredoc)
 		fd = open(s, O_RDONLY);
 	else if (mode == f_output)
-		fd = open(s, O_CREAT | O_RDWR, 0644);
+		fd = open(s, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
-		fd = open(s, O_CREAT | O_APPEND, 0644);
+		fd = open(s, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (fd == -1)
 	{
 		free(s);
