@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 14:24:26 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:21:06 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ typedef struct s_token
 }	t_token;
 
 t_lst	*ft_itoa(int a);
+char	**ft_av_free(char **target);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
 int		ft_strcmp(char *s1, char *s2);
@@ -124,7 +125,8 @@ t_lst	*mk_token_lst(char *line, t_lst *ev);
 t_lst	*mk_file_lst(char *s, int dir_type);
 t_lst	*ft_hash_find(t_lst *hash, char *to_find);
 int		dup_str_lst(t_lst **lst, t_lst *to_dup);
-char	*ft_c_str(t_lst *str, int n, int del_quote);
+int		ft_str_size(t_lst *str);
+char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote);
 t_lst	*mk_lst(void *data, int is_argv);
 void	*ft_node_free(void *data, int data_info);
 void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);

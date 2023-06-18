@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:56:01 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:11:24 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:30:27 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	*ft_node_free(void *data, int data_info)
 	else if (data_info == f_data_file)
 	{
 		if (((t_file *)data)->mode == f_heredoc)
-			unlink(ft_c_str(((t_file *)data)->file_name, -1, 0));
+			unlink(ft_c_str(((t_file *)data)->file_name, NULL, -1, 0));
 		ft_lst_free(((t_file *)data)->file_name, f_data_char, NULL);
 	}
 	else if (data_info == f_data_hash)

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 14:47:05 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:35:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ static int	ft_chk_validate(char *s, int cmd)
 		i++;
 	}
 	if (i == 0 || (cmd == 1 && s[i] == '='))
+	{
+		ft_error(f_error_export);
+		return (-1);
+	}
+	if (cmd == 0 && s[i] != '=')
 		return (-1);
 	return (i);
 }
@@ -40,7 +45,7 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		return (ft_error(f_error_export));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
-		return (ft_error(f_error_export));
+		return (1);
 	tmp = s[i];
 	s[i] = '\0';
 	while (ev != NULL)
@@ -66,7 +71,7 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 		return (ft_env(ev));
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(f_error_mem));
 		flag = ft_chk_key(tmp, ev, 0);
@@ -87,7 +92,7 @@ int	ft_unset(t_lst	*argv, t_lst *ev, int flag)
 
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(f_error_mem));
 		flag = ft_chk_key(tmp, ev, 1);

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 14:29:25 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:31:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_cd(t_lst *argv, t_lst *ev)
 	char	*tmp;
 	t_lst	*pwd;
 
-	tmp = ft_c_str(argv->data, -1, 1);
+	tmp = ft_c_str(argv->data, NULL, -1, 1);
 	if (tmp == NULL)
 		return (ft_error(f_error_mem));
 	if (chdir(tmp) != 0)
@@ -73,7 +73,7 @@ int	ft_exit(t_lst *argv, int i)
 	{
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(f_error_arg));
-		tmp = ft_c_str(((t_lst *)argv->nxt)->data, -1, 1);
+		tmp = ft_c_str(((t_lst *)argv->nxt)->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(f_error_mem));
 		while (tmp[i])
@@ -87,15 +87,15 @@ int	ft_exit(t_lst *argv, int i)
 		}
 		free(tmp);
 	}
-	printf("exit");
+	printf("exit\n");
 	exit(num);
 }
 
-int ft_echo(t_lst *argv, char *tmp, int flag)
+int	ft_echo(t_lst *argv, char *tmp, int flag)
 {
 	if (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(f_error_mem));
 		flag = ft_strcmp(tmp, "-n");
@@ -105,7 +105,7 @@ int ft_echo(t_lst *argv, char *tmp, int flag)
 		argv = argv->nxt;
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(f_error_mem));
 		printf("%s", tmp);
@@ -123,11 +123,11 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 {
 	char	*cmd;
 
-	cmd = ft_c_str(argv->data, -1, 1);
+	cmd = ft_c_str(argv->data, NULL, -1, 1);
 	if (cmd == NULL)
 		return (ft_error(f_error_mem));
 	if (ft_strcmp(cmd, "echo") == 0)
-	   return (ft_echo(argv->nxt, NULL, 1));
+		return (ft_echo(argv->nxt, NULL, 1));
 	if (ft_strcmp(cmd, "cd") == 0)
 		return (ft_cd(argv->nxt, ev));
 	if (ft_strcmp(cmd, "pwd") == 0)
