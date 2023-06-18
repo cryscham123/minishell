@@ -6,13 +6,24 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:28:28 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 13:09:22 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:23:48 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 extern int	g_status;
+
+char	**ft_av_free(char **target)
+{
+	int	i;
+
+	i = 0;
+	while (target[i] != NULL)
+		free(target[i++]);
+	free(target);
+	return (NULL);
+}
 
 char	*ft_substr(char *src, int n)
 {

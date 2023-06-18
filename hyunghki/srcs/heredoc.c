@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:16:29 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:31:04 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	file = ft_itoa(token_num);
 	if (file == NULL)
 		return (ft_lst_free(file, f_data_char, f_error_mem));
-	tmp = ft_c_str(file, -1, 0);
+	tmp = ft_c_str(file, NULL, -1, 0);
 	if (tmp == NULL)
 		return (ft_lst_free(file, f_data_char, f_error_mem));
 	fd = open(tmp, O_CREAT | O_RDWR, 0644);
@@ -93,7 +93,7 @@ int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 	t_lst	*tmp;
 
 	tmp = f->file_name;
-	del = ft_c_str(tmp, -1, 1);
+	del = ft_c_str(tmp, NULL, -1, 1);
 	if (del == NULL)
 		return (ft_error(f_error_mem));
 	mode = 1;

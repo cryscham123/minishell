@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 18:01:42 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:35:48 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_str_size(t_lst *str)
+int	ft_str_size(t_lst *str)
 {
 	int	i;
 
@@ -25,26 +25,32 @@ static int	ft_str_size(t_lst *str)
 	return (i);
 }
 
-char	*ft_c_str(t_lst *str, int n, int del_quote)
+char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote)
 {
 	char	*target;
-	char	c;
+	int		size;
 	int		i;
 
 	i = 0;
 	if (n == -1)
 		n = ft_str_size(str);
-	target = ft_calloc(n + 1);
+	size = n + ft_str_size(apd) + 1;
+	target = ft_calloc(size + 1);
 	if (target == NULL)
 		return (NULL);
 	while (str != NULL && i < n)
 	{
-		c = *(char *)str->data;
-		if (!(del_quote && (c == '\"' || c == '\'')))
-			target[i++] = c;
+		if (!(del_quote \
+			&& (*(char *)str->data == '\"' || *(char *)str->data == '\'')))
+			target[i++] = *(char *)str->data;
 		str = str->nxt;
 	}
-	target[i] = '\0';
+	target[i++] = '/' * (apd != NULL);
+	while (apd != NULL && i < size)
+	{
+		target[i++] = *(char *)apd->data;
+		apd = apd->nxt;
+	}
 	return (target);
 }
 
@@ -53,7 +59,7 @@ int	dup_str_lst(t_lst **lst, t_lst *to_dup)
 	char	*tmp;
 	t_lst	*target;
 
-	tmp = ft_c_str(to_dup, to_dup->size, 0);
+	tmp = ft_c_str(to_dup, NULL, to_dup->size, 0);
 	if (tmp == NULL)
 		return (1);
 	target = mk_str_lst(tmp);

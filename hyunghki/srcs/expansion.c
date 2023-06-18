@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:14:14 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 20:13:08 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 16:30:11 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	trans_help(t_lst **target, t_lst **lst, t_lst *cur, t_lst *ev)
 		tmp = tmp->nxt;
 		i++;
 	}
-	to_find = ft_c_str(cur->nxt, i, 0);
+	to_find = ft_c_str(cur->nxt, NULL, i, 0);
 	if (to_find == NULL)
 		return (1);
 	to_link = ft_hash_find(ev, to_find);
@@ -87,7 +87,7 @@ int	ft_resplit(t_token *token, t_lst *lst, int n)
 	i = 0;
 	while (1)
 	{
-		target = ft_c_str(tmp->data, -1, 0);
+		target = ft_c_str(tmp->data, NULL, -1, 0);
 		if (target == NULL)
 			return (ft_error(f_error_mem));
 		if (ft_split(token, target, " \t", 0) != 0)
