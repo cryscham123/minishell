@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 16:31:04 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:42:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
 	(*target)++;
 	while ((*target)[i])
 	{
-		if (ft_word_chk((*target)[i], "| \t><$\'\"", f_chk) == 0)
+		if (ft_word_chk((*target)[i], "| \t><$\'\"", F_CHK) == 0)
 			break ;
 		i++;
 	}
@@ -73,14 +73,14 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 
 	file = ft_itoa(token_num);
 	if (file == NULL)
-		return (ft_lst_free(file, f_data_char, f_error_mem));
+		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
 	tmp = ft_c_str(file, NULL, -1, 0);
 	if (tmp == NULL)
-		return (ft_lst_free(file, f_data_char, f_error_mem));
+		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
 	fd = open(tmp, O_CREAT | O_RDWR, 0644);
 	free(tmp);
 	if (fd < 0)
-		return (ft_lst_free(file, f_data_char, f_error_file));
+		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
 	parse_heredoc(fd, del, mode, ev);
 	close(fd);
 	return (file);
@@ -95,11 +95,11 @@ int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 	tmp = f->file_name;
 	del = ft_c_str(tmp, NULL, -1, 1);
 	if (del == NULL)
-		return (ft_error(f_error_mem));
+		return (ft_error(F_ERROR_MEM));
 	mode = 1;
 	while (tmp != NULL)
 	{
-		if (ft_word_chk(*(char *)tmp->data, "\'\"", f_chk) == 0)
+		if (ft_word_chk(*(char *)tmp->data, "\'\"", F_CHK) == 0)
 			mode = 0;
 		tmp = tmp->nxt;
 	}
@@ -107,7 +107,7 @@ int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 	free(del);
 	if (tmp == NULL)
 		return (1);
-	ft_lst_free(f->file_name, f_data_char, NULL);
+	ft_lst_free(f->file_name, F_DATA_CHAR, NULL);
 	f->file_name = tmp;
 	return (0);
 }

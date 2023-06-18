@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 17:35:48 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:45:24 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,11 @@ t_lst	*ft_itoa(int a)
 		return (NULL);
 	target->data = ft_substr(&"0123456789"[a % 10], 1);
 	if (target->data == NULL)
-		return (ft_lst_free(target, f_data_char, NULL));
+		return (ft_lst_free(target, F_DATA_CHAR, NULL));
 	if (a < 10)
 		return (target);
 	target->nxt = ft_itoa(a / 10);
 	if (target->nxt == NULL)
-		return (ft_lst_free(target, f_data_char, NULL));
+		return (ft_lst_free(target, F_DATA_CHAR, NULL));
 	return (target);
 }

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 13:11:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 17:31:55 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:49:19 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, char **env)
 		}
 		path_char = ft_c_str(path, av, i, 0);
 		if (path_char == NULL)
-			exit(ft_error(f_error_mem));
+			exit(ft_error(F_ERROR_MEM));
 		execve(path_char, argv, env);
 		if (cur == NULL)
 			path = cur;
 		else
 			path = cur->nxt;
 	}
-	exit(ft_error(f_error_exe));
+	exit(ft_error(F_ERROR_EXE));
 }
 
 static char	**mk_av(t_lst *data)
@@ -74,7 +74,7 @@ static int	ft_extern(t_lst *data, t_lst *ev, char **env, int is_single)
 	{
 		pid = fork();
 		if (pid < 0)
-			flag = ft_error(f_error_mem);
+			flag = ft_error(F_ERROR_MEM);
 		else if (pid == 0)
 			ft_exe_extern(path, data->data, argv, env);
 		else
@@ -92,7 +92,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, char **env, int is_single)
 	int	in;
 	int	out;
 
-	if (ft_redirection(data, data->redirection, ev) != 0)
+	if (ft_redirection(data, data->redirection) != 0)
 		return (1);
 	in = dup(0);
 	out = dup(1);

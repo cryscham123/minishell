@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:56:01 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 16:30:27 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:35:05 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,24 @@ void	*ft_node_free(void *data, int data_info)
 {
 	if (data == NULL)
 		return (NULL);
-	if (data_info == f_data_string)
-		return (ft_lst_free(data, f_data_char, NULL));
-	if (data_info == f_data_token)
+	if (data_info == F_DATA_STRING)
+		return (ft_lst_free(data, F_DATA_CHAR, NULL));
+	if (data_info == F_DATA_TOKEN)
 	{
 		ft_close(((t_token *)data)->fd);
-		ft_lst_free(((t_token *)data)->argv, f_data_string, NULL);
-		ft_lst_free(((t_token *)data)->redirection, f_data_file, NULL);
+		ft_lst_free(((t_token *)data)->argv, F_DATA_STRING, NULL);
+		ft_lst_free(((t_token *)data)->redirection, F_DATA_FILE, NULL);
 	}
-	else if (data_info == f_data_file)
+	else if (data_info == F_DATA_FILE)
 	{
-		if (((t_file *)data)->mode == f_heredoc)
+		if (((t_file *)data)->mode == F_HEREDOC)
 			unlink(ft_c_str(((t_file *)data)->file_name, NULL, -1, 0));
-		ft_lst_free(((t_file *)data)->file_name, f_data_char, NULL);
+		ft_lst_free(((t_file *)data)->file_name, F_DATA_CHAR, NULL);
 	}
-	else if (data_info == f_data_hash)
+	else if (data_info == F_DATA_HASH)
 	{
 		free(((t_hash *)data)->key);
-		ft_lst_free(((t_hash *)data)->value, f_data_char, NULL);
+		ft_lst_free(((t_hash *)data)->value, F_DATA_CHAR, NULL);
 	}
 	free(data);
 	return (NULL);
@@ -63,7 +63,7 @@ t_lst	*mk_lst(void *data, int is_argv)
 	if (target == NULL)
 	{
 		if (is_argv)
-			return (ft_lst_free(data, f_data_string, NULL));
+			return (ft_lst_free(data, F_DATA_STRING, NULL));
 		return (NULL);
 	}
 	target->data = data;
@@ -88,7 +88,7 @@ int	lst_push(t_lst **lst, t_lst *data)
 	t_lst	*tmp;
 
 	if (data == NULL)
-		return (ft_error(f_error_mem));
+		return (ft_error(F_ERROR_MEM));
 	tmp = *lst;
 	if (tmp == NULL)
 	{

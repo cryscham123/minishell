@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 17:21:06 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:48:47 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,71 +15,36 @@
 
 # include <stdio.h>
 # include <readline/readline.h>
-// int rl_on_new_line(void)
-// void rl_redisplay(void)
-// void rl_replace_line(const char *, int)
 # include <readline/history.h>
-// void rl_clear_history(void)
 # include <stdlib.h>
-// pid_t wait(int *status)
-// pid_t wait3(int *statloc, int options, struct rusage *rusage)
-// pid_t wait4(pid_t pid, int *statloc, int options, struct rusage *rusage)
-// pid_t waitpid(pid_t pid, int *status, int options);
 # include <unistd.h>
-// int access(const char *path_name, int mode)
-// ssize_t read(int fd, void *buf, size_t nbyte)
-// pid_t fork(void)
-// char *getcwd(char *buf, size_t size)
-// int chdir(const char *path)
-// int stat(const char *path, struct stat *buf)
-// int fstat(int fd, struct stat *buf)
-// int lstat(const char *path, struct stat *buf)
-// int unlink(const char *pathname)
-// int execve(const char *filename, char *const argv[],char *const envp[])
-// int dup(int oldfd)
-// int dup2(int oldfd, int newfd)
-// int pipe(int pipefd[2])
-// int isatty(int fd)
-// char *ttyname(int fd)
-// int ttyslot(void)
-// int tcgetattr(int fd, struct termios *termios_p)
-// int tcsetattr(int fd, int optional_actions, const struct termios *termios_p)
 # include <fcntl.h>
 # include <signal.h>
-// int kill(pid_t pid, int sig)
-// sighandler_t signal(int signum, sighandler_t handler)
-// int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact)
-// int sigemptyset(sigset_t *set)
-// int sigaddset(sigset_t *set, int signum)
-# include <dirent.h>
-// DIR *opendir(const char *name)
-// struct dirent *readdir(DIR *dirp)
-// int closedir(DIR *dirp)
 
-# define f_error_mem "Memmory Allocation Failed..."
-# define f_error_syntax "Unexpected Token..."
-# define f_error_amb "Ambiguos Arguments..."
-# define f_error_arg "Too Many Arguments..."
-# define f_error_file "Failed To Access File Or Directory..."
-# define f_error_export "Not A Valid Identifier..."
-# define f_error_exit "Not A Number..."
-# define f_error_exe "Command Not Found..."
-# define f_get 0
-# define f_reset 1
-# define f_chk 2
-# define f_word 3
-# define f_data_char 0
-# define f_data_string 1
-# define f_data_file 2
-# define f_data_hash 3
-# define f_data_token 4
-# define f_quote 1
-# define f_dequote 2
-# define f_pipe 4
-# define f_input 8
-# define f_heredoc 16
-# define f_output 32
-# define f_append 64
+# define F_ERROR_MEM "Memmory Allocation Failed..."
+# define F_ERROR_SYNTAX "Unexpected Token..."
+# define F_ERROR_AMB "Ambiguos Arguments..."
+# define F_ERROR_ARG "Too Many Arguments..."
+# define F_ERROR_FILE "Failed To Access File Or Directory..."
+# define F_ERROR_EXPORT "Not A Valid Identifier..."
+# define F_ERROR_EXIT "Not A Number..."
+# define F_ERROR_EXE "Command Not Found..."
+# define F_GET 0
+# define F_RESET 1
+# define F_CHK 2
+# define F_WORD 3
+# define F_DATA_CHAR 0
+# define F_DATA_STRING 1
+# define F_DATA_FILE 2
+# define F_DATA_HASH 3
+# define F_DATA_TOKEN 4
+# define F_QUOTE 1
+# define F_DEQUOTE 2
+# define F_PIPE 4
+# define F_INPUT 8
+# define F_HEREDOC 16
+# define F_OUTPUT 32
+# define F_APPEND 64
 
 typedef struct s_lst
 {
@@ -116,9 +81,8 @@ int		ft_word_chk(char c, char *meta, int mode);
 int		ft_split(void *target, char *s, char *meta, int flag);
 int		ft_error(const char *msg);
 int		ft_expansion(t_lst *lst, int is_redir, t_lst *ev);
-int		ft_trans_ev(t_lst **cur, t_lst **prev, t_lst **lst, t_lst *ev);
 int		ft_resplit(t_token *token, t_lst *lst, int n);
-int		ft_redirection(t_token *token, t_lst *redir, t_lst *ev);
+int		ft_redirection(t_token *token, t_lst *redir);
 t_lst	*mk_str_lst(char *s);
 t_lst	*mk_hash_lst(char *s);
 t_lst	*mk_token_lst(char *line, t_lst *ev);
@@ -143,5 +107,6 @@ int		ft_cd(t_lst *argv, t_lst *ev);
 int		ft_pwd(t_lst **buf);
 int		ft_exit(t_lst *argv, int i);
 int		ft_exe(t_lst *tv, t_lst *ev, char **env);
+int		print_export(t_lst *ev, int size);
 
 #endif

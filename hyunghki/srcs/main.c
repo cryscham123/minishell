@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 13:55:31 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 18:49:07 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	*ft_parse(t_lst *ev, char **env)
 			return (NULL);
 		}
 		g_status = ft_exe(tv, ev, env);
-		ft_lst_free(tv, f_data_token, NULL);
+		ft_lst_free(tv, F_DATA_TOKEN, NULL);
 	}
 	free(line);
 	return (NULL);
@@ -43,11 +43,11 @@ static void	*mk_ev(char **env)
 
 	ev = NULL;
 	if (lst_push(&ev, mk_hash_lst("=$")) != 0)
-		return (ft_lst_free(ev, f_data_hash, f_error_mem));
+		return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
 	while (*env)
 	{
 		if (lst_push(&ev, mk_hash_lst(*env)) != 0)
-			return (ft_lst_free(ev, f_data_hash, f_error_mem));
+			return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
 		env++;
 	}
 	return (ev);
@@ -59,8 +59,7 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv;
 	if (argc != 1)
-		return (ft_error(f_error_arg));
-	// signal handle
+		return (ft_error(F_ERROR_ARG));
 	ev = mk_ev(env);
 	if (ev == NULL)
 		return (1);
