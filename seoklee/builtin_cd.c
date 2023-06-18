@@ -6,7 +6,7 @@
 /*   By: seoklee <seoklee@student.42.kr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:09:47 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/17 18:33:03 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/18 01:11:48 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	if (s1 == NULL || s2 == NULL)
+	if (!s1 || !s2)
 		return (NULL);
 	i = ft_strlen(s1);
 	j = ft_strlen(s2);
@@ -52,7 +52,7 @@ char	*get_env_value(t_lst *value)
 {
 	char	*str;
 
-	if (value == NULL)
+	if (!value || !value->data)
 		return (NULL);
 	str = ft_substr(value->data, 1);
 	//if (str == NULL)
@@ -65,7 +65,7 @@ char	*get_env_value(t_lst *value)
 	return (str);
 }
 
-int	change_dir(char *path, t_lst *ev)
+void	change_dir(char *path, t_lst *ev)
 {
 	char	 cwd[4096];
 	t_lst	*value;
@@ -83,11 +83,10 @@ int	change_dir(char *path, t_lst *ev)
 		value = mk_str_lst(cwd);
 	}
 	else
-		return (ft_error("cd: fail"));
-	return (0);
+		ft_error("cd: fail");
 }
 
-int	builtin_cd(char **argv, t_lst *ev)
+void	builtin_cd(char **argv, t_lst *ev)
 {
 	char	*home_path;
 	t_lst	*value;
@@ -95,9 +94,9 @@ int	builtin_cd(char **argv, t_lst *ev)
 	value = ft_hash_find(ev, "HOME");
 	home_path = get_env_value(value);
 	if (argv[1] == NULL && value == NULL)
-		return (ft_error("HOME not set"));
+		ft_error("HOME not set");
 	else if (argv[1] == NULL)
-		return (change_dir(home_path, ev));
+		change_dir(home_path, ev);
 	else
-		return (change_dir(argv[1], ev));
+		change_dir(argv[1], ev);
 }
