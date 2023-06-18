@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 15:59:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 13:52:53 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@
 # define f_error_amb "Ambiguos Arguments..."
 # define f_error_arg "Too Many Arguments..."
 # define f_error_file "Failed To Access File Or Directory..."
+# define f_error_export "Not A Valid Identifier..."
+# define f_error_exit "Not A Number..."
+# define f_error_exe "Command Not Found..."
 # define f_get 0
 # define f_reset 1
 # define f_chk 2
@@ -129,5 +132,14 @@ int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
 int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
 void	ft_close(int *fd);
+int		ft_built_in_cmd(t_lst *argv, t_lst *ev);
+int		ft_export(t_lst *argv, t_lst *ev, int flag);
+int		ft_unset(t_lst	*argv, t_lst *ev, int flag);
+int		ft_env(t_lst *ev);
+int		ft_echo(t_lst *argv, char *tmp, int flag);
+int		ft_cd(t_lst *argv, t_lst *ev);
+int		ft_pwd(t_lst **buf);
+int		ft_exit(t_lst *argv);
+int		ft_exe(t_lst *tv, t_lst *ev);
 
 #endif

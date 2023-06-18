@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:28:28 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:11:52 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 13:09:22 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,14 @@ void	*ft_calloc(int size)
 
 int	ft_error(const char *msg)
 {
-	printf("Error: %s\n", msg);
+	int	i;
+
+	write(2, "Error: ", 7);
+	i = 0;
+	while (msg[i])
+		i++;
+	write(2, msg, i);
+	write(2, "\n", 1);
 	g_status = 1;
 	return (1);
 }
