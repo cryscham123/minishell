@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:12:48 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 12:06:24 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_open(t_token *token, char *s, int mode, t_lst *ev)
 		free(s);
 		return (ft_error(f_error_file));
 	}
-	direction = (mode == f_input || mode == f_heredoc);
+	direction = (mode == f_output || mode == f_append);
 	if (token->fd[direction] != direction)
 		close(token->fd[direction]);
 	token->fd[direction] = fd;

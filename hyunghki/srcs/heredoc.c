@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 15:48:38 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:16:29 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 	{
 		target = readline("\033[34mheredoc>\033[0m ");
 		if (ft_strcmp(del, target) == 0)
-			break;
+			break ;
 		tmp = target;
 		while (*tmp)
 		{
@@ -65,7 +65,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 	free(target);
 }
 
-static t_lst *create_heredoc(char *del, int mode, int token_num, t_lst *ev)
+static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 {
 	int		fd;
 	t_lst	*file;

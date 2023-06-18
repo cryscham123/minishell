@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:14:14 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/17 13:27:06 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/17 20:13:08 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	trans_help(t_lst **target, t_lst **lst, t_lst *cur, t_lst *ev)
 	tmp = cur;
 	i = 0;
 	while (tmp->nxt != NULL \
-			&& ft_word_chk(*(char *)tmp->nxt->data, "| \t><$\'\"", f_chk) != 0)
+			&& ft_word_chk(*(char *)tmp->nxt->data, "| \t><$\'\"=", f_chk) != 0)
 	{
 		tmp = tmp->nxt;
 		i++;
