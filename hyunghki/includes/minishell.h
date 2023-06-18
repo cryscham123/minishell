@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 13:52:53 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:24:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ int		ft_env(t_lst *ev);
 int		ft_echo(t_lst *argv, char *tmp, int flag);
 int		ft_cd(t_lst *argv, t_lst *ev);
 int		ft_pwd(t_lst **buf);
-int		ft_exit(t_lst *argv);
-int		ft_exe(t_lst *tv, t_lst *ev);
+int		ft_exit(t_lst *argv, int i);
+int		ft_exe(t_lst *tv, t_lst *ev, char **env);
 
 #endif

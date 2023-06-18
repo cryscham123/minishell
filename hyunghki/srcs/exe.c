@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 13:11:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 13:53:28 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/18 14:24:09 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,11 @@ static char	**mk_av(t_lst *data)
 	}
 	return (target);
 }
-
-static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
+static int	ft_extern(t_lst *data, t_lst *ev, char **env, int is_single)
 {
 	pid_t	pid;
 	char	*path;
 	char	**argv;
-	char	**ev;
 	int		flag;
 
 	path = mk_path;
@@ -51,21 +49,22 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	if (is_single)
 	{
 		pid = fork();
-		if (pid == 0 && flag = execve(path, argv, ev) < 0)
+		if (pid == 0 && execve(path, argv, env) < 0)
 			return (ft_error(f_error_exe));
 	}
 	else if (execve(path, argv, ev) < 0)
 		return (ft_error(f_error_exe));
-
 	return (flag);
 }
 **/
-static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single)
+
+static int	ft_exe_cmd(t_token *data, t_lst *ev, char **env, int is_single)
 {
 	int	flag;
 	int	in;
 	int	out;
 
+	(void)env;
 	(void)is_single;
 	if (ft_redirection(data, data->redirection, ev) != 0)
 		return (1);
@@ -78,7 +77,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single)
 	   flag = ft_built_in_cmd(data->argv, ev);
 	/**
 	if (flag == 2)
-		flag = ft_extern(data->argv, ev, is_single);
+		flag = ft_extern(data->argv, env, is_single);
 		**/
 	dup2(in, 0);
 	dup2(out, 1);
@@ -87,7 +86,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single)
 	return (flag);
 }
 
-int	ft_exe(t_lst *tv, t_lst *ev)
+int	ft_exe(t_lst *tv, t_lst *ev, char **env)
 {
 	int		is_single;
 	int		flag;
@@ -95,7 +94,7 @@ int	ft_exe(t_lst *tv, t_lst *ev)
 	is_single = (tv->nxt == NULL);
 	while (tv != NULL)
 	{
-		flag = ft_exe_cmd(tv->data, ev, is_single);
+		flag = ft_exe_cmd(tv->data, ev, env, is_single);
 		tv = tv->nxt;
 	}
 	return (flag);
