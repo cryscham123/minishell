@@ -59,16 +59,15 @@ static int	trs(t_lst **cur, t_lst **prev, t_lst **lst, t_lst *ev)
 			lst_push(&to_link, tmp->nxt->nxt);
 		tmp->nxt->nxt = NULL;
 	}
-	else
-	{
-		if (trans_help(&to_link, cur, tmp, ev) != 0)
+	else if (trans_help(&to_link, cur, tmp, ev) != 0)
 			return (ft_error(F_ERROR_MEM));
-	}
 	ft_lst_free(tmp, F_DATA_CHAR, NULL);
 	if (*prev == NULL)
 		*lst = to_link;
 	else
 		(*prev)->nxt = to_link;
+	if (to_link == NULL)
+		*cur = NULL;
 	return (0);
 }
 

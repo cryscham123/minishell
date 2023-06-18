@@ -35,6 +35,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, char **env)
 			path = cur;
 		else
 			path = cur->nxt;
+		free(path_char);
 	}
 	exit(ft_error(F_ERROR_EXE));
 }

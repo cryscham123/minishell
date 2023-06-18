@@ -27,7 +27,7 @@ void	*ft_node_free(void *data, int data_info)
 	else if (data_info == F_DATA_FILE)
 	{
 		if (((t_file *)data)->mode == F_HEREDOC)
-			unlink(ft_c_str(((t_file *)data)->file_name, NULL, -1, 0));
+			ft_unlink(((t_file *)data)->file_name);
 		ft_lst_free(((t_file *)data)->file_name, F_DATA_CHAR, NULL);
 	}
 	else if (data_info == F_DATA_HASH)

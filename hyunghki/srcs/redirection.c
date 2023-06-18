@@ -43,6 +43,15 @@ void	ft_close(int *fd)
 		close(fd[1]);
 }
 
+void	ft_unlink(t_lst *file_name)
+{
+	char	*name;
+
+	name = ft_c_str(file_name, NULL, -1, 0);
+	unlink(name);
+	free(name);
+}
+
 int	ft_redirection(t_token *token, t_lst *redir)
 {
 	t_file	*data;

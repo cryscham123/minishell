@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <sys/wait.h>
 
 # define F_ERROR_MEM "Memmory Allocation Failed..."
 # define F_ERROR_SYNTAX "Unexpected Token..."
@@ -97,6 +98,7 @@ void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
 int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
+void	ft_unlink(t_lst *file_name);
 void	ft_close(int *fd);
 int		ft_built_in_cmd(t_lst *argv, t_lst *ev);
 int		ft_export(t_lst *argv, t_lst *ev, int flag);

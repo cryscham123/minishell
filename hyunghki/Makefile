@@ -46,7 +46,7 @@ fclean:
 	rm -f $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $@ $^ $(LIBS)
+	$(CC) -o $@ $^ $(LIBS) -g3 -fsanitize=address
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
