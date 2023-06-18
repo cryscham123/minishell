@@ -6,21 +6,32 @@
 /*   By: seoklee <seoklee@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/18 16:05:28 by seoklee           #+#    #+#             */
-/*   Updated: 2023/06/18 17:35:10 by seoklee          ###   ########.fr       */
+/*   Updated: 2023/06/18 20:52:39 by seoklee          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	set_env_order(t_lst *ev)
+static void	set_env_order(t_lst *ev, int flag)
 {
 	int	n;
 
-	n = 1;
-	while (ev != NULL)
+	n = 0;
+	if (flag == 1)
 	{
-		ev->size = n++;
-		ev = ev->nxt;
+		while (ev != NULL)
+		{
+			ev->size = n++;
+			ev = ev->nxt;
+		}
+	}
+	else
+	{
+		while (ev != NULL)
+		{
+			ev->size = 0;
+			ev = ev->nxt;
+		}
 	}
 }
 
@@ -44,6 +55,7 @@ static void	sort_env(t_lst *ev)
 				tmp = i->size;
 				i->size = j->size;
 				j->size = tmp;
+				j = ev;
 			}
 			j = j->nxt;
 		}
@@ -51,21 +63,21 @@ static void	sort_env(t_lst *ev)
 	}
 }
 
-void	print_export(t_lst *ev, int size)
+int	print_export(t_lst *ev)
 {
 	int		n;
 	t_lst	*val;
 	t_lst	*tmp;
 
-	set_env_order(ev);
+	set_env_order(ev, 1);
 	sort_env(ev);
-	n = 0;
-	while (++n < size)
+	n = -1;
+	while (++n < ft_str_size(ev))
 	{
 		tmp = ev;
-		while (tmp->size != n)
+		while (tmp != NULL && tmp->size != n)
 			tmp = tmp->nxt;
-		printf("declare -x %s=", ((t_hash *)tmp->data)->key);
+		printf("%d, declare -x %s=", tmp->size, ((t_hash *)tmp->data)->key);
 		val = ((t_hash *)tmp->data)->value;
 		while (val != NULL)
 		{
@@ -74,4 +86,6 @@ void	print_export(t_lst *ev, int size)
 		}
 		printf("\n");
 	}
+	set_env_order(ev, 0);
+	return (0);
 }
