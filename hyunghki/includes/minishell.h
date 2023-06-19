@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:48:47 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:21:47 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ typedef struct s_token
 	int		fd[2];
 }	t_token;
 
-t_lst	*ft_itoa(int a);
+t_lst	*ft_itoa(unsigned char a);
 char	**ft_av_free(char **target);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
@@ -100,6 +100,7 @@ t_lst	*ft_lst_back(t_lst *lst);
 int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
 void	ft_unlink(t_lst *file_name);
 void	ft_close(int *fd);
+int		ft_pipe(t_lst *tv);
 int		ft_built_in_cmd(t_lst *argv, t_lst *ev);
 int		ft_export(t_lst *argv, t_lst *ev, int flag);
 int		ft_unset(t_lst	*argv, t_lst *ev, int flag);
@@ -108,7 +109,7 @@ int		ft_echo(t_lst *argv, char *tmp, int flag);
 int		ft_cd(t_lst *argv, t_lst *ev);
 int		ft_pwd(t_lst **buf);
 int		ft_exit(t_lst *argv, int i);
-int		ft_exe(t_lst *tv, t_lst *ev, char **env);
+int		ft_exe(t_lst *tv, t_lst *ev, char **env, int i);
 int		print_export(t_lst *ev, int size);
 
 #endif

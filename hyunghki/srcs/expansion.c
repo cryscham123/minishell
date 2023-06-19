@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:14:14 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:33:07 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 14:00:16 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_status;
+extern unsigned char	g_status;
 
 static int	trans_help(t_lst **target, t_lst **lst, t_lst *cur, t_lst *ev)
 {
@@ -60,7 +60,7 @@ static int	trs(t_lst **cur, t_lst **prev, t_lst **lst, t_lst *ev)
 		tmp->nxt->nxt = NULL;
 	}
 	else if (trans_help(&to_link, cur, tmp, ev) != 0)
-			return (ft_error(F_ERROR_MEM));
+		return (ft_error(F_ERROR_MEM));
 	ft_lst_free(tmp, F_DATA_CHAR, NULL);
 	if (*prev == NULL)
 		*lst = to_link;

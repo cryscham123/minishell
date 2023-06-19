@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:49:50 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 11:45:48 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,10 @@ static int	ft_chk_validate(char *s, int cmd)
 		if (!(i != 0 && s[i] >= '0' && s[i] <= '9') \
 			&& !(s[i] >= 'a' && s[i] <= 'z') \
 			&& !(s[i] >= 'A' && s[i] <= 'Z') && s[i] != '_')
+		{
+			ft_error(F_ERROR_EXPORT);
 			return (-1);
+		}
 		i++;
 	}
 	if (i == 0 || (cmd == 1 && s[i] == '='))

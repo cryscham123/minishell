@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/18 13:11:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:49:19 by hyunghki         ###   ########.fr       */
+/*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
+/*   Updated: 2023/06/19 14:37:54 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,37 +90,55 @@ static int	ft_extern(t_lst *data, t_lst *ev, char **env, int is_single)
 static int	ft_exe_cmd(t_token *data, t_lst *ev, char **env, int is_single)
 {
 	int	flag;
-	int	in;
-	int	out;
+	int	fd_tmp[2];
 
 	if (ft_redirection(data, data->redirection) != 0)
 		return (1);
-	in = dup(0);
-	out = dup(1);
+	fd_tmp[0] = dup(0);
+	fd_tmp[1] = dup(1);
 	dup2(data->fd[0], 0);
 	dup2(data->fd[1], 1);
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
 	if (flag == 2)
+	{
 		flag = ft_extern(data->argv, ev, env, is_single);
-	dup2(in, 0);
-	dup2(out, 1);
-	close(in);
-	close(out);
+		if (flag != 0)
+			flag = -1;
+	}
+	dup2(fd_tmp[0], 0);
+	dup2(fd_tmp[1], 1);
+	close(fd_tmp[0]);
+	close(fd_tmp[1]);
+	if (!is_single)
+		exit(flag);
 	return (flag);
 }
 
-int	ft_exe(t_lst *tv, t_lst *ev, char **env)
+int	ft_exe(t_lst *tv, t_lst *ev, char **env, int i)
 {
+	pid_t	pid;
 	int		is_single;
 	int		flag;
 
 	is_single = (tv->nxt == NULL);
+	if (is_single)
+		return (ft_exe_cmd(tv->data, ev, env, is_single));
+	if (ft_pipe(tv) != 0)
+		return (1);
 	while (tv != NULL)
 	{
-		flag = ft_exe_cmd(tv->data, ev, env, is_single);
+		pid = fork();
+		if (pid < 0)
+			ft_error(F_ERROR_MEM);
+		else if (pid == 0)
+			ft_exe_cmd(tv->data, ev, env, is_single);
 		tv = tv->nxt;
 	}
+	while (i--)
+		waitpid(-1, &flag, 0);
+	if (flag != 0)
+		return (-1);
 	return (flag);
 }
