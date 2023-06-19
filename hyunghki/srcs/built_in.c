@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:30:30 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:25:44 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_cd(t_lst *argv, t_lst *ev)
 	{
 		if (ft_strcmp(((t_hash *)ev->data)->key, "PWD") == 0)
 		{
-			ft_node_free(((t_hash *)ev->data)->value, F_DATA_CHAR);
+			ft_lst_free(((t_hash *)ev->data)->value, F_DATA_CHAR, NULL);
 			((t_hash *)ev->data)->value = pwd;
 			break ;
 		}
@@ -69,7 +69,7 @@ int	ft_exit(t_lst *argv, int i)
 	int		num;
 
 	num = 0;
-	if (argv->nxt != NULL)
+	if (argv != NULL && argv->nxt != NULL)
 	{
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));

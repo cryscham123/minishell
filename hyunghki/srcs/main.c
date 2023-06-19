@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:49:07 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:31:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	g_status;
+unsigned char	g_status;
 
 static void	*ft_parse(t_lst *ev, char **env)
 {
@@ -30,7 +30,7 @@ static void	*ft_parse(t_lst *ev, char **env)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev, env);
+		g_status = ft_exe(tv, ev, env, ft_str_size(tv));
 		ft_lst_free(tv, F_DATA_TOKEN, NULL);
 	}
 	free(line);
@@ -53,6 +53,22 @@ static void	*mk_ev(char **env)
 	return (ev);
 }
 
+static void	handle_signal(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGINT)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	t_lst		*ev;
@@ -64,6 +80,11 @@ int	main(int argc, char **argv, char **env)
 	if (ev == NULL)
 		return (1);
 	while (1)
+	{
+		signal(SIGINT, handle_signal);
+		signal(SIGQUIT, handle_signal);
 		ft_parse(ev, env);
+	}
+	ft_lst_free(ev, F_DATA_HASH, NULL);
 	return (0);
 }

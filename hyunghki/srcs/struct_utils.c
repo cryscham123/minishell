@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:45:24 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:55:27 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,22 @@ t_lst	*ft_hash_find(t_lst *hash, char *to_find)
 	return (NULL);
 }
 
-t_lst	*ft_itoa(int a)
+t_lst	*ft_itoa(unsigned char a)
 {
 	t_lst	*target;
+	t_lst	*prev;
 
 	target = ft_calloc(sizeof(t_lst));
 	if (target == NULL)
 		return (NULL);
 	target->data = ft_substr(&"0123456789"[a % 10], 1);
 	if (target->data == NULL)
-		return (ft_lst_free(target, F_DATA_CHAR, NULL));
+		return (ft_node_free(target, F_DATA_CHAR));
 	if (a < 10)
 		return (target);
-	target->nxt = ft_itoa(a / 10);
-	if (target->nxt == NULL)
-		return (ft_lst_free(target, F_DATA_CHAR, NULL));
-	return (target);
+	prev = ft_itoa(a / 10);
+	if (prev == NULL)
+		return (ft_node_free(target, F_DATA_CHAR));
+	lst_push(&prev, target);
+	return (prev);
 }

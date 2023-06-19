@@ -6,14 +6,17 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/18 17:47:42 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/19 15:14:30 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
+LDFLAGS= -L/Users/hyunghki/.brew/opt/readline/lib
 CFLAGS= -Wall -Werror -Wextra
+DEBUG_FLAGS= -g3 -fsanitize=address
 LIBS= -lreadline
-INCLUDE= -Iincludes
+INCLUDE= -Iincludes \
+		 -I/Users/hyunghki/.brew/opt/readline/include
 SRC_DIR= ./srcs/
 SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)utils.c \
@@ -46,7 +49,7 @@ fclean:
 	rm -f $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $@ $^ $(LIBS) -g3 -fsanitize=address
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)

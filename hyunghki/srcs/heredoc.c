@@ -6,11 +6,27 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:42:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 15:32:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	heredoc_signal(int sig)
+{
+	if (sig == SIGQUIT)
+	{
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGINT)
+	{
+		printf("heredoc: not yet.\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+}
 
 static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
 {
@@ -45,6 +61,8 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 
 	while (1)
 	{
+		signal(SIGINT, heredoc_signal);
+		signal(SIGQUIT, heredoc_signal);
 		target = readline("\033[34mheredoc>\033[0m ");
 		if (ft_strcmp(del, target) == 0)
 			break ;
@@ -77,7 +95,7 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	tmp = ft_c_str(file, NULL, -1, 0);
 	if (tmp == NULL)
 		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
-	fd = open(tmp, O_CREAT | O_RDWR, 0644);
+	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	free(tmp);
 	if (fd < 0)
 		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));

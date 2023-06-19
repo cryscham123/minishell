@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/18 18:49:23 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 13:04:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,24 @@ void	ft_unlink(t_lst *file_name)
 	name = ft_c_str(file_name, NULL, -1, 0);
 	unlink(name);
 	free(name);
+}
+
+int	ft_pipe(t_lst *tv)
+{
+	int	fd_tmp[2];
+
+	while (tv != NULL)
+	{
+		if (tv->nxt != NULL)
+		{
+			if (pipe(fd_tmp) < 0)
+				return (ft_error(F_ERROR_FILE));
+			((t_token *)tv->data)->fd[1] = fd_tmp[1];
+			((t_token *)tv->nxt->data)->fd[0] = fd_tmp[0];
+		}
+		tv = tv->nxt;
+	}
+	return (0);
 }
 
 int	ft_redirection(t_token *token, t_lst *redir)
