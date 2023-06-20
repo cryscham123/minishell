@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 15:31:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 13:39:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,13 @@ static void	*ft_parse(t_lst *ev, char **env)
 
 	tv = NULL;
 	line = readline("\033[95mminishell$\033[0m ");
-	if (line != NULL && *line)
+	if (line == NULL)
+	{
+		rl_replace_line("exit", 1);
+		rl_redisplay();
+		exit(0);
+	}
+	if (*line)
 	{
 		add_history(line);
 		tv = mk_token_lst(line, ev);
@@ -53,19 +59,30 @@ static void	*mk_ev(char **env)
 	return (ev);
 }
 
-static void	handle_signal(int sig)
+void	handle_signal(int sig)
 {
 	if (sig == SIGQUIT)
 	{
-		rl_on_new_line();
-		rl_redisplay();
+		if (g_status == F_STATUS_ONGOING)
+			printf("Quit: %d\n", SIGQUIT);
+		else
+		{
+			rl_on_new_line();
+			rl_redisplay();
+		}
 	}
 	else if (sig == SIGINT)
 	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (g_status == F_STATUS_ONGOING)
+			printf("\n");
+		else
+		{
+			printf("\n");
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+		}
+		g_status = 1;
 	}
 }
 
