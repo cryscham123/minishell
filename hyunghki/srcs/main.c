@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 14:33:10 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:07:05 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	*ft_parse(t_lst *ev)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev, ft_str_size(tv));
+		g_status = ft_exe(tv, ev, NULL, ft_str_size(tv));
 		ft_lst_free(tv, F_DATA_TOKEN, NULL);
 	}
 	free(line);

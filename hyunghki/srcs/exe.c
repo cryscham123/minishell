@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 14:40:35 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 15:06:28 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	return (flag);
 }
 
-static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *tv)
+static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 {
 	int	flag;
 	int	fd_tmp[2];
@@ -100,7 +100,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *tv)
 	fd_tmp[1] = dup(1);
 	dup2(data->fd[0], 0);
 	dup2(data->fd[1], 1);
-	ft_close(data->fd, tv->nxt);
+	ft_close(data->fd, prev);
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
@@ -117,12 +117,11 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *tv)
 	return (flag);
 }
 
-int	ft_exe(t_lst *tv, t_lst *ev, int i)
+int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 {
 	pid_t	pid;
 	int		is_single;
 	int		flag;
-	t_lst	*prev;
 
 	g_status = F_STATUS_ONGOING;
 	is_single = (tv->nxt == NULL);
@@ -130,14 +129,13 @@ int	ft_exe(t_lst *tv, t_lst *ev, int i)
 		return (ft_exe_cmd(tv->data, ev, is_single, tv));
 	if (ft_pipe(tv) != 0)
 		return (1);
-	prev = NULL;
 	while (tv != NULL)
 	{
 		pid = fork();
 		if (pid < 0)
 			ft_error(F_ERROR_MEM);
 		else if (pid == 0)
-			ft_exe_cmd(tv->data, ev, is_single, tv);
+			ft_exe_cmd(tv->data, ev, is_single, prev);
 		if (prev != NULL)
 			ft_close(((t_token *)prev->data)->fd, NULL);
 		prev = tv;
