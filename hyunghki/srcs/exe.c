@@ -6,11 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 14:37:54 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 17:04:38 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern unsigned char	g_status;
 
 static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, char **env)
 {
@@ -122,6 +124,7 @@ int	ft_exe(t_lst *tv, t_lst *ev, char **env, int i)
 	int		is_single;
 	int		flag;
 
+	g_status = F_STATUS_ONGOING;
 	is_single = (tv->nxt == NULL);
 	if (is_single)
 		return (ft_exe_cmd(tv->data, ev, env, is_single));

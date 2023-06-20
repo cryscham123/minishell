@@ -6,17 +6,17 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/19 15:14:30 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/19 15:38:10 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= minishell
-LDFLAGS= -L/Users/hyunghki/.brew/opt/readline/lib
+LDFLAGS= -L$(HOME)/.brew/opt/readline/lib
 CFLAGS= -Wall -Werror -Wextra
 DEBUG_FLAGS= -g3 -fsanitize=address
 LIBS= -lreadline
 INCLUDE= -Iincludes \
-		 -I/Users/hyunghki/.brew/opt/readline/include
+		 -I$(HOME)/.brew/opt/readline/include
 SRC_DIR= ./srcs/
 SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)utils.c \

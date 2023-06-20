@@ -6,17 +6,16 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 15:25:44 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/19 17:00:01 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(t_lst *argv, t_lst *ev)
+int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
 {
-	char	*tmp;
-	t_lst	*pwd;
-
+	if (argv == NULL)
+		return (0);
 	tmp = ft_c_str(argv->data, NULL, -1, 1);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_MEM));
@@ -131,7 +130,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	else if (ft_strcmp(cmd, "echo") == 0)
 		flag = ft_echo(argv->nxt, NULL, 1);
 	else if (ft_strcmp(cmd, "cd") == 0)
-		flag = ft_cd(argv->nxt, ev);
+		flag = ft_cd(argv->nxt, ev, NULL, NULL);
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		flag = ft_pwd(NULL);
 	else if (ft_strcmp(cmd, "export") == 0)
