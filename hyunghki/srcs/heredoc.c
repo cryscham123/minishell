@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 17:52:00 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:20:32 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	heredoc_signal(int sig)
 {
 	(void)sig;
-	printf("heredoc: not yet.\n");
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -57,7 +56,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 		signal(SIGINT, heredoc_signal);
 		signal(SIGQUIT, SIG_IGN);
 		target = readline("\033[34mheredoc>\033[0m ");
-		if (ft_strcmp(del, target) == 0)
+		if (target == NULL || ft_strcmp(del, target) == 0)
 			break ;
 		tmp = target;
 		while (*tmp)

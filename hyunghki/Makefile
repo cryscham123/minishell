@@ -6,7 +6,7 @@
 #    By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/19 15:38:10 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/20 16:09:58 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,7 @@ SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)struct_utils.c \
 	  $(SRC_DIR)exe.c \
 	  $(SRC_DIR)built_in.c \
-	  $(SRC_DIR)built_in2.c \
-	  $(SRC_DIR)export_utils.c
+	  $(SRC_DIR)built_in2.c
 OBJS= $(SRCS:.c=.o)
 
 all: $(NAME)

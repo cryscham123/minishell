@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 11:45:48 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:00:47 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		if (ft_strcmp(((t_hash *)ev->data)->key, s) == 0)
 		{
 			prev->nxt = ev->nxt;
-			ft_node_free(ev, F_DATA_HASH);
+			ft_node_free(ev->data, F_DATA_HASH);
+			free(ev);
 			break ;
 		}
 		prev = ev;
@@ -71,7 +72,7 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 	char	*tmp;
 
 	if (argv == NULL)
-		return (print_export(ev->nxt, ev->size));
+		return (0);
 	while (argv != NULL)
 	{
 		tmp = ft_c_str(argv->data, NULL, -1, 1);
