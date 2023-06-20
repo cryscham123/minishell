@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 13:04:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:37:56 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,17 @@ static int	ft_open(t_token *token, char *s, int mode)
 	return (0);
 }
 
-void	ft_close(int *fd)
+void	ft_close(int *fd, t_lst *tv)
 {
 	if (fd[0] != 0)
 		close(fd[0]);
 	if (fd[1] != 1)
 		close(fd[1]);
+	while (tv != NULL)
+	{
+		ft_close(((t_token *)tv->data)->fd, NULL);
+		tv = tv->nxt;
+	}
 }
 
 void	ft_unlink(t_lst *file_name)

@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 17:52:11 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:36:31 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_lst
 
 typedef struct s_hash
 {
+	char	**env;
 	char	*key;
 	t_lst	*value;
 }	t_hash;
@@ -100,7 +101,7 @@ int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
 int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
 void	ft_unlink(t_lst *file_name);
-void	ft_close(int *fd);
+void	ft_close(int *fd, t_lst *tv);
 int		ft_pipe(t_lst *tv);
 int		ft_built_in_cmd(t_lst *argv, t_lst *ev);
 int		ft_export(t_lst *argv, t_lst *ev, int flag);
@@ -110,7 +111,7 @@ int		ft_echo(t_lst *argv, char *tmp, int flag);
 int		ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd);
 int		ft_pwd(t_lst **buf);
 int		ft_exit(t_lst *argv, int i);
-int		ft_exe(t_lst *tv, t_lst *ev, char **env, int i);
+int		ft_exe(t_lst *tv, t_lst *ev, int i);
 int		print_export(t_lst *ev, int size);
 void	handle_signal(int sig);
 

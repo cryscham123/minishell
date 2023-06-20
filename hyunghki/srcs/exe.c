@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 17:04:38 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:40:35 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern unsigned char	g_status;
 
-static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, char **env)
+static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 {
 	char	*path_char;
 	int		i;
@@ -32,7 +32,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, char **env)
 		path_char = ft_c_str(path, av, i, 0);
 		if (path_char == NULL)
 			exit(ft_error(F_ERROR_MEM));
-		execve(path_char, argv, env);
+		execve(path_char, argv, ((t_hash *)ev->data)->env);
 		if (cur == NULL)
 			path = cur;
 		else
@@ -61,7 +61,7 @@ static char	**mk_av(t_lst *data)
 	return (target);
 }
 
-static int	ft_extern(t_lst *data, t_lst *ev, char **env, int is_single)
+static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 {
 	pid_t	pid;
 	t_lst	*path;
@@ -79,17 +79,17 @@ static int	ft_extern(t_lst *data, t_lst *ev, char **env, int is_single)
 		if (pid < 0)
 			flag = ft_error(F_ERROR_MEM);
 		else if (pid == 0)
-			ft_exe_extern(path, data->data, argv, env);
+			ft_exe_extern(path, data->data, argv, ev);
 		else
 			waitpid(-1, &flag, 0);
 	}
 	else
-		ft_exe_extern(path, data->data, argv, env);
+		ft_exe_extern(path, data->data, argv, ev);
 	ft_av_free(argv);
 	return (flag);
 }
 
-static int	ft_exe_cmd(t_token *data, t_lst *ev, char **env, int is_single)
+static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *tv)
 {
 	int	flag;
 	int	fd_tmp[2];
@@ -100,48 +100,50 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, char **env, int is_single)
 	fd_tmp[1] = dup(1);
 	dup2(data->fd[0], 0);
 	dup2(data->fd[1], 1);
+	ft_close(data->fd, tv->nxt);
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
 	if (flag == 2)
 	{
-		flag = ft_extern(data->argv, ev, env, is_single);
-		if (flag != 0)
-			flag = -1;
+		flag = ft_extern(data->argv, ev, is_single);
+		flag = -1 * (flag != 0);
 	}
 	dup2(fd_tmp[0], 0);
 	dup2(fd_tmp[1], 1);
-	close(fd_tmp[0]);
-	close(fd_tmp[1]);
+	ft_close(fd_tmp, NULL);
 	if (!is_single)
 		exit(flag);
 	return (flag);
 }
 
-int	ft_exe(t_lst *tv, t_lst *ev, char **env, int i)
+int	ft_exe(t_lst *tv, t_lst *ev, int i)
 {
 	pid_t	pid;
 	int		is_single;
 	int		flag;
+	t_lst	*prev;
 
 	g_status = F_STATUS_ONGOING;
 	is_single = (tv->nxt == NULL);
 	if (is_single)
-		return (ft_exe_cmd(tv->data, ev, env, is_single));
+		return (ft_exe_cmd(tv->data, ev, is_single, tv));
 	if (ft_pipe(tv) != 0)
 		return (1);
+	prev = NULL;
 	while (tv != NULL)
 	{
 		pid = fork();
 		if (pid < 0)
 			ft_error(F_ERROR_MEM);
 		else if (pid == 0)
-			ft_exe_cmd(tv->data, ev, env, is_single);
+			ft_exe_cmd(tv->data, ev, is_single, tv);
+		if (prev != NULL)
+			ft_close(((t_token *)prev->data)->fd, NULL);
+		prev = tv;
 		tv = tv->nxt;
 	}
 	while (i--)
 		waitpid(-1, &flag, 0);
-	if (flag != 0)
-		return (-1);
-	return (flag);
+	return (-1 * (flag != 0));
 }

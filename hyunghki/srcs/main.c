@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 13:39:26 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 14:33:10 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 unsigned char	g_status;
 
-static void	*ft_parse(t_lst *ev, char **env)
+static void	*ft_parse(t_lst *ev)
 {
 	char	*line;
 	t_lst	*tv;
@@ -36,7 +36,7 @@ static void	*ft_parse(t_lst *ev, char **env)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev, env, ft_str_size(tv));
+		g_status = ft_exe(tv, ev, ft_str_size(tv));
 		ft_lst_free(tv, F_DATA_TOKEN, NULL);
 	}
 	free(line);
@@ -50,6 +50,7 @@ static void	*mk_ev(char **env)
 	ev = NULL;
 	if (lst_push(&ev, mk_hash_lst("=$")) != 0)
 		return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
+	((t_hash *)ev->data)->env = env;
 	while (*env)
 	{
 		if (lst_push(&ev, mk_hash_lst(*env)) != 0)
@@ -100,7 +101,7 @@ int	main(int argc, char **argv, char **env)
 	{
 		signal(SIGINT, handle_signal);
 		signal(SIGQUIT, handle_signal);
-		ft_parse(ev, env);
+		ft_parse(ev);
 	}
 	ft_lst_free(ev, F_DATA_HASH, NULL);
 	return (0);
