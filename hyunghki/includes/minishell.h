@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 16:01:02 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:27:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 # define F_HEREDOC 16
 # define F_OUTPUT 32
 # define F_APPEND 64
-# define F_STATUS_ONGOING 130
+# define F_STATUS_ONGOING 77
 
 typedef struct s_lst
 {
@@ -112,6 +112,9 @@ int		ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd);
 int		ft_pwd(t_lst **buf);
 int		ft_exit(t_lst *argv, int i);
 int		ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i);
-void	handle_signal(int sig);
+void	ft_signal(void (*handler_1)(int), void (*handler_2)(int));
+void	heredoc_signal_handler(int sig);
+void	sigint_handler(int sig);
+void	sigquit_handler(int sig);
 
 #endif

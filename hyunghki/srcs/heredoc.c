@@ -6,19 +6,11 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 16:20:32 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/20 18:39:43 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static void	heredoc_signal(int sig)
-{
-	(void)sig;
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
 
 static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
 {
@@ -53,9 +45,10 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 
 	while (1)
 	{
-		signal(SIGINT, heredoc_signal);
-		signal(SIGQUIT, SIG_IGN);
+		ft_signal(heredoc_signal_handler, SIG_IGN);
 		target = readline("\033[34mheredoc>\033[0m ");
+		if (target == NULL)
+			printf("\033[A\033[34mheredoc>\033[0m ");
 		if (target == NULL || ft_strcmp(del, target) == 0)
 			break ;
 		tmp = target;
@@ -64,10 +57,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 			if (*tmp == '$' && mode == 1)
 				ft_parse_heredoc_env(fd, &tmp, ev);
 			else
-			{
-				write(fd, tmp, 1);
-				tmp++;
-			}
+				write(fd, tmp++, 1);
 		}
 		write(fd, "\n", 1);
 		free(target);
@@ -92,8 +82,7 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	if (fd < 0)
 		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
 	parse_heredoc(fd, del, mode, ev);
-	signal(SIGINT, handle_signal);
-	signal(SIGQUIT, handle_signal);
+	ft_signal(sigint_handler, sigquit_handler);
 	close(fd);
 	return (file);
 }
