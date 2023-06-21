@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 15:23:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 16:18:32 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ static void	*ft_parse(t_lst *ev)
 	line = readline("\033[s\033[95mminishell$\033[0m ");
 	if (line == NULL)
 	{
-		printf("\033[u");
-		printf("\033[95mminishell$\033[0m exit\n");
+		printf("\033[u\033[95mminishell$\033[0m exit\n");
 		exit(0);
 	}
 	if (*line)
