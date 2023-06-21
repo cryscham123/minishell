@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 18:40:52 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:23:45 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-unsigned char	g_status;
+int	g_status;
 
 static void	*ft_parse(t_lst *ev)
 {
@@ -20,10 +20,10 @@ static void	*ft_parse(t_lst *ev)
 	t_lst	*tv;
 
 	tv = NULL;
-	line = readline("\033[95mminishell$\033[0m ");
+	line = readline("\033[s\033[95mminishell$\033[0m ");
 	if (line == NULL)
 	{
-		printf("\033[A\033[11D");
+		printf("\033[u");
 		printf("\033[95mminishell$\033[0m exit\n");
 		exit(0);
 	}
@@ -72,7 +72,7 @@ int	main(int argc, char **argv, char **env)
 		return (1);
 	while (1)
 	{
-		ft_signal(sigint_handler, sigquit_handler);
+		ft_signal(sigint_handler, SIG_IGN);
 		ft_parse(ev);
 	}
 	ft_lst_free(ev, F_DATA_HASH, NULL);

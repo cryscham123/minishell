@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 17:27:14 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:01:01 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@
 # define F_HEREDOC 16
 # define F_OUTPUT 32
 # define F_APPEND 64
-# define F_STATUS_ONGOING 77
 
 typedef struct s_lst
 {
@@ -75,7 +74,7 @@ typedef struct s_token
 	int		fd[2];
 }	t_token;
 
-t_lst	*ft_itoa(unsigned char a);
+t_lst	*ft_itoa(int a);
 char	**ft_av_free(char **target);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
@@ -115,6 +114,6 @@ int		ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int));
 void	heredoc_signal_handler(int sig);
 void	sigint_handler(int sig);
-void	sigquit_handler(int sig);
+void	child_signal_handler(int sig);
 
 #endif

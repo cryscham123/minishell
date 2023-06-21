@@ -6,11 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 18:39:43 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:13:45 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
 {
@@ -63,6 +65,25 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 		free(target);
 	}
 	free(target);
+	exit(0);
+}
+
+static int	heredoc_parent_wait(int fd, t_lst *file)
+{
+	int	flag;
+
+	ft_signal(SIG_IGN, SIG_IGN);
+	waitpid(-1, &flag, 0);
+	if (flag != 0)
+	{
+		close(fd);
+		ft_unlink(file);
+		ft_lst_free(file, F_DATA_CHAR, NULL);
+		g_status = 1;
+		return (1);
+	}
+	ft_signal(sigint_handler, SIG_IGN);
+	return (0);
 }
 
 static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
@@ -70,6 +91,7 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	int		fd;
 	t_lst	*file;
 	char	*tmp;
+	pid_t	pid;
 
 	file = ft_itoa(token_num);
 	if (file == NULL)
@@ -81,8 +103,13 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	free(tmp);
 	if (fd < 0)
 		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
-	parse_heredoc(fd, del, mode, ev);
-	ft_signal(sigint_handler, sigquit_handler);
+	pid = fork();
+	if (pid < 0)
+		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
+	else if (pid == 0)
+		parse_heredoc(fd, del, mode, ev);
+	else if (heredoc_parent_wait(fd, file) != 0)
+		return (NULL);
 	close(fd);
 	return (file);
 }

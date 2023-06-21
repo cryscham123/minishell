@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:28:28 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 13:18:19 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:45:24 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern unsigned char	g_status;
+extern int	g_status;
 
 char	**ft_av_free(char **target)
 {

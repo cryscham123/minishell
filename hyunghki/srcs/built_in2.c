@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 16:00:47 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 10:14:19 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,8 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		if (ft_strcmp(((t_hash *)ev->data)->key, s) == 0)
 		{
 			prev->nxt = ev->nxt;
-			ft_node_free(ev->data, F_DATA_HASH);
-			free(ev);
+			ev->nxt = NULL;
+			ft_lst_free(ev, F_DATA_HASH, NULL);
 			break ;
 		}
 		prev = ev;

@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:14:14 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 14:00:16 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:45:07 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern unsigned char	g_status;
+extern int	g_status;
 
 static int	trans_help(t_lst **target, t_lst **lst, t_lst *cur, t_lst *ev)
 {

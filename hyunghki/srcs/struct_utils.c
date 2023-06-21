@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/19 13:55:27 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 12:46:19 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_lst	*ft_hash_find(t_lst *hash, char *to_find)
 	return (NULL);
 }
 
-t_lst	*ft_itoa(unsigned char a)
+t_lst	*ft_itoa(int a)
 {
 	t_lst	*target;
 	t_lst	*prev;

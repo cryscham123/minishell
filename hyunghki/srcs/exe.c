@@ -6,13 +6,13 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/20 18:44:05 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/21 15:18:10 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern unsigned char	g_status;
+extern int	g_status;
 
 static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 {
@@ -105,16 +105,13 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
 	if (flag == 2)
-	{
 		flag = ft_extern(data->argv, ev, is_single);
-		flag = -1 * (flag != 0);
-	}
 	dup2(fd_tmp[0], 0);
 	dup2(fd_tmp[1], 1);
 	ft_close(fd_tmp, NULL);
 	if (!is_single)
 		exit(flag);
-	return (flag);
+	return (flag + 128 * (flag != 0) - 257 * (flag >= 256));
 }
 
 int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
@@ -123,7 +120,7 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 	int		is_single;
 	int		flag;
 
-	g_status = F_STATUS_ONGOING;
+	ft_signal(child_signal_handler, child_signal_handler);
 	is_single = (tv->nxt == NULL);
 	if (is_single)
 		return (ft_exe_cmd(tv->data, ev, is_single, tv));
@@ -143,5 +140,5 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 	}
 	while (i--)
 		waitpid(-1, &flag, 0);
-	return (-1 * (flag != 0));
+	return (flag + 128 * (flag != 0) - 257 * (flag >= 256));
 }
