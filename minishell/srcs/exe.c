@@ -57,14 +57,14 @@ static char	**translate_av_ev(t_lst *data, t_lst *ev, int data_type)
 		if (data_type == F_DATA_CHAR)
 			target[i++] = ft_c_str(data->data, NULL, -1, 1);
 		else if (data_type == F_DATA_HASH)
-			target[i++] = ft_hash_str(ev->data);
+			target[i++] = ft_hash_str(data->data);
 		if (target[i - 1] == NULL)
 			return (ft_lst_free(NULL, target, F_DATA_CHAR, F_ERROR_MEM));
 		data = data->nxt;
 	}
 	if (data_type == F_DATA_CHAR)
 	{
-		((t_hash *)ev->data)->env = translate_av_ev(ev, ev, F_DATA_HASH);
+		((t_hash *)ev->data)->env = translate_av_ev(ev->nxt, ev, F_DATA_HASH);
 		if (((t_hash *)ev->data)->env == NULL)
 			return (ft_lst_free(NULL, target, F_DATA_CHAR, F_ERROR_MEM));
 	}
