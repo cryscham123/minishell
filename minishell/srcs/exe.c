@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 13:59:10 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 16:52:34 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:37:22 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	int		i;
 	t_lst	*cur;
 
+	execve(argv[0], argv, ((t_hash *)ev->data)->env);
 	while (path != NULL)
 	{
 		cur = path;
@@ -42,23 +43,32 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	exit(ft_error(F_ERROR_EXE));
 }
 
-static char	**mk_av(t_lst *data)
+static int	translate_av_ev(t_lst *data, char ***argv, t_lst *ev)
 {
-	char	**target;
+	char	**target_av;
 	int		i;
 
-	target = ft_calloc(sizeof(char *) * (ft_str_size(data) + 1));
-	if (target == NULL)
-		return (NULL);
+	target_av = ft_calloc(sizeof(char *) * (ft_str_size(data) + 1));
+	if (target_av == NULL)
+		return (1);
 	i = 0;
 	while (data != NULL)
 	{
-		target[i++] = ft_c_str(data->data, NULL, -1, 1);
-		if (target[i - 1] == NULL)
-			return (ft_av_free(target));
+		target_av[i++] = ft_c_str(data->data, NULL, -1, 1);
+		if (target_av[i - 1] == NULL)
+		{
+			ft_av_free(target_av);
+			return (1);
+		}
 		data = data->nxt;
 	}
-	return (target);
+	if (mk_ev_char(ev) != 0)
+	{
+		ft_av_free(target_av);
+		return (1);
+	}
+	*argv = target_av;
+	return (0);
 }
 
 static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
@@ -68,8 +78,7 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	char	**argv;
 	int		flag;
 
-	argv = mk_av(data);
-	if (argv == NULL)
+	if (translate_av_ev(data, &argv, ev) != 0)
 		return (1);
 	path = ft_hash_find(ev, "PATH");
 	flag = 0;

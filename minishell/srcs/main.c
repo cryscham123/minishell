@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 16:56:55 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:36:29 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ static void	*mk_ev(char **env)
 	ev = NULL;
 	if (lst_push(&ev, mk_hash_lst("=$")) != 0)
 		return (ft_lst_free(ev, F_DATA_HASH, F_ERROR_MEM));
-	((t_hash *)ev->data)->env = env;
 	while (*env)
 	{
 		if (lst_push(&ev, mk_hash_lst(*env)) != 0)

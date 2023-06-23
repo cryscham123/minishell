@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/13 11:56:01 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/21 12:26:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/23 18:35:16 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	*ft_node_free(void *data, int data_info)
 		return (ft_lst_free(data, F_DATA_CHAR, NULL));
 	if (data_info == F_DATA_TOKEN)
 	{
+		ft_close(((t_token *)data)->fd, NULL);
 		ft_lst_free(((t_token *)data)->argv, F_DATA_STRING, NULL);
 		ft_lst_free(((t_token *)data)->redirection, F_DATA_FILE, NULL);
 	}
