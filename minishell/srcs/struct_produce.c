@@ -47,9 +47,9 @@ t_lst	*mk_token_lst(char *line, t_lst *ev)
 	line_lst = NULL;
 	target = NULL;
 	if (*line == '|')
-		return (ft_lst_free(NULL, F_DATA_CHAR, F_ERROR_SYNTAX));
+		return (ft_lst_free(NULL, NULL, F_DATA_CHAR, F_ERROR_SYNTAX));
 	if (ft_split(&line_lst, line, "|", F_PIPE) != 0)
-		return (ft_lst_free(line_lst, F_DATA_CHAR, NULL));
+		return (ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL));
 	tmp = line_lst;
 	while (tmp != NULL)
 	{
@@ -57,12 +57,12 @@ t_lst	*mk_token_lst(char *line, t_lst *ev)
 		if (token == NULL || lst_push(&target, mk_lst(token, 0)) != 0)
 		{
 			ft_node_free(token, F_DATA_TOKEN);
-			ft_lst_free(line_lst, F_DATA_CHAR, NULL);
-			return (ft_lst_free(target, F_DATA_TOKEN, NULL));
+			ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL);
+			return (ft_lst_free(target, NULL, F_DATA_TOKEN, NULL));
 		}
 		tmp = tmp->nxt;
 	}
-	ft_lst_free(line_lst, F_DATA_CHAR, NULL);
+	ft_lst_free(line_lst, NULL, F_DATA_CHAR, NULL);
 	return (target);
 }
 
@@ -100,7 +100,7 @@ t_lst	*mk_str_lst(char *s)
 		if (data == NULL || lst_push(&target, mk_lst(data, 0)) != 0)
 		{
 			free(data);
-			return (ft_lst_free(target, F_DATA_STRING, NULL));
+			return (ft_lst_free(target, NULL, F_DATA_STRING, NULL));
 		}
 		s++;
 	}

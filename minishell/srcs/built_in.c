@@ -31,7 +31,7 @@ int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
 	{
 		if (ft_strcmp(((t_hash *)ev->data)->key, "PWD") == 0)
 		{
-			ft_lst_free(((t_hash *)ev->data)->value, F_DATA_CHAR, NULL);
+			ft_lst_free(((t_hash *)ev->data)->value, NULL, F_DATA_CHAR, NULL);
 			((t_hash *)ev->data)->value = pwd;
 			break ;
 		}

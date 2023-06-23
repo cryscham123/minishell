@@ -57,7 +57,7 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		{
 			prev->nxt = ev->nxt;
 			ev->nxt = NULL;
-			ft_lst_free(ev, F_DATA_HASH, NULL);
+			ft_lst_free(ev, NULL, F_DATA_HASH, NULL);
 			break ;
 		}
 		prev = ev;

@@ -61,7 +61,7 @@ static int	trs(t_lst **cur, t_lst **prev, t_lst **lst, t_lst *ev)
 	}
 	else if (trans_help(&to_link, cur, tmp, ev) != 0)
 		return (ft_error(F_ERROR_MEM));
-	ft_lst_free(tmp, F_DATA_CHAR, NULL);
+	ft_lst_free(tmp, NULL, F_DATA_CHAR, NULL);
 	if (*prev == NULL)
 		*lst = to_link;
 	else
@@ -122,7 +122,7 @@ int	ft_resplit(t_token *token, t_lst *lst, int n)
 	}
 	token->argv = tmp->nxt;
 	tmp->nxt = NULL;
-	ft_lst_free(lst, F_DATA_STRING, NULL);
+	ft_lst_free(lst, NULL, F_DATA_STRING, NULL);
 	return (0);
 }
 

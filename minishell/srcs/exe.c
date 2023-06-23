@@ -43,32 +43,32 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	exit(ft_error(F_ERROR_EXE));
 }
 
-static int	translate_av_ev(t_lst *data, char ***argv, t_lst *ev)
+static char	**translate_av_ev(t_lst *data, t_lst *ev, int data_type)
 {
-	char	**target_av;
+	char	**target;
 	int		i;
 
-	target_av = ft_calloc(sizeof(char *) * (ft_str_size(data) + 1));
-	if (target_av == NULL)
-		return (1);
+	target = ft_calloc(sizeof(char *) * (ft_str_size(data) + 1));
+	if (target == NULL)
+		return (ft_lst_free(NULL, target, F_DATA_CHAR, F_ERROR_MEM));
 	i = 0;
 	while (data != NULL)
 	{
-		target_av[i++] = ft_c_str(data->data, NULL, -1, 1);
-		if (target_av[i - 1] == NULL)
-		{
-			ft_av_free(target_av);
-			return (1);
-		}
+		if (data_type == F_DATA_CHAR)
+			target[i++] = ft_c_str(data->data, NULL, -1, 1);
+		else if (data_type == F_DATA_HASH)
+			target[i++] = ft_hash_str(ev->data);
+		if (target[i - 1] == NULL)
+			return (ft_lst_free(NULL, target, F_DATA_CHAR, F_ERROR_MEM));
 		data = data->nxt;
 	}
-	if (mk_ev_char(ev) != 0)
+	if (data_type == F_DATA_CHAR)
 	{
-		ft_av_free(target_av);
-		return (1);
+		((t_hash *)ev->data)->env = translate_av_ev(ev, ev, F_DATA_HASH);
+		if (((t_hash *)ev->data)->env == NULL)
+			return (ft_lst_free(NULL, target, F_DATA_CHAR, F_ERROR_MEM));
 	}
-	*argv = target_av;
-	return (0);
+	return (target);
 }
 
 static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
@@ -78,7 +78,8 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	char	**argv;
 	int		flag;
 
-	if (translate_av_ev(data, &argv, ev) != 0)
+	argv = translate_av_ev(data, ev, F_DATA_CHAR);
+	if (argv == NULL)
 		return (1);
 	path = ft_hash_find(ev, "PATH");
 	flag = 0;
@@ -94,7 +95,8 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	}
 	else
 		ft_exe_extern(path, data->data, argv, ev);
-	ft_av_free(argv);
+	ft_lst_free(NULL, argv, F_DATA_CHAR, NULL);
+	ft_lst_free(NULL, ((t_hash *)ev->data)->env, F_DATA_CHAR, NULL);
 	return (flag);
 }
 

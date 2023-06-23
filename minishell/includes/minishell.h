@@ -76,7 +76,6 @@ typedef struct s_token
 }	t_token;
 
 t_lst	*ft_itoa(int a);
-char	**ft_av_free(char **target);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
 int		ft_strcmp(char *s1, char *s2);
@@ -96,7 +95,7 @@ int		ft_str_size(t_lst *str);
 char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote);
 t_lst	*mk_lst(void *data, int is_argv);
 void	*ft_node_free(void *data, int data_info);
-void	*ft_lst_free(t_lst *lst, int data_info, const char *msg);
+void	*ft_lst_free(t_lst *lst, char **argv, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
 int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
@@ -116,5 +115,6 @@ void	ft_signal(void (*handler_1)(int), void (*handler_2)(int));
 void	heredoc_signal_handler(int sig);
 void	sigint_handler(int sig);
 void	child_signal_handler(int sig);
+char	*ft_hash_str(t_hash *data);
 
 #endif

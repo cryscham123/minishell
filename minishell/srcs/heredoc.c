@@ -78,7 +78,7 @@ static int	heredoc_parent_wait(int fd, t_lst *file)
 	{
 		close(fd);
 		ft_unlink(file);
-		ft_lst_free(file, F_DATA_CHAR, NULL);
+		ft_lst_free(file, NULL, F_DATA_CHAR, NULL);
 		g_status = 1;
 		return (1);
 	}
@@ -95,17 +95,17 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 
 	file = ft_itoa(token_num);
 	if (file == NULL)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
+		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
 	tmp = ft_c_str(file, NULL, -1, 0);
 	if (tmp == NULL)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_MEM));
+		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
 	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	free(tmp);
 	if (fd < 0)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
+		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_FILE));
 	pid = fork();
 	if (pid < 0)
-		return (ft_lst_free(file, F_DATA_CHAR, F_ERROR_FILE));
+		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_FILE));
 	else if (pid == 0)
 		parse_heredoc(fd, del, mode, ev);
 	else if (heredoc_parent_wait(fd, file) != 0)
@@ -135,7 +135,7 @@ int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 	free(del);
 	if (tmp == NULL)
 		return (1);
-	ft_lst_free(f->file_name, F_DATA_CHAR, NULL);
+	ft_lst_free(f->file_name, NULL, F_DATA_CHAR, NULL);
 	f->file_name = tmp;
 	return (0);
 }

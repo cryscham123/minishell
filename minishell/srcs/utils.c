@@ -14,15 +14,31 @@
 
 extern int	g_status;
 
-char	**ft_av_free(char **target)
+char	*ft_hash_str(t_hash *data)
 {
-	int	i;
+	t_lst	*value;
+	char	*target;
+	int		i;
 
 	i = 0;
-	while (target[i] != NULL)
-		free(target[i++]);
-	free(target);
-	return (NULL);
+	while (data->key[i])
+		i++;
+	i += ft_str_size(data->value);
+	target = ft_calloc(i + 2);
+	i = 0;
+	while (data->key[i])
+	{
+		target[i] = data->key[i];
+		i++;
+	}
+	target[i++] = '=';
+	value = data->value;
+	while (value != NULL)
+	{
+		target[i++] = *(char *)value->data;
+		value = value->nxt;
+	}
+	return (target);
 }
 
 char	*ft_substr(char *src, int n)
