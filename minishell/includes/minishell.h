@@ -40,13 +40,13 @@
 # define F_DATA_FILE 2
 # define F_DATA_HASH 3
 # define F_DATA_TOKEN 4
-# define F_QUOTE 1
-# define F_DEQUOTE 2
-# define F_PIPE 4
-# define F_INPUT 8
-# define F_HEREDOC 16
-# define F_OUTPUT 32
-# define F_APPEND 64
+# define F_QUOTE 2
+# define F_DEQUOTE 4
+# define F_PIPE 8
+# define F_INPUT 16
+# define F_HEREDOC 32
+# define F_OUTPUT 64
+# define F_APPEND 128
 
 typedef struct s_lst
 {
@@ -114,7 +114,7 @@ int		ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int));
 void	heredoc_signal_handler(int sig);
 void	sigint_handler(int sig);
-void	child_signal_handler(int sig);
+int		cal_flag(int ret_val);
 char	*ft_hash_str(t_hash *data);
 
 #endif

@@ -31,12 +31,21 @@ void	heredoc_signal_handler(int sig)
 	exit(1);
 }
 
-void	child_signal_handler(int sig)
+int	cal_flag(int ret_val)
 {
-	if (sig == SIGINT)
-		write(2, "^C\n", 3);
-	if (sig == SIGQUIT)
-		write(2, "^\\Quit: 3\n", 10);
+	if (ret_val == 2)
+	{
+		printf("^C\n");
+		return (ret_val + 128);
+	}
+	if (ret_val == 3)
+	{
+		printf("^\\Quit: %d\n", ret_val);
+		return (ret_val + 128);
+	}
+	if (ret_val == 256)
+		return (127);
+	return (ret_val);
 }
 
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int))

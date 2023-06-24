@@ -20,6 +20,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	int		i;
 	t_lst	*cur;
 
+	ft_signal(SIG_DFL, SIG_DFL);
 	execve(argv[0], argv, ((t_hash *)ev->data)->env);
 	while (path != NULL)
 	{
@@ -34,11 +35,10 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 		if (path_char == NULL)
 			exit(ft_error(F_ERROR_MEM));
 		execve(path_char, argv, ((t_hash *)ev->data)->env);
-		if (cur == NULL)
-			path = cur;
-		else
-			path = cur->nxt;
 		free(path_char);
+		if (cur == NULL)
+			break ;
+		path = cur->nxt;
 	}
 	exit(ft_error(F_ERROR_EXE));
 }
@@ -122,7 +122,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 	ft_close(fd_tmp, NULL);
 	if (!is_single)
 		exit(flag);
-	return (flag + 128 * (flag != 0) - 257 * (flag >= 256));
+	return (cal_flag(flag));
 }
 
 int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
@@ -131,7 +131,7 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 	int		is_single;
 	int		flag;
 
-	ft_signal(child_signal_handler, child_signal_handler);
+	ft_signal(SIG_IGN, SIG_IGN);
 	is_single = (tv->nxt == NULL);
 	if (is_single)
 		return (ft_exe_cmd(tv->data, ev, is_single, tv));
@@ -151,5 +151,5 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 	}
 	while (i--)
 		waitpid(-1, &flag, 0);
-	return (flag + 128 * (flag != 0) - 257 * (flag >= 256));
+	return (cal_flag(flag));
 }
