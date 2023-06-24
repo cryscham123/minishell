@@ -72,7 +72,7 @@ int	ft_exit(t_lst *argv, int i)
 	{
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
-		tmp = ft_c_str(((t_lst *)argv->nxt)->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->nxt->data, NULL, -1, 1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		while (tmp[i])

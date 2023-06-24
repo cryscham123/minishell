@@ -100,5 +100,7 @@ int	ft_error(const char *msg)
 	write(2, msg, i);
 	write(2, "\n", 1);
 	g_status = 1;
+	if (ft_strcmp((char *)msg, F_ERROR_EXE) == 0)
+		return (127);
 	return (1);
 }

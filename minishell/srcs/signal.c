@@ -33,19 +33,15 @@ void	heredoc_signal_handler(int sig)
 
 int	cal_flag(int ret_val)
 {
+	if (ret_val == 0 || ret_val == 1)
+		return (ret_val);
+	if (WIFEXITED(ret_val))
+		return (WEXITSTATUS(ret_val));
 	if (ret_val == 2)
-	{
 		printf("^C\n");
-		return (ret_val + 128);
-	}
 	if (ret_val == 3)
-	{
 		printf("^\\Quit: %d\n", ret_val);
-		return (ret_val + 128);
-	}
-	if (ret_val == 256)
-		return (127);
-	return (ret_val);
+	return (ret_val + 128);
 }
 
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int))
