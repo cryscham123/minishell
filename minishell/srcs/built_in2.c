@@ -48,7 +48,7 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		return (ft_error(F_ERROR_EXPORT));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
-		return (2);
+		return (1);
 	tmp = s[i];
 	s[i] = '\0';
 	while (ev != NULL)

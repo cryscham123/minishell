@@ -123,7 +123,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	char	*cmd;
 	int		flag;
 
-	flag = -1;
+	flag = 2;
 	cmd = ft_c_str(argv->data, NULL, 0, -1);
 	if (cmd == NULL)
 		flag = ft_error(F_ERROR_MEM);

@@ -115,7 +115,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
-	if (flag == -1)
+	if (flag == 2)
 		flag = ft_extern(data->argv, ev, is_single);
 	dup2(fd_tmp[0], 0);
 	dup2(fd_tmp[1], 1);
