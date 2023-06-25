@@ -46,13 +46,10 @@ void	*ft_lst_free(t_lst *lst, char **argv, int data_info, const char *msg)
 
 	if (msg != NULL)
 		ft_error(msg);
-	if (argv != NULL)
-	{
-		i = 0;
-		while (argv[i] != NULL)
-			free(argv[i++]);
-		free(argv);
-	}
+	i = 0;
+	while (argv != NULL && argv[i] != NULL)
+		free(argv[i++]);
+	free(argv);
 	while (lst != NULL)
 	{
 		ft_node_free(lst->data, data_info);
@@ -82,7 +79,7 @@ t_lst	*ft_lst_back(t_lst *lst)
 {
 	t_lst	*prev;
 
-	prev = lst;
+	prev = NULL;
 	while (lst != NULL)
 	{
 		prev = lst;

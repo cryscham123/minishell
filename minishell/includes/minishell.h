@@ -25,7 +25,6 @@
 
 # define F_ERROR_MEM "Memmory Allocation Failed..."
 # define F_ERROR_SYNTAX "Unexpected Token..."
-# define F_ERROR_AMB "Ambiguos Arguments..."
 # define F_ERROR_ARG "Too Many Arguments..."
 # define F_ERROR_FILE "Failed To Access File Or Directory..."
 # define F_ERROR_EXPORT "Not A Valid Identifier..."
@@ -41,7 +40,7 @@
 # define F_DATA_HASH 3
 # define F_DATA_TOKEN 4
 # define F_QUOTE 2
-# define F_DEQUOTE 4
+# define F_DQUOTE 4
 # define F_PIPE 8
 # define F_INPUT 16
 # define F_HEREDOC 32
@@ -83,7 +82,6 @@ int		ft_word_chk(char c, char *meta, int mode);
 int		ft_split(void *target, char *s, char *meta, int flag);
 int		ft_error(const char *msg);
 int		ft_expansion(t_lst *lst, int is_redir, t_lst *ev);
-int		ft_resplit(t_token *token, t_lst *lst, int n);
 int		ft_redirection(t_token *token, t_lst *redir);
 t_lst	*mk_str_lst(char *s);
 t_lst	*mk_hash_lst(char *s);
@@ -92,7 +90,7 @@ t_lst	*mk_file_lst(char *s, int dir_type);
 t_lst	*ft_hash_find(t_lst *hash, char *to_find);
 int		dup_str_lst(t_lst **lst, t_lst *to_dup);
 int		ft_str_size(t_lst *str);
-char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote);
+char	*ft_c_str(t_lst *str, t_lst *apd, char c, int n);
 t_lst	*mk_lst(void *data, int is_argv);
 void	*ft_node_free(void *data, int data_info);
 void	*ft_lst_free(t_lst *lst, char **argv, int data_info, const char *msg);
@@ -111,7 +109,7 @@ int		ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd);
 int		ft_pwd(t_lst **buf);
 int		ft_exit(t_lst *argv, int i);
 int		ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i);
-void	ft_signal(void (*handler_1)(int), void (*handler_2)(int));
+void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag);
 void	heredoc_signal_handler(int sig);
 void	sigint_handler(int sig);
 int		cal_flag(int ret_val);

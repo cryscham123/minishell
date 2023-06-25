@@ -52,7 +52,7 @@ void	ft_unlink(t_lst *file_name)
 {
 	char	*name;
 
-	name = ft_c_str(file_name, NULL, -1, 0);
+	name = ft_c_str(file_name, NULL, 0, -1);
 	unlink(name);
 	free(name);
 }
@@ -78,20 +78,12 @@ int	ft_pipe(t_lst *tv)
 int	ft_redirection(t_token *token, t_lst *redir)
 {
 	t_file	*data;
-	t_lst	*tmp;
 	char	*file_name;
 
 	while (redir != NULL)
 	{
 		data = redir->data;
-		tmp = data->file_name;
-		while (tmp != NULL)
-		{
-			if (ft_word_chk(*(char *)tmp->data, " \t", F_WORD) == 0)
-				return (ft_error(F_ERROR_AMB));
-			tmp = tmp->nxt;
-		}
-		file_name = ft_c_str(data->file_name, NULL, -1, 1);
+		file_name = ft_c_str(data->file_name, NULL, 0, -1);
 		if (file_name == NULL)
 			return (ft_error(F_ERROR_MEM));
 		if (ft_open(token, file_name, data->mode) != 0)

@@ -20,7 +20,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	int		i;
 	t_lst	*cur;
 
-	ft_signal(SIG_DFL, SIG_DFL);
+	ft_signal(SIG_DFL, SIG_DFL, 1);
 	execve(argv[0], argv, ((t_hash *)ev->data)->env);
 	while (path != NULL)
 	{
@@ -31,7 +31,7 @@ static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 			i++;
 			cur = cur->nxt;
 		}
-		path_char = ft_c_str(path, av, i, 0);
+		path_char = ft_c_str(path, av, '/', i);
 		if (path_char == NULL)
 			exit(ft_error(F_ERROR_MEM));
 		execve(path_char, argv, ((t_hash *)ev->data)->env);
@@ -55,7 +55,7 @@ static char	**translate_av_ev(t_lst *data, t_lst *ev, int data_type)
 	while (data != NULL)
 	{
 		if (data_type == F_DATA_CHAR)
-			target[i++] = ft_c_str(data->data, NULL, -1, 1);
+			target[i++] = ft_c_str(data->data, NULL, 0, -1);
 		else if (data_type == F_DATA_HASH)
 			target[i++] = ft_hash_str(data->data);
 		if (target[i - 1] == NULL)
@@ -115,7 +115,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
-	if (flag == 2)
+	if (flag == -1)
 		flag = ft_extern(data->argv, ev, is_single);
 	dup2(fd_tmp[0], 0);
 	dup2(fd_tmp[1], 1);
@@ -131,7 +131,7 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 	int		is_single;
 	int		flag;
 
-	ft_signal(SIG_IGN, SIG_IGN);
+	ft_signal(SIG_IGN, SIG_IGN, 0);
 	is_single = (tv->nxt == NULL);
 	if (is_single)
 		return (ft_exe_cmd(tv->data, ev, is_single, tv));

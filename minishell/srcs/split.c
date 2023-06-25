@@ -102,11 +102,11 @@ int	ft_word_chk(char c, char *meta, int mode)
 	}
 	if (mode == F_WORD)
 	{
-		if (c == '\'' && (quote_flag & F_DEQUOTE) == 0)
+		if (c == '\'' && (quote_flag & F_DQUOTE) == 0)
 			quote_flag ^= F_QUOTE;
 		if (c == '\"' && (quote_flag & F_QUOTE) == 0)
-			quote_flag ^= F_DEQUOTE;
-		if ((quote_flag & (F_QUOTE + F_DEQUOTE)) != 0)
+			quote_flag ^= F_DQUOTE;
+		if ((quote_flag & (F_QUOTE + F_DQUOTE)) != 0)
 			return (quote_flag);
 	}
 	while (*meta)

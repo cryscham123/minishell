@@ -47,7 +47,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 
 	while (1)
 	{
-		ft_signal(heredoc_signal_handler, SIG_IGN);
+		ft_signal(heredoc_signal_handler, SIG_IGN, 0);
 		target = readline("\033[34mheredoc>\033[0m ");
 		if (target == NULL)
 			printf("\033[A\033[34mheredoc>\033[0m ");
@@ -72,7 +72,7 @@ static int	heredoc_parent_wait(int fd, t_lst *file)
 {
 	int	flag;
 
-	ft_signal(SIG_IGN, SIG_IGN);
+	ft_signal(SIG_IGN, SIG_IGN, 0);
 	waitpid(-1, &flag, 0);
 	if (flag != 0)
 	{
@@ -82,7 +82,7 @@ static int	heredoc_parent_wait(int fd, t_lst *file)
 		g_status = 1;
 		return (1);
 	}
-	ft_signal(sigint_handler, SIG_IGN);
+	ft_signal(sigint_handler, SIG_IGN, 0);
 	return (0);
 }
 
@@ -96,7 +96,7 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 	file = ft_itoa(token_num);
 	if (file == NULL)
 		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
-	tmp = ft_c_str(file, NULL, -1, 0);
+	tmp = ft_c_str(file, NULL, 0, -1);
 	if (tmp == NULL)
 		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
 	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
@@ -121,7 +121,7 @@ int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 	t_lst	*tmp;
 
 	tmp = f->file_name;
-	del = ft_c_str(tmp, NULL, -1, 1);
+	del = ft_c_str(tmp, NULL, 0, -1);
 	if (del == NULL)
 		return (ft_error(F_ERROR_MEM));
 	mode = 1;

@@ -16,7 +16,7 @@ int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
 {
 	if (argv == NULL)
 		return (0);
-	tmp = ft_c_str(argv->data, NULL, -1, 1);
+	tmp = ft_c_str(argv->data, NULL, 0, -1);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_MEM));
 	if (chdir(tmp) != 0)
@@ -72,7 +72,7 @@ int	ft_exit(t_lst *argv, int i)
 	{
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
-		tmp = ft_c_str(argv->nxt->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->nxt->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		while (tmp[i])
@@ -94,7 +94,7 @@ int	ft_echo(t_lst *argv, char *tmp, int flag)
 {
 	if (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_strcmp(tmp, "-n");
@@ -104,7 +104,7 @@ int	ft_echo(t_lst *argv, char *tmp, int flag)
 		argv = argv->nxt;
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		printf("%s", tmp);
@@ -123,8 +123,8 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	char	*cmd;
 	int		flag;
 
-	flag = 2;
-	cmd = ft_c_str(argv->data, NULL, -1, 1);
+	flag = -1;
+	cmd = ft_c_str(argv->data, NULL, 0, -1);
 	if (cmd == NULL)
 		flag = ft_error(F_ERROR_MEM);
 	else if (ft_strcmp(cmd, "echo") == 0)

@@ -25,7 +25,7 @@ int	ft_str_size(t_lst *str)
 	return (i);
 }
 
-char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote)
+char	*ft_c_str(t_lst *str, t_lst *apd, char c, int n)
 {
 	char	*target;
 	int		size;
@@ -40,12 +40,11 @@ char	*ft_c_str(t_lst *str, t_lst *apd, int n, int del_quote)
 		return (NULL);
 	while (str != NULL && i < n)
 	{
-		if (!(del_quote \
-			&& (*(char *)str->data == '\"' || *(char *)str->data == '\'')))
+		if (*(char *)str->data != '\0')
 			target[i++] = *(char *)str->data;
 		str = str->nxt;
 	}
-	target[i++] = '/' * (apd != NULL);
+	target[i++] = c;
 	while (apd != NULL && i < size)
 	{
 		target[i++] = *(char *)apd->data;
@@ -59,7 +58,7 @@ int	dup_str_lst(t_lst **lst, t_lst *to_dup)
 	char	*tmp;
 	t_lst	*target;
 
-	tmp = ft_c_str(to_dup, NULL, to_dup->size, 0);
+	tmp = ft_c_str(to_dup, NULL, 0, -1);
 	if (tmp == NULL)
 		return (1);
 	target = mk_str_lst(tmp);

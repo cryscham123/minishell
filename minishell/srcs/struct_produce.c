@@ -31,9 +31,6 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 		return (ft_node_free(token, F_DATA_TOKEN));
 	if (ft_expansion(token->redirection, 1, ev) != 0)
 		return (ft_node_free(token, F_DATA_TOKEN));
-	if (token->argv != NULL \
-			&& ft_resplit(token, token->argv, token->argv->size) != 0)
-		return (ft_node_free(token, F_DATA_TOKEN));
 	return (token);
 }
 

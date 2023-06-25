@@ -48,7 +48,7 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		return (ft_error(F_ERROR_EXPORT));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
-		return (1);
+		return (2);
 	tmp = s[i];
 	s[i] = '\0';
 	while (ev != NULL)
@@ -75,7 +75,7 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 		return (0);
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_chk_key(tmp, ev, 0);
@@ -96,7 +96,7 @@ int	ft_unset(t_lst	*argv, t_lst *ev, int flag)
 
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, -1, 1);
+		tmp = ft_c_str(argv->data, NULL, 0, -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_chk_key(tmp, ev, 1);

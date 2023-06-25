@@ -60,7 +60,6 @@ static void	*mk_ev(char **env)
 
 int	main(int argc, char **argv, char **env)
 {
-	struct termios	term;
 	t_lst			*ev;
 
 	(void)argv;
@@ -69,12 +68,9 @@ int	main(int argc, char **argv, char **env)
 	ev = mk_ev(env);
 	if (ev == NULL)
 		return (1);
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	while (1)
 	{
-		ft_signal(sigint_handler, SIG_IGN);
+		ft_signal(sigint_handler, SIG_IGN, 0);
 		ft_parse(ev);
 	}
 	ft_lst_free(ev, NULL, F_DATA_HASH, NULL);
