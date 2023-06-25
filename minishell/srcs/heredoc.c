@@ -117,21 +117,13 @@ static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
 int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
 {
 	char	*del;
-	int		mode;
 	t_lst	*tmp;
 
-	tmp = f->file_name;
-	del = ft_c_str(tmp, NULL, 0, -1);
+	del = ft_c_str(f->file_name, NULL, 0, -1);
 	if (del == NULL)
 		return (ft_error(F_ERROR_MEM));
-	mode = 1;
-	while (tmp != NULL)
-	{
-		if (ft_word_chk(*(char *)tmp->data, "\'\"", F_CHK) == 0)
-			mode = 0;
-		tmp = tmp->nxt;
-	}
-	tmp = create_heredoc(del, mode, token_num, ev);
+	tmp = create_heredoc(del, ((f->mode & F_NO_TRANS) == 0), token_num, ev);
+	f->mode &= ~F_NO_TRANS;
 	free(del);
 	if (tmp == NULL)
 		return (1);

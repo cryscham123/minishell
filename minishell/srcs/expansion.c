@@ -80,7 +80,7 @@ static int	ft_translate(t_lst **cur, t_lst *ev)
 	return (0);
 }
 
-static int	exp_help(t_lst *cur, t_lst *ev)
+static int	exp_help(t_lst *cur, t_lst *ev, t_file *file_info, int is_heredoc)
 {
 	char	val;
 	int		flag;
@@ -89,16 +89,19 @@ static int	exp_help(t_lst *cur, t_lst *ev)
 	while (cur != NULL)
 	{
 		val = *(char *)cur->data;
-		if (flag == F_QUOTE && val == '\'')
-			*(char *)cur->data = '\0';
-		if (flag == F_DQUOTE && val == '\"')
+		if ((flag == F_QUOTE && val == '\'') \
+			|| (flag == F_DQUOTE && val == '\"'))
 			*(char *)cur->data = '\0';
 		flag = ft_word_chk(val, "", F_WORD);
-		if (flag == F_QUOTE && val == '\'')
+		if ((flag == F_QUOTE && val == '\'') \
+			|| (flag == F_DQUOTE && val == '\"'))
+		{
 			*(char *)cur->data = '\0';
-		if (flag == F_DQUOTE && val == '\"')
-			*(char *)cur->data = '\0';
-		if (flag != F_QUOTE && val == '$' && ft_translate(&cur, ev) != 0)
+			if (is_heredoc)
+				file_info->mode |= F_NO_TRANS;
+		}
+		if (!is_heredoc && flag != F_QUOTE && val == '$' \
+			&& ft_translate(&cur, ev) != 0)
 			return (ft_word_chk(0, "", F_RESET));
 		if (cur != NULL)
 			cur = cur->nxt;
@@ -110,22 +113,21 @@ int	ft_expansion(t_lst *lst, int is_redir, t_lst *ev)
 {
 	static int	heredoc_name;
 	t_lst		*tmp;
+	int			is_heredoc;
 	t_file		*file_info;
 
 	tmp = lst;
 	while (tmp != NULL)
 	{
-		if (is_redir == 0 && exp_help(tmp->data, ev) != 0)
+		if (is_redir == 0 && exp_help(tmp->data, ev, NULL, 0) != 0)
 			return (1);
 		if (is_redir != 0)
 		{
 			file_info = tmp->data;
-			if (file_info->mode == F_HEREDOC)
-			{
-				if (ft_heredoc(file_info, ++heredoc_name, ev) != 0)
-					return (1);
-			}
-			else if (exp_help(file_info->file_name, ev) != 0)
+			is_heredoc = (file_info->mode == F_HEREDOC);
+			if (exp_help(file_info->file_name, ev, file_info, is_heredoc) != 0)
+				return (1);
+			if (is_heredoc && ft_heredoc(file_info, ++heredoc_name, ev) != 0)
 				return (1);
 		}
 		tmp = tmp->nxt;

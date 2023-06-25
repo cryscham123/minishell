@@ -46,6 +46,7 @@
 # define F_HEREDOC 32
 # define F_OUTPUT 64
 # define F_APPEND 128
+# define F_NO_TRANS 256
 
 typedef struct s_lst
 {
