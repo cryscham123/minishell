@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 18:39:04 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:25 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:11:52 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,19 @@ static int	ft_chk_validate(char *s, int cmd)
 {
 	int	i;
 
+	if (*s >= '0' && *s <= '9')
+		return (ft_error(F_ERROR_EXPORT));
 	i = 0;
 	while (s[i] && ft_word_chk(s[i], "=", F_CHK) != 0)
 	{
 		if (!(i != 0 && s[i] >= '0' && s[i] <= '9') \
 			&& !(s[i] >= 'a' && s[i] <= 'z') \
 			&& !(s[i] >= 'A' && s[i] <= 'Z') && s[i] != '_')
-		{
-			ft_error(F_ERROR_EXPORT);
-			return (-1);
-		}
+			return (ft_error(F_ERROR_EXPORT));
 		i++;
 	}
 	if (i == 0 || (cmd == 1 && s[i] == '='))
-	{
-		ft_error(F_ERROR_EXPORT);
-		return (-1);
-	}
+		return (ft_error(F_ERROR_EXPORT));
 	if (cmd == 0 && s[i] != '=')
 		return (-2);
 	return (i);
@@ -43,8 +39,6 @@ int	ft_chk_key(char *s, t_lst *ev, int cmd)
 	int		i;
 	t_lst	*prev;
 
-	if (*s >= '0' && *s <= '9')
-		return (ft_error(F_ERROR_EXPORT));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
 		return (i);

@@ -6,7 +6,7 @@
 #    By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/06/23 18:41:51 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/06/26 14:06:03 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,7 @@ fclean:
 	rm -f $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(DEBUG_FLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) $(DEBUG_FLAGS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)

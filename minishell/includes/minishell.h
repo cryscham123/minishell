@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:55 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:28:31 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int		ft_export(t_lst *argv, t_lst *ev, int flag);
 int		ft_unset(t_lst	*argv, t_lst *ev, int flag);
 int		ft_env(t_lst *ev);
 int		ft_echo(t_lst *argv, char *tmp, int flag);
-int		ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd);
+int		ft_cd(t_lst *argv, t_lst *ev, char *tmp);
 int		ft_pwd(t_hash *buf);
 int		ft_chk_key(char *s, t_lst *ev, int cmd);
 int		ft_exit(t_lst *argv, int i);

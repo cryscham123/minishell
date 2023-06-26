@@ -6,13 +6,13 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:26 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *new_pwd)
+int	ft_cd(t_lst *argv, t_lst *ev, char *tmp)
 {
 	t_hash	*pwd;
 
@@ -28,16 +28,13 @@ int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *new_pwd)
 	}
 	free(tmp);
 	pwd = ft_calloc(sizeof(t_hash));
-	if (ft_pwd(pwd) != 0)
-		return (1);
-	new_pwd = mk_lst(pwd, 0);
-	if (new_pwd == NULL)
+	if (pwd == NULL || ft_pwd(pwd) != 0)
 	{
 		ft_node_free(pwd, F_DATA_HASH);
-		return (ft_error(F_ERROR_MEM));
+		return (1);
 	}
 	ft_chk_key("PWD", ev, 1);
-	lst_push(&ev, new_pwd);
+	lst_push(&ev, mk_lst(pwd, 0));
 	return (0);
 }
 
@@ -59,8 +56,8 @@ int	ft_pwd(t_hash *buf)
 		buf->key = ft_substr("PWD", 3);
 		if (buf->key == NULL)
 		{
-			ft_lst_free(buf->value, NULL, F_DATA_CHAR, NULL);
-			return (ft_error(F_ERROR_MEM));
+			ft_lst_free(buf->value, NULL, F_DATA_CHAR, F_ERROR_MEM);
+			return (1);
 		}
 		return (0);
 	}
@@ -137,7 +134,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	else if (ft_strcmp(cmd, "echo") == 0)
 		flag = ft_echo(argv->nxt, NULL, 1);
 	else if (ft_strcmp(cmd, "cd") == 0)
-		flag = ft_cd(argv->nxt, ev, NULL, NULL);
+		flag = ft_cd(argv->nxt, ev, NULL);
 	else if (ft_strcmp(cmd, "pwd") == 0)
 		flag = ft_pwd(NULL);
 	else if (ft_strcmp(cmd, "export") == 0)

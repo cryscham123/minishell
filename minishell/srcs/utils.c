@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/11 15:28:28 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 14:13:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,6 @@ int	ft_error(const char *msg)
 	if (ft_strcmp((char *)msg, F_ERROR_EXIT) == 0)
 		return (F_ERROR_BUILTIN);
 	if (ft_strcmp((char *)msg, F_ERROR_EXPORT) == 0)
-		return (F_ERROR_BUILTIN);
+		return (-1);
 	return (1);
 }
