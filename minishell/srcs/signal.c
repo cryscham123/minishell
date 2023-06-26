@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 16:57:48 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:18 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/06/26 15:42:49 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	heredoc_signal_handler(int sig)
 int	cal_flag(int ret_val)
 {
 	if (ret_val == F_ERROR_BUILTIN)
-		return (2);
+		return (1);
 	if (ret_val == 0 || ret_val == 1)
 		return (ret_val);
 	if (WIFEXITED(ret_val))
