@@ -47,6 +47,8 @@
 # define F_OUTPUT 64
 # define F_APPEND 128
 # define F_NO_TRANS 256
+# define F_STATUS_NO_BUILTIN -1
+# define F_ERROR_BUILTIN -2
 
 typedef struct s_lst
 {
@@ -107,7 +109,8 @@ int		ft_unset(t_lst	*argv, t_lst *ev, int flag);
 int		ft_env(t_lst *ev);
 int		ft_echo(t_lst *argv, char *tmp, int flag);
 int		ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd);
-int		ft_pwd(t_lst **buf);
+int		ft_pwd(t_hash *buf);
+int		ft_chk_key(char *s, t_lst *ev, int cmd);
 int		ft_exit(t_lst *argv, int i);
 int		ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag);

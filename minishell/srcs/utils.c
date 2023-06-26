@@ -102,5 +102,9 @@ int	ft_error(const char *msg)
 	g_status = 1;
 	if (ft_strcmp((char *)msg, F_ERROR_EXE) == 0)
 		return (127);
+	if (ft_strcmp((char *)msg, F_ERROR_EXIT) == 0)
+		return (F_ERROR_BUILTIN);
+	if (ft_strcmp((char *)msg, F_ERROR_EXPORT) == 0)
+		return (F_ERROR_BUILTIN);
 	return (1);
 }

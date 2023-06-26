@@ -34,23 +34,22 @@ static int	ft_chk_validate(char *s, int cmd)
 		return (-1);
 	}
 	if (cmd == 0 && s[i] != '=')
-		return (-1);
+		return (-2);
 	return (i);
 }
 
-static int	ft_chk_key(char *s, t_lst *ev, int cmd)
+int	ft_chk_key(char *s, t_lst *ev, int cmd)
 {
 	int		i;
-	char	tmp;
 	t_lst	*prev;
 
 	if (*s >= '0' && *s <= '9')
 		return (ft_error(F_ERROR_EXPORT));
 	i = ft_chk_validate(s, cmd);
 	if (i < 0)
-		return (1);
-	tmp = s[i];
-	s[i] = '\0';
+		return (i);
+	if (cmd == 0)
+		s[i] = '\0';
 	while (ev != NULL)
 	{
 		if (ft_strcmp(((t_hash *)ev->data)->key, s) == 0)
@@ -63,7 +62,8 @@ static int	ft_chk_key(char *s, t_lst *ev, int cmd)
 		prev = ev;
 		ev = ev->nxt;
 	}
-	s[i] = tmp;
+	if (cmd == 0)
+		s[i] = '=';
 	return (0);
 }
 
@@ -84,6 +84,10 @@ int	ft_export(t_lst *argv, t_lst *ev, int flag)
 			free(tmp);
 			return (ft_error(F_ERROR_MEM));
 		}
+		else if (flag == -2)
+			flag = 0;
+		else if (flag < 0)
+			flag = F_ERROR_BUILTIN;
 		free(tmp);
 		argv = argv->nxt;
 	}
@@ -100,6 +104,8 @@ int	ft_unset(t_lst	*argv, t_lst *ev, int flag)
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
 		flag = ft_chk_key(tmp, ev, 1);
+		if (flag < 0)
+			flag = F_ERROR_BUILTIN;
 		free(tmp);
 		argv = argv->nxt;
 	}

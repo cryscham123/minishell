@@ -12,8 +12,10 @@
 
 #include "minishell.h"
 
-int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
+int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *new_pwd)
 {
+	t_hash	*pwd;
+
 	if (argv == NULL)
 		return (0);
 	tmp = ft_c_str(argv->data, NULL, 0, -1);
@@ -25,22 +27,21 @@ int	ft_cd(t_lst *argv, t_lst *ev, char *tmp, t_lst *pwd)
 		return (ft_error(F_ERROR_FILE));
 	}
 	free(tmp);
-	if (ft_pwd(&pwd) != 0)
+	pwd = ft_calloc(sizeof(t_hash));
+	if (ft_pwd(pwd) != 0)
 		return (1);
-	while (ev != NULL)
+	new_pwd = mk_lst(pwd, 0);
+	if (new_pwd == NULL)
 	{
-		if (ft_strcmp(((t_hash *)ev->data)->key, "PWD") == 0)
-		{
-			ft_lst_free(((t_hash *)ev->data)->value, NULL, F_DATA_CHAR, NULL);
-			((t_hash *)ev->data)->value = pwd;
-			break ;
-		}
-		ev = ev->nxt;
+		ft_node_free(pwd, F_DATA_HASH);
+		return (ft_error(F_ERROR_MEM));
 	}
+	ft_chk_key("PWD", ev, 1);
+	lst_push(&ev, new_pwd);
 	return (0);
 }
 
-int	ft_pwd(t_lst **buf)
+int	ft_pwd(t_hash *buf)
 {
 	char	*tmp;
 	t_lst	*ret;
@@ -54,7 +55,13 @@ int	ft_pwd(t_lst **buf)
 		free(tmp);
 		if (ret == NULL)
 			return (ft_error(F_ERROR_MEM));
-		(*buf) = ret;
+		buf->value = ret;
+		buf->key = ft_substr("PWD", 3);
+		if (buf->key == NULL)
+		{
+			ft_lst_free(buf->value, NULL, F_DATA_CHAR, NULL);
+			return (ft_error(F_ERROR_MEM));
+		}
 		return (0);
 	}
 	printf("%s\n", tmp);
@@ -123,7 +130,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	char	*cmd;
 	int		flag;
 
-	flag = 2;
+	flag = F_STATUS_NO_BUILTIN;
 	cmd = ft_c_str(argv->data, NULL, 0, -1);
 	if (cmd == NULL)
 		flag = ft_error(F_ERROR_MEM);

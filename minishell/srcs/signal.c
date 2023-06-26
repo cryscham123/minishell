@@ -33,6 +33,8 @@ void	heredoc_signal_handler(int sig)
 
 int	cal_flag(int ret_val)
 {
+	if (ret_val == F_ERROR_BUILTIN)
+		return (2);
 	if (ret_val == 0 || ret_val == 1)
 		return (ret_val);
 	if (WIFEXITED(ret_val))
