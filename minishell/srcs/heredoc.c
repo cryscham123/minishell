@@ -48,9 +48,9 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 	while (1)
 	{
 		ft_signal(heredoc_signal_handler, SIG_IGN, 0);
-		target = readline("\033[34mheredoc>\033[0m ");
+		target = readline("\e[34mheredoc>\e[0m \e[s");
 		if (target == NULL)
-			printf("\033[A\033[34mheredoc>\033[0m ");
+			printf("\e[u\e[B\e[A");
 		if (target == NULL || ft_strcmp(del, target) == 0)
 			break ;
 		tmp = target;

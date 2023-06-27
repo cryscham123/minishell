@@ -20,10 +20,10 @@ static void	*ft_parse(t_lst *ev)
 	t_lst	*tv;
 
 	tv = NULL;
-	line = readline("\033[s\033[95mminishell$\033[0m ");
+	line = readline("\e[95mminishell$\e[0m \e[s");
 	if (line == NULL)
 	{
-		printf("\033[u\033[95mminishell$\033[0m exit\n");
+		printf("\e[u\e[B\e[Aexit\n");
 		exit(0);
 	}
 	if (*line)
