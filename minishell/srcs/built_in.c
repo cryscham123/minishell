@@ -12,12 +12,14 @@
 
 #include "minishell.h"
 
-int	ft_cd(t_lst *argv, t_lst *ev, char *tmp)
+int	ft_cd(t_lst *argv, t_lst *ev)
 {
-	t_hash	*pwd;
+	char	*tmp;
 
 	if (argv == NULL)
 		return (0);
+	if (ft_set_ev_pwd("OLDPWD", ev, NULL) != 0)
+		return (1);
 	tmp = ft_c_str(argv->data, NULL, 0, -1);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_MEM));
@@ -27,40 +29,18 @@ int	ft_cd(t_lst *argv, t_lst *ev, char *tmp)
 		return (ft_error(F_ERROR_FILE));
 	}
 	free(tmp);
-	pwd = ft_calloc(sizeof(t_hash));
-	if (pwd == NULL || ft_pwd(pwd) != 0)
-	{
-		ft_node_free(pwd, F_DATA_HASH);
+	if (ft_set_ev_pwd("PWD", ev, NULL) != 0)
 		return (1);
-	}
-	ft_chk_key("PWD", ev, 1);
-	lst_push(&ev, mk_lst(pwd, 0));
 	return (0);
 }
 
-int	ft_pwd(t_hash *buf)
+int	ft_pwd(void)
 {
 	char	*tmp;
-	t_lst	*ret;
 
 	tmp = getcwd(NULL, 0);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_FILE));
-	if (buf != NULL)
-	{
-		ret = mk_str_lst(tmp);
-		free(tmp);
-		if (ret == NULL)
-			return (ft_error(F_ERROR_MEM));
-		buf->value = ret;
-		buf->key = ft_substr("PWD", 3);
-		if (buf->key == NULL)
-		{
-			ft_lst_free(buf->value, NULL, F_DATA_CHAR, F_ERROR_MEM);
-			return (1);
-		}
-		return (0);
-	}
 	printf("%s\n", tmp);
 	free(tmp);
 	return (0);
@@ -94,18 +74,17 @@ int	ft_exit(t_lst *argv, int i)
 	exit(num);
 }
 
-int	ft_echo(t_lst *argv, char *tmp, int flag)
+int	ft_echo(t_lst *argv)
 {
-	if (argv != NULL)
+	int		option_flag;
+	char	*tmp;
+
+	option_flag = 0;
+	if (argv != NULL && echo_option_chk(argv->data) != 0)
 	{
-		tmp = ft_c_str(argv->data, NULL, 0, -1);
-		if (tmp == NULL)
-			return (ft_error(F_ERROR_MEM));
-		flag = ft_strcmp(tmp, "-n");
-		free(tmp);
-	}
-	if (flag == 0)
 		argv = argv->nxt;
+		option_flag = 1;
+	}
 	while (argv != NULL)
 	{
 		tmp = ft_c_str(argv->data, NULL, 0, -1);
@@ -117,7 +96,7 @@ int	ft_echo(t_lst *argv, char *tmp, int flag)
 			printf(" ");
 		argv = argv->nxt;
 	}
-	if (flag)
+	if (option_flag == 0)
 		printf("\n");
 	return (0);
 }
@@ -132,11 +111,11 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	if (cmd == NULL)
 		flag = ft_error(F_ERROR_MEM);
 	else if (ft_strcmp(cmd, "echo") == 0)
-		flag = ft_echo(argv->nxt, NULL, 1);
+		flag = ft_echo(argv->nxt);
 	else if (ft_strcmp(cmd, "cd") == 0)
-		flag = ft_cd(argv->nxt, ev, NULL);
+		flag = ft_cd(argv->nxt, ev);
 	else if (ft_strcmp(cmd, "pwd") == 0)
-		flag = ft_pwd(NULL);
+		flag = ft_pwd();
 	else if (ft_strcmp(cmd, "export") == 0)
 		flag = ft_export(argv->nxt, ev, 0);
 	else if (ft_strcmp(cmd, "unset") == 0)

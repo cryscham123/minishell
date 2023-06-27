@@ -46,6 +46,13 @@ char	*ft_substr(char *src, int n)
 	char	*target;
 	int		i;
 
+	if (n == -1)
+	{
+		i = 0;
+		while (src[i])
+			i++;
+		n = i;
+	}
 	target = ft_calloc(n + 1);
 	if (target == NULL)
 		return (NULL);
@@ -102,6 +109,8 @@ int	ft_error(const char *msg)
 	g_status = 1;
 	if (ft_strcmp((char *)msg, F_ERROR_EXE) == 0)
 		return (127);
+	if (ft_strcmp((char *)msg, F_ERROR_ACCESS) == 0)
+		return (126);
 	if (ft_strcmp((char *)msg, F_ERROR_EXPORT) == 0)
 		return (-1);
 	return (1);

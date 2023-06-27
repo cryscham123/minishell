@@ -14,35 +14,6 @@
 
 extern int	g_status;
 
-static void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
-{
-	char	*path_char;
-	int		i;
-	t_lst	*cur;
-
-	ft_signal(SIG_DFL, SIG_DFL, 1);
-	execve(argv[0], argv, ((t_hash *)ev->data)->env);
-	while (path != NULL)
-	{
-		cur = path;
-		i = 0;
-		while (cur != NULL && *(char *)cur->data != ':')
-		{
-			i++;
-			cur = cur->nxt;
-		}
-		path_char = ft_c_str(path, av, '/', i);
-		if (path_char == NULL)
-			exit(ft_error(F_ERROR_MEM));
-		execve(path_char, argv, ((t_hash *)ev->data)->env);
-		free(path_char);
-		if (cur == NULL)
-			break ;
-		path = cur->nxt;
-	}
-	exit(ft_error(F_ERROR_EXE));
-}
-
 static char	**translate_av_ev(t_lst *data, t_lst *ev, int data_type)
 {
 	char	**target;

@@ -68,7 +68,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 	exit(0);
 }
 
-static int	heredoc_parent_wait(int fd, t_lst *file)
+static int	heredoc_parent_wait(int fd, char *file_name)
 {
 	int	flag;
 
@@ -77,8 +77,7 @@ static int	heredoc_parent_wait(int fd, t_lst *file)
 	if (flag != 0)
 	{
 		close(fd);
-		ft_unlink(file);
-		ft_lst_free(file, NULL, F_DATA_CHAR, NULL);
+		unlink(file_name);
 		g_status = 1;
 		return (1);
 	}
@@ -86,47 +85,59 @@ static int	heredoc_parent_wait(int fd, t_lst *file)
 	return (0);
 }
 
-static t_lst	*create_heredoc(char *del, int mode, int token_num, t_lst *ev)
+static int	open_heredoc(char *file_name, t_file *file, t_lst *ev, char *del)
 {
 	int		fd;
-	t_lst	*file;
-	char	*tmp;
 	pid_t	pid;
 
-	file = ft_itoa(token_num);
-	if (file == NULL)
-		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
-	tmp = ft_c_str(file, NULL, 0, -1);
-	if (tmp == NULL)
-		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_MEM));
-	fd = open(tmp, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	free(tmp);
-	if (fd < 0)
-		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_FILE));
-	pid = fork();
-	if (pid < 0)
-		return (ft_lst_free(file, NULL, F_DATA_CHAR, F_ERROR_FILE));
-	else if (pid == 0)
-		parse_heredoc(fd, del, mode, ev);
-	else if (heredoc_parent_wait(fd, file) != 0)
-		return (NULL);
-	close(fd);
-	return (file);
-}
-
-int	ft_heredoc(t_file *f, int token_num, t_lst *ev)
-{
-	char	*del;
-	t_lst	*tmp;
-
-	del = ft_c_str(f->file_name, NULL, 0, -1);
+	del = ft_c_str(file->file_name, NULL, 0, -1);
 	if (del == NULL)
 		return (ft_error(F_ERROR_MEM));
-	tmp = create_heredoc(del, ((f->mode & F_NO_TRANS) == 0), token_num, ev);
-	f->mode &= ~F_NO_TRANS;
+	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd < 0)
+	{
+		free(del);
+		return (ft_error(F_ERROR_FILE));
+	}
+	pid = fork();
+	if (pid < 0)
+	{
+		free(del);
+		return (ft_error(F_ERROR_FILE));
+	}
+	else if (pid == 0)
+		parse_heredoc(fd, del, ((file->mode & F_NO_TRANS) != 0), ev);
 	free(del);
-	if (tmp == NULL)
+	if (heredoc_parent_wait(fd, file_name) != 0)
 		return (1);
+	close(fd);
+	return (0);
+}
+
+int	ft_heredoc(t_file *f, t_lst *ev, char *file_name)
+{
+	static int	heredoc_num;
+	t_lst		*tmp;
+
+	while (1)
+	{
+		if (heredoc_num == 2147483647)
+			return (ft_error(F_ERROR_FILE));
+		file_name = ft_itoa(++heredoc_num);
+		if (file_name == NULL)
+			return (ft_error(F_ERROR_MEM));
+		if (access(file_name, F_OK) != 0)
+			break ;
+		free(file_name);
+	}
+	tmp = mk_str_lst(file_name);
+	if (tmp == NULL || open_heredoc(file_name, f, ev, NULL) != 0)
+	{
+		free(file_name);
+		ft_lst_free(tmp, NULL, F_DATA_CHAR, NULL);
+		return (1);
+	}
+	free(file_name);
 	ft_lst_free(f->file_name, NULL, F_DATA_CHAR, NULL);
 	f->file_name = tmp;
 	return (0);

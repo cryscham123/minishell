@@ -61,6 +61,7 @@ static int	trans_help(t_lst **target, t_lst **tmp, t_lst *cur, t_lst *ev)
 
 static int	ft_translate(t_lst **cur, t_lst *ev)
 {
+	char	*c_tmp;
 	t_lst	*to_link;
 	t_lst	*to_del;
 	t_lst	*tmp;
@@ -69,7 +70,11 @@ static int	ft_translate(t_lst **cur, t_lst *ev)
 	*(char *)(*cur)->data = '\0';
 	if (to_del->nxt != NULL && *(char *)to_del->nxt->data == '?')
 	{
-		to_link = ft_itoa(g_status);
+		c_tmp = ft_itoa(g_status);
+		if (c_tmp == NULL)
+			return (ft_error(F_ERROR_MEM));
+		to_link = mk_str_lst(c_tmp);
+		free(c_tmp);
 		if (to_link == NULL)
 			return (ft_error(F_ERROR_MEM));
 		tmp = to_del->nxt;
@@ -111,7 +116,6 @@ static int	exp_help(t_lst *cur, t_lst *ev, t_file *file_info, int is_heredoc)
 
 int	ft_expansion(t_lst *lst, int is_redir, t_lst *ev)
 {
-	static int	heredoc_name;
 	t_lst		*tmp;
 	int			is_heredoc;
 	t_file		*file_info;
@@ -127,7 +131,7 @@ int	ft_expansion(t_lst *lst, int is_redir, t_lst *ev)
 			is_heredoc = (file_info->mode == F_HEREDOC);
 			if (exp_help(file_info->file_name, ev, file_info, is_heredoc) != 0)
 				return (1);
-			if (is_heredoc && ft_heredoc(file_info, ++heredoc_name, ev) != 0)
+			if (is_heredoc && ft_heredoc(file_info, ev, NULL) != 0)
 				return (1);
 		}
 		tmp = tmp->nxt;

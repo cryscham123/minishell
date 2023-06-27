@@ -30,6 +30,7 @@
 # define F_ERROR_EXPORT "Not A Valid Identifier..."
 # define F_ERROR_EXIT "Not A Number..."
 # define F_ERROR_EXE "Command Not Found..."
+# define F_ERROR_ACCESS "Permission Denied..."
 # define F_GET 0
 # define F_RESET 1
 # define F_CHK 2
@@ -77,7 +78,7 @@ typedef struct s_token
 	int		fd[2];
 }	t_token;
 
-t_lst	*ft_itoa(int a);
+char	*ft_itoa(int a);
 char	*ft_substr(char *src, int n);
 void	*ft_calloc(int size);
 int		ft_strcmp(char *s1, char *s2);
@@ -99,7 +100,7 @@ void	*ft_node_free(void *data, int data_info);
 void	*ft_lst_free(t_lst *lst, char **argv, int data_info, const char *msg);
 int		lst_push(t_lst **lst, t_lst *data);
 t_lst	*ft_lst_back(t_lst *lst);
-int		ft_heredoc(t_file *f, int token_num, t_lst *ev);
+int		ft_heredoc(t_file *f, t_lst *ev, char *file_name);
 void	ft_unlink(t_lst *file_name);
 void	ft_close(int *fd, t_lst *tv);
 int		ft_pipe(t_lst *tv);
@@ -107,9 +108,9 @@ int		ft_built_in_cmd(t_lst *argv, t_lst *ev);
 int		ft_export(t_lst *argv, t_lst *ev, int flag);
 int		ft_unset(t_lst	*argv, t_lst *ev, int flag);
 int		ft_env(t_lst *ev);
-int		ft_echo(t_lst *argv, char *tmp, int flag);
-int		ft_cd(t_lst *argv, t_lst *ev, char *tmp);
-int		ft_pwd(t_hash *buf);
+int		ft_echo(t_lst *argv);
+int		ft_cd(t_lst *argv, t_lst *ev);
+int		ft_pwd(void);
 int		ft_chk_key(char *s, t_lst *ev, int cmd);
 int		ft_exit(t_lst *argv, int i);
 int		ft_exe(t_lst *tv, t_lst *ev, int i);
@@ -118,5 +119,8 @@ void	heredoc_signal_handler(int sig);
 void	sigint_handler(int sig);
 int		cal_flag(int ret_val);
 char	*ft_hash_str(t_hash *data);
+int		ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd);
+int		echo_option_chk(t_lst *str);
+void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev);
 
 #endif

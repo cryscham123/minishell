@@ -83,22 +83,19 @@ t_lst	*ft_hash_find(t_lst *hash, char *to_find)
 	return (NULL);
 }
 
-t_lst	*ft_itoa(int a)
+char	*ft_itoa(int a)
 {
-	t_lst	*target;
-	t_lst	*prev;
+	char	*target;
 
-	target = ft_calloc(sizeof(t_lst));
+	target = ft_calloc(4);
 	if (target == NULL)
 		return (NULL);
-	target->data = ft_substr(&"0123456789"[a % 10], 1);
-	if (target->data == NULL)
-		return (ft_node_free(target, F_DATA_CHAR));
-	if (a < 10)
-		return (target);
-	prev = ft_itoa(a / 10);
-	if (prev == NULL)
-		return (ft_node_free(target, F_DATA_CHAR));
-	lst_push(&prev, target);
-	return (prev);
+	target[0 + (a >= 10) + (a >= 100)] = "0123456789"[a % 10];
+	a /= 10;
+	if (a > 0)
+		target[0 + (a >= 10)] = "0123456789"[a % 10];
+	a /= 10;
+	if (a > 0)
+		target[0] = "0123456789"[a % 10];
+	return (target);
 }

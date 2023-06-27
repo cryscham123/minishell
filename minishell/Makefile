@@ -28,8 +28,10 @@ SRCS= $(SRC_DIR)main.c \
 	  $(SRC_DIR)heredoc.c \
 	  $(SRC_DIR)struct_utils.c \
 	  $(SRC_DIR)exe.c \
+	  $(SRC_DIR)exe2.c \
 	  $(SRC_DIR)built_in.c \
 	  $(SRC_DIR)built_in2.c \
+	  $(SRC_DIR)built_in3.c \
 	  $(SRC_DIR)signal.c
 OBJS= $(SRCS:.c=.o)
 
@@ -49,7 +51,7 @@ fclean:
 	rm -f $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(DEBUG_FLAGS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) $(DEBUG_FLAGS)
