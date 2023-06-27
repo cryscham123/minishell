@@ -75,7 +75,7 @@ int	ft_pipe(t_lst *tv)
 	return (0);
 }
 
-int	ft_redirection(t_token *token, t_lst *redir)
+int	ft_redirection(t_token *token, t_lst *redir, int is_single)
 {
 	t_file	*data;
 	char	*file_name;
@@ -85,9 +85,17 @@ int	ft_redirection(t_token *token, t_lst *redir)
 		data = redir->data;
 		file_name = ft_c_str(data->file_name, NULL, 0, -1);
 		if (file_name == NULL)
+		{
+			if (!is_single)
+				exit(ft_error(F_ERROR_MEM));
 			return (ft_error(F_ERROR_MEM));
+		}
 		if (ft_open(token, file_name, data->mode) != 0)
+		{
+			if (!is_single)
+				exit(1);
 			return (1);
+		}
 		free(file_name);
 		redir = redir->nxt;
 	}

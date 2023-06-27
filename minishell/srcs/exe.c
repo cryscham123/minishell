@@ -100,18 +100,18 @@ static int	ft_extern(t_lst *data, t_lst *ev, int is_single)
 	return (flag);
 }
 
-static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
+static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *tv)
 {
 	int	flag;
 	int	fd_tmp[2];
 
-	if (ft_redirection(data, data->redirection) != 0)
+	if (ft_redirection(data, data->redirection, is_single) != 0)
 		return (1);
 	fd_tmp[0] = dup(0);
 	fd_tmp[1] = dup(1);
 	dup2(data->fd[0], 0);
 	dup2(data->fd[1], 1);
-	ft_close(data->fd, prev);
+	ft_close(data->fd, tv);
 	flag = 0;
 	if (data->argv != NULL)
 		flag = ft_built_in_cmd(data->argv, ev);
@@ -125,7 +125,7 @@ static int	ft_exe_cmd(t_token *data, t_lst *ev, int is_single, t_lst *prev)
 	return (cal_flag(flag));
 }
 
-int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
+int	ft_exe(t_lst *tv, t_lst *ev, int i)
 {
 	pid_t	pid;
 	int		is_single;
@@ -143,10 +143,8 @@ int	ft_exe(t_lst *tv, t_lst *ev, t_lst *prev, int i)
 		if (pid < 0)
 			ft_error(F_ERROR_MEM);
 		else if (pid == 0)
-			ft_exe_cmd(tv->data, ev, is_single, prev);
-		if (prev != NULL)
-			ft_close(((t_token *)prev->data)->fd, NULL);
-		prev = tv;
+			ft_exe_cmd(tv->data, ev, is_single, tv);
+		ft_close(((t_token *)tv->data)->fd, NULL);
 		tv = tv->nxt;
 	}
 	while (i--)

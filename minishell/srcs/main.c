@@ -35,7 +35,7 @@ static void	*ft_parse(t_lst *ev)
 			free(line);
 			return (NULL);
 		}
-		g_status = ft_exe(tv, ev, NULL, ft_str_size(tv));
+		g_status = ft_exe(tv, ev, ft_str_size(tv));
 		ft_lst_free(tv, NULL, F_DATA_TOKEN, NULL);
 	}
 	free(line);
