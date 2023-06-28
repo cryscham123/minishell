@@ -17,11 +17,10 @@ int ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd)
 	char	*tmp;
 
 	tmp = getcwd(NULL, 0);
-	if (tmp == NULL)
-	{
+	if (tmp == NULL && ft_strcmp("PWD", key) == 0)
 		ft_error(F_ERROR_FILE);
+	if (tmp == NULL)
 		return (0);
-	}
 	pwd = ft_calloc(sizeof(t_hash));
 	if (pwd == NULL)
 	{
@@ -81,4 +80,20 @@ int	ft_exit_code(t_lst *data)
 		exit(ft_error(F_ERROR_EXIT));
 	free(tmp);
 	return (res * sign);
+}
+
+int	chk_cd_argv(char *path)
+{
+	struct stat	buf;
+
+	if (*path == '\0')
+		return (-1);
+	stat(path, &buf);
+	if (access(path, F_OK) != 0)
+		return (ft_error(F_ERROR_FILE));
+	if (access(path, X_OK) != 0)
+		return (ft_error(F_ERROR_FILE));
+	if (!S_ISDIR(buf.st_mode))
+		return (ft_error(F_ERROR_NOT_DIR));
+	return (0);
 }

@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <termios.h>
 
 # define F_ERROR_MEM "Memmory Allocation Failed..."
@@ -31,6 +32,8 @@
 # define F_ERROR_EXIT "Not A Number..."
 # define F_ERROR_EXE "Command Not Found..."
 # define F_ERROR_ACCESS "Permission Denied..."
+# define F_ERROR_NOT_FILE "Not A File..."
+# define F_ERROR_NOT_DIR "Not A Directory..."
 # define F_GET 0
 # define F_RESET 1
 # define F_CHK 2
@@ -123,5 +126,6 @@ char	*ft_hash_str(t_hash *data);
 int		ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd);
 int		echo_option_chk(t_lst *str);
 void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev);
+int		chk_cd_argv(char *path);
 
 #endif

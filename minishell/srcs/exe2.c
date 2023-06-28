@@ -14,10 +14,16 @@
 
 static void	chk_access_and_exe(char *path, char **argv, char **env)
 {
+	struct stat	buf;
+
 	if (access(path, F_OK) != 0)
 		return ;
+	stat(path, &buf);
+	if (!S_ISREG(buf.st_mode))
+		exit(ft_error(F_ERROR_NOT_FILE));
+	if (access(path, X_OK) != 0)
+		exit(ft_error(F_ERROR_ACCESS));
 	execve(path, argv, env);
-	exit(ft_error(F_ERROR_ACCESS));
 }
 
 void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
@@ -27,7 +33,6 @@ void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev)
 	t_lst	*cur;
 
 	ft_signal(SIG_DFL, SIG_DFL, 1);
-	
 	chk_access_and_exe(argv[0], argv, ((t_hash *)ev->data)->env);
 	while (path != NULL)
 	{

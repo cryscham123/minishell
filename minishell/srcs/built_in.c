@@ -17,19 +17,22 @@ extern int	g_status;
 int	ft_cd(t_lst *argv, t_lst *ev)
 {
 	char	*tmp;
+	int		flag;
 
 	if (argv == NULL)
 		return (0);
-	if (ft_set_ev_pwd("OLDPWD", ev, NULL) != 0)
-		return (1);
 	tmp = ft_c_str(argv->data, NULL, 0, -1);
 	if (tmp == NULL)
 		return (ft_error(F_ERROR_MEM));
-	if (chdir(tmp) != 0)
+	flag = chk_cd_argv(tmp);
+	if (flag != 0)
 	{
 		free(tmp);
-		return (ft_error(F_ERROR_FILE));
+		return (flag > 0);
 	}
+	if (ft_set_ev_pwd("OLDPWD", ev, NULL) != 0)
+		return (1);
+	chdir(tmp);
 	free(tmp);
 	if (ft_set_ev_pwd("PWD", ev, NULL) != 0)
 		return (1);
