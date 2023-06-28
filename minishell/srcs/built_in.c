@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 int	ft_cd(t_lst *argv, t_lst *ev)
 {
 	char	*tmp;
@@ -46,29 +48,16 @@ int	ft_pwd(void)
 	return (0);
 }
 
-int	ft_exit(t_lst *argv, int i)
+int	ft_exit(t_lst *argv)
 {
-	char	*tmp;
 	int		num;
 
-	num = 0;
+	num = g_status;
 	if (argv != NULL && argv->nxt != NULL)
 	{
+		num = ft_exit_code(argv->nxt->data);
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
-		tmp = ft_c_str(argv->nxt->data, NULL, 0, -1);
-		if (tmp == NULL)
-			return (ft_error(F_ERROR_MEM));
-		while (tmp[i])
-		{
-			if (!(tmp[i] >= '0' && tmp[i] <= '9'))
-			{
-				free(tmp);
-				return (ft_error(F_ERROR_EXIT));
-			}
-			num = num * 10 + tmp[i++] - '0';
-		}
-		free(tmp);
 	}
 	printf("exit\n");
 	exit(num);
@@ -123,7 +112,7 @@ int	ft_built_in_cmd(t_lst *argv, t_lst *ev)
 	else if (ft_strcmp(cmd, "env") == 0)
 		flag = ft_env(ev->nxt);
 	else if (ft_strcmp(cmd, "exit") == 0)
-		flag = ft_exit(argv, 0);
+		flag = ft_exit(argv);
 	free(cmd);
 	return (flag);
 }

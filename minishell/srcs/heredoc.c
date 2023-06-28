@@ -119,7 +119,7 @@ int	ft_heredoc(t_file *f, t_lst *ev, char *file_name)
 	static int	heredoc_num;
 	int			flag;
 
-	while (1)
+	while (heredoc_num < 2147483647)
 	{
 		file_name = ft_itoa(++heredoc_num);
 		if (file_name == NULL)
@@ -127,9 +127,9 @@ int	ft_heredoc(t_file *f, t_lst *ev, char *file_name)
 		if (access(file_name, F_OK) != 0)
 			break ;
 		free(file_name);
-		if (heredoc_num == 2147483647)
-			return (ft_error(F_ERROR_FILE));
 	}
+	if (heredoc_num == 2147483647)
+		return (ft_error(F_ERROR_FILE));
 	flag = open_heredoc(file_name, f, ev, NULL);
 	f->mode &= ~F_NO_TRANS;
 	ft_lst_free(f->file_name, NULL, F_DATA_CHAR, NULL);

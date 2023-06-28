@@ -54,3 +54,31 @@ int	echo_option_chk(t_lst *str)
 	}
 	return (1);
 }
+
+int	ft_exit_code(t_lst *data)
+{
+	char		*tmp;
+	long long	res;
+	int			sign;
+	int			i;
+
+	tmp = ft_c_str(data, NULL, 0, -1);
+	if (tmp == NULL)
+		exit(ft_error(F_ERROR_MEM));
+	res = 0;
+	i = 0;
+	sign = -(tmp[i] == '-') + (tmp[i] != '-');
+	i += (tmp[i] == '+' || tmp[i] == '-');
+	while (tmp[i])
+	{
+		if (!(tmp[i] >= '0' && tmp[i] <= '9') \
+			|| (res == 214748364 && tmp[i] > ('7' + (sign == -1))))
+			exit(ft_error(F_ERROR_EXIT));
+		res = res * 10 + tmp[i] - '0';
+		i++;
+	}
+	if (((tmp[0] == '-' || tmp[0] == '+') && i == 1) || i == 0)
+		exit(ft_error(F_ERROR_EXIT));
+	free(tmp);
+	return (res * sign);
+}

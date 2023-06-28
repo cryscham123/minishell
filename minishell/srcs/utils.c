@@ -113,5 +113,7 @@ int	ft_error(const char *msg)
 		return (126);
 	if (ft_strcmp((char *)msg, F_ERROR_EXPORT) == 0)
 		return (-1);
+	if (ft_strcmp((char *)msg, F_ERROR_EXIT) == 0)
+		return (255);
 	return (1);
 }
