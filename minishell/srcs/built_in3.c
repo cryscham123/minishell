@@ -40,45 +40,50 @@ int ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd)
 	return (0);
 }
 
-int	echo_option_chk(t_lst *str)
+int	echo_option_chk(char *target)
 {
-	if (*(char *)str->data != '-' || str->nxt == NULL)
-		return (0);
-	str = str->nxt;
-	while (str != NULL)
+	int	i;
+
+	i = 1;
+	if (target[0] != '-' || target[1] == '\0')
 	{
-		if (*(char *)str->data != 'n')
-			return (0);
-		str = str->nxt;
+		printf("%s", target);
+		return (1);
 	}
+	while (target[i] == 'n')
+		i++;
+	if (target[i] == '\0' || (target[i] == ' ' && target[i + 1] == '\0'))
+		return (2);
+	printf("%s", target);
 	return (1);
 }
 
-int	ft_exit_code(t_lst *data)
+int	ft_exit_code(char *data)
 {
-	char		*tmp;
 	long long	res;
 	int			sign;
 	int			i;
 
-	tmp = ft_c_str(data, NULL, 0, -1);
-	if (tmp == NULL)
-		exit(ft_error(F_ERROR_MEM));
 	res = 0;
 	i = 0;
-	sign = -(tmp[i] == '-') + (tmp[i] != '-');
-	i += (tmp[i] == '+' || tmp[i] == '-');
-	while (tmp[i])
+	sign = -(data[i] == '-') + (data[i] != '-');
+	i += (data[i] == '+' || data[i] == '-');
+	while (data[i])
 	{
-		if (!(tmp[i] >= '0' && tmp[i] <= '9') \
-			|| (res == 214748364 && tmp[i] > ('7' + (sign == -1))))
+		if (!(data[i] >= '0' && data[i] <= '9') \
+			|| (res == 214748364 && data[i] > ('7' + (sign == -1))))
+		{
+			printf("exit\n");
 			exit(ft_error(F_ERROR_EXIT));
-		res = res * 10 + tmp[i] - '0';
+		}
+		res = res * 10 + data[i] - '0';
 		i++;
 	}
-	if (((tmp[0] == '-' || tmp[0] == '+') && i == 1) || i == 0)
+	if (((data[0] == '-' || data[0] == '+') && i == 1) || i == 0)
+	{
+		printf("exit\n");
 		exit(ft_error(F_ERROR_EXIT));
-	free(tmp);
+	}
 	return (res * sign);
 }
 

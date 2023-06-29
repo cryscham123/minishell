@@ -117,7 +117,7 @@ int		ft_cd(t_lst *argv, t_lst *ev);
 int		ft_pwd(void);
 int		ft_chk_key(char *s, t_lst *ev, int cmd);
 int		ft_exit(t_lst *argv);
-int		ft_exit_code(t_lst *data);
+int		ft_exit_code(char *data);
 int		ft_exe(t_lst *tv, t_lst *ev, int i);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag);
 void	heredoc_signal_handler(int sig);
@@ -125,7 +125,7 @@ void	sigint_handler(int sig);
 int		cal_flag(int ret_val);
 char	*ft_hash_str(t_hash *data);
 int		ft_set_ev_pwd(char *key, t_lst *ev, t_hash *pwd);
-int		echo_option_chk(t_lst *str);
+int		echo_option_chk(char *s);
 void	ft_exe_extern(t_lst *path, t_lst *av, char **argv, t_lst *ev);
 int		chk_cd_argv(char *path);
 

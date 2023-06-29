@@ -53,12 +53,17 @@ int	ft_pwd(void)
 
 int	ft_exit(t_lst *argv)
 {
+	char	*tmp;
 	int		num;
 
 	num = g_status;
 	if (argv != NULL && argv->nxt != NULL)
 	{
-		num = ft_exit_code(argv->nxt->data);
+		tmp = ft_c_str(argv->nxt->data, NULL, 0, -1);
+		if (tmp == NULL)
+			return(ft_error(F_ERROR_MEM));
+		num = ft_exit_code(tmp);
+		free(tmp);
 		if (argv->nxt->nxt != NULL)
 			return (ft_error(F_ERROR_ARG));
 	}
@@ -72,23 +77,22 @@ int	ft_echo(t_lst *argv)
 	char	*tmp;
 
 	option_flag = 0;
-	if (argv != NULL && echo_option_chk(argv->data) != 0)
-	{
-		argv = argv->nxt;
-		option_flag = 1;
-	}
 	while (argv != NULL)
 	{
-		tmp = ft_c_str(argv->data, NULL, 0, -1);
+		if (argv->nxt != NULL)
+			tmp = ft_c_str(argv->data, NULL, ' ', -1);
+		else
+			tmp = ft_c_str(argv->data, NULL, '\0', -1);
 		if (tmp == NULL)
 			return (ft_error(F_ERROR_MEM));
-		printf("%s", tmp);
+		if (option_flag == 0)
+			option_flag = echo_option_chk(tmp);
+		else
+			printf("%s", tmp);
 		free(tmp);
-		if (argv->nxt != NULL)
-			printf(" ");
 		argv = argv->nxt;
 	}
-	if (option_flag == 0)
+	if (option_flag != 2)
 		printf("\n");
 	return (0);
 }
