@@ -116,9 +116,10 @@ static int	open_heredoc(char *file_name, t_file *file, t_lst *ev, char *del)
 
 int	ft_heredoc(t_file *f, t_lst *ev, char *file_name)
 {
-	static int	heredoc_num;
-	int			flag;
+	int	heredoc_num;
+	int	flag;
 
+	heredoc_num = 0;
 	while (heredoc_num < 2147483647)
 	{
 		file_name = ft_itoa(++heredoc_num);

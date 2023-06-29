@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static t_token	*mk_token(t_lst *target, t_lst *ev)
+static t_token	*mk_token(t_lst *target, t_lst *ev, int is_single)
 {
 	t_token	*token;
 
@@ -22,7 +22,7 @@ static t_token	*mk_token(t_lst *target, t_lst *ev)
 	token->fd[1] = 1;
 	if (ft_split(token, target->data, " \t><", 0) != 0)
 		return (ft_node_free(token, F_DATA_TOKEN));
-	if (token->argv == NULL && token->redirection == NULL && target->size != 1)
+	if (token->argv == NULL && token->redirection == NULL && !is_single)
 	{
 		ft_error(F_ERROR_SYNTAX);
 		return (ft_node_free(token, F_DATA_TOKEN));
@@ -50,7 +50,7 @@ t_lst	*mk_token_lst(char *line, t_lst *ev)
 	tmp = line_lst;
 	while (tmp != NULL)
 	{
-		token = mk_token(tmp, ev);
+		token = mk_token(tmp, ev, (line_lst->nxt == NULL));
 		if (token == NULL || lst_push(&target, mk_lst(token, 0)) != 0)
 		{
 			ft_node_free(token, F_DATA_TOKEN);

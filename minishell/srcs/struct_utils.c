@@ -40,7 +40,7 @@ char	*ft_c_str(t_lst *str, t_lst *apd, char c, int n)
 		return (NULL);
 	while (str != NULL && i < n)
 	{
-		if (*(char *)str->data != '\0')
+		if (str->info != F_TO_DEL)
 			target[i++] = *(char *)str->data;
 		str = str->nxt;
 	}

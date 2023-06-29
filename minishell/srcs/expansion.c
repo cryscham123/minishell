@@ -67,7 +67,7 @@ static int	ft_translate(t_lst **cur, t_lst *ev)
 	t_lst	*tmp;
 
 	to_del = (*cur);
-	*(char *)(*cur)->data = '\0';
+	(*cur)->info = F_TO_DEL;
 	if (to_del->nxt != NULL && *(char *)to_del->nxt->data == '?')
 	{
 		c_tmp = ft_itoa(g_status);
@@ -96,12 +96,12 @@ static int	exp_help(t_lst *cur, t_lst *ev, t_file *file_info, int is_heredoc)
 		val = *(char *)cur->data;
 		if ((flag == F_QUOTE && val == '\'') \
 			|| (flag == F_DQUOTE && val == '\"'))
-			*(char *)cur->data = '\0';
+			cur->info = F_TO_DEL;
 		flag = ft_word_chk(val, "", F_WORD);
 		if ((flag == F_QUOTE && val == '\'') \
 			|| (flag == F_DQUOTE && val == '\"'))
 		{
-			*(char *)cur->data = '\0';
+			cur->info = F_TO_DEL;
 			if (is_heredoc)
 				file_info->mode |= F_NO_TRANS;
 		}

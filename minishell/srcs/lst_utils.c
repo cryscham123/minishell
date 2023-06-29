@@ -98,12 +98,10 @@ int	lst_push(t_lst **lst, t_lst *data)
 	if (tmp == NULL)
 	{
 		*lst = data;
-		(*lst)->size++;
 		return (0);
 	}
 	while (tmp->nxt != NULL)
 		tmp = tmp->nxt;
 	tmp->nxt = data;
-	(*lst)->size++;
 	return (0);
 }

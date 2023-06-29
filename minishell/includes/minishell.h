@@ -53,11 +53,12 @@
 # define F_NO_TRANS 256
 # define F_STATUS_NO_BUILTIN -1
 # define F_ERROR_BUILTIN -2
+# define F_TO_DEL 2
 
 typedef struct s_lst
 {
 	void			*data;
-	int				size;
+	int				info;
 	struct s_lst	*nxt;
 }	t_lst;
 
