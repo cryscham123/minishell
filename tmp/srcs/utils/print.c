@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 02:59:57 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_putstr_fd(char *s, int fd)
 int	ft_error(char *msg, int exit_status)
 {
 	ft_putstr_fd(msg, 2);
-	if (exit_status == 0 || exit_status == 1)
+	if (exit_status == 1)
 		g_status = exit_status;
 	return (exit_status);
 }

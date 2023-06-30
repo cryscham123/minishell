@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:05:28 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_node_free(void *data, int data_type, int info)
 	{
 		ft_close(((t_token *)data)->fd, NULL);
 		ft_lst_free(((t_token *)data)->argv);
-		ft_lst_free(((t_token *)data)->redirection);
+		ft_lst_free(((t_token *)data)->redir);
 	}
 	free(data);
 }

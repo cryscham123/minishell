@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 02:34:07 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,5 @@ void	ft_exe_extern(char *path, char **av, char **env)
 		else
 			path += (i + 1);
 	}
-	exit(ft_error(F_ERROR_EXE, F_EXIT_STATUS_CMD));
+	exit(ft_error(F_ERROR_EXE, F_EXIT_STATUS_EXE));
 }

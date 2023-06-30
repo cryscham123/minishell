@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 04:35:37 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,18 @@ char	*ft_trim(char *s)
 	return (s);
 }
 
-char	*ft_itoa(int a)
+char	*ft_itoa(int a, int cnt)
 {
 	char	*target;
 
-	target = ft_calloc(4);
-	if (target == NULL)
-		return (NULL);
-	target[0 + (a >= 10) + (a >= 100)] = "0123456789"[a % 10];
-	a /= 10;
-	if (a > 0)
-		target[0 + (a >= 10)] = "0123456789"[a % 10];
-	a /= 10;
-	if (a > 0)
+	if (a < 10)
+	{
+		target = ft_calloc(cnt + 1);
 		target[0] = "0123456789"[a % 10];
+		return (target);
+	}
+	target = ft_itoa(a / 10, cnt + 1);
+	target[ft_strlen(target)] = "0123456789"[a % 10];
 	return (target);
 }
 
@@ -54,6 +52,7 @@ char	*ft_c_str(t_lst *lst)
 	target = ft_calloc(ft_lst_size(lst) + 1);
 	if (target == NULL)
 		return (NULL);
+	i = 0;
 	while (lst != NULL)
 	{
 		if (lst->info != F_NO_PARSE)
@@ -73,6 +72,7 @@ char	**mk_argv(t_lst *lst)
 	target = ft_calloc(sizeof(char *) * (size + 1));
 	if (target == NULL)
 		return (NULL);
+	i = 0;
 	while (lst != NULL)
 	{
 		if (lst->data_type == F_DATA_STRING)

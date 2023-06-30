@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 04:33:08 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	ft_str_find(char *s, char to_find)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 int	ft_strcmp(char *s1, char *s2)
@@ -44,6 +44,7 @@ int	ft_strlen(char *s)
 {
 	int	i;
 
+	i = 0;
 	while (s[i])
 		i++;
 	return (i);

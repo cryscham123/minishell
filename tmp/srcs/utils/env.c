@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/15 12:06:35 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:16 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 02:56:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_lst	*mk_ev(char **env)
 	{
 		to_push = mk_lst(*env, F_DATA_CHAR, ft_str_find(*env, '='));
 		if (to_push == NULL)
-			return (lst_free(ev));
+			return (ft_lst_free(ev));
 		lst_push(&ev, to_push);
 		env++;
 	}

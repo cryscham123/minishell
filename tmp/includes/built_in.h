@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:07:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@
 
 # define F_EV_NO_VALUE -3
 # define F_EV_KEY_ERROR -4
+# define F_EXIT_STATUS_EXIT 255
+# define F_ERROR_NO_DIR "Not A Directory..."
+# define F_ERROR_KEY "Not A Valid Argument..."
+# define F_ERROR_EXIT "Not A Number..."
 
 int		echo_option_chk(char *s);
 int		ft_av_validate_dir(char **s);

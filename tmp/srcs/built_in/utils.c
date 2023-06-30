@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 02:49:01 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	ft_av_validate_dir(char **s)
 	if (access(s, F_OK) != 0)
 		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
 	if (access(s, X_OK) != 0)
-		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
+		return (ft_error(F_ERROR_ACCESS, F_EXIT_STATUS_FILE));
 	if (!S_ISDIR(buf.st_mode))
 		return (ft_error(F_ERROR_NO_DIR, F_EXIT_STATUS_FILE));
 	return (0);

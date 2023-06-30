@@ -6,13 +6,13 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:22 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 04:34:32 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
+static void	ft_parse_heredoc_env(int fd, char **to_read, t_lst *ev)
 {
 	t_lst	*to_find;
 	char	*target;
@@ -20,23 +20,23 @@ static void	ft_parse_heredoc_env(int fd, char **target, t_lst *ev)
 	int		i;
 
 	i = 0;
-	(*target)++;
-	while ((*target)[i])
+	(*to_read)++;
+	while ((*to_read)[i])
 	{
-		if (ft_word_chk((*target)[i], "| \t><$\'\"*", F_CHK) == 0)
+		if (ft_str_find("| \t><$\'\"*", (*to_read)[i]) != -1)
 			break ;
 		i++;
 	}
-	tmp = (*target)[i];
-	(*target)[i] = '\0';
-	to_find = ft_env_find(ev, (*target));
-	(*target)[i] = tmp;
+	tmp = (*to_read)[i];
+	(*to_read)[i] = '\0';
+	to_find = ft_env_find(ev, (*to_read));
+	(*to_read)[i] = tmp;
 	if (to_find != NULL)
 	{
 		target = ((char *)to_find->data) + (to_find->info + 1);
 		write(fd, target, ft_strlen(target));
 	}
-	(*target) += i;
+	(*to_read) += i;
 }
 
 static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
@@ -86,6 +86,7 @@ static int	heredoc_parent_wait(int fd, char *file_name)
 
 static int	open_heredoc(char *file_name, t_lst *f, t_lst *ev)
 {
+	char	*del;
 	int		fd;
 	pid_t	pid;
 
@@ -96,7 +97,7 @@ static int	open_heredoc(char *file_name, t_lst *f, t_lst *ev)
 	if (fd < 0)
 	{
 		free(del);
-		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
+		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	}
 	pid = fork();
 	if (pid < 0)
@@ -105,7 +106,7 @@ static int	open_heredoc(char *file_name, t_lst *f, t_lst *ev)
 		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	}
 	else if (pid == 0)
-		parse_heredoc(fd, del, ((file->mode & F_NO_TRANS) == 0), ev);
+		parse_heredoc(fd, del, ((f->info & F_NO_TRANS) == 0), ev);
 	free(del);
 	if (heredoc_parent_wait(fd, file_name) != 0)
 		return (1);
@@ -121,7 +122,7 @@ int	ft_heredoc(t_lst *f, t_lst *ev)
 	heredoc_num = 0;
 	while (heredoc_num < 2147483647)
 	{
-		file_name = ft_itoa(++heredoc_num);
+		file_name = ft_itoa(++heredoc_num, 1);
 		if (file_name == NULL)
 			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 		if (access(file_name, F_OK) != 0)
@@ -129,7 +130,7 @@ int	ft_heredoc(t_lst *f, t_lst *ev)
 		free(file_name);
 	}
 	if (heredoc_num == 2147483647)
-		return (ft_error(F_ERROR_FILE));
+		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	if (open_heredoc(file_name, f, ev) != 0)
 	{
 		free(file_name);

@@ -6,26 +6,28 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/23 18:41:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:24:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_open(t_token *token)
+int	ft_open(t_token *token)
 {
-	int	fd;
-	int	direction;
+	t_lst	*redir;
+	int		fd;
+	int		direction;
 
-	if (token->info == F_INPUT || token->info == F_HEREDOC)
-		fd = open(token->data, O_RDONLY);
-	else if (token->info == F_OUTPUT)
-		fd = open(token->data, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	redir = token->redir;
+	if (redir->info == F_INPUT || redir->info == F_HEREDOC)
+		fd = open(redir->data, O_RDONLY);
+	else if (redir->info == F_OUTPUT)
+		fd = open(redir->data, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
-		fd = open(token->data, O_CREAT | O_RDWR | O_APPEND, 0644);
+		fd = open(redir->data, O_CREAT | O_RDWR | O_APPEND, 0644);
 	if (fd == -1)
-		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
-	direction = (token->info == F_OUTPUT || token->info == F_APPEND);
+		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+	direction = (redir->info == F_OUTPUT || redir->info == F_APPEND);
 	if (token->fd[direction] != direction)
 		close(token->fd[direction]);
 	token->fd[direction] = fd;
@@ -61,7 +63,7 @@ int	ft_pipe(t_lst *tv)
 		if (tv->nxt != NULL)
 		{
 			if (pipe(fd_tmp) < 0)
-				return (ft_error(F_ERROR_FILE));
+				return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 			((t_token *)tv->data)->fd[1] = fd_tmp[1];
 			((t_token *)tv->nxt->data)->fd[0] = fd_tmp[0];
 		}

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 16:57:48 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 15:42:49 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:08:39 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	cal_flag(int ret_val)
 {
 	if (ret_val == 0 || ret_val == 1)
 		return (ret_val);
-	if (ret_val == F_ERROR_BUILTIN)
-		return (F_EXIT_STATUS_BUILTIN);
+	if (ret_val == F_EXIT_STATUS_BUILTIN)
+		return (1);
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
 	if (ret_val == 2)

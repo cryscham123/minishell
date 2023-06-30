@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/06/26 14:28:20 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:09:21 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_export(char **av, t_lst *ev)
 		else if (flag == F_EV_NO_VALUE)
 			flag = 0;
 		else if (flag == F_EV_KEY_ERROR)
-			flag = F_EXIT_STATUS_BUILTIN_ERROR;
+			flag = F_EXIT_STATUS_BUILTIN;
 		av++;
 	}
 	return (flag);
@@ -100,7 +100,7 @@ int	ft_unset(char **av, t_lst *ev)
 			flag = 0;
 		}
 		else
-			flag = F_EXIT_STATUS_BUILTIN_ERROR;
+			flag = F_EXIT_STATUS_BUILTIN;
 		av++;
 	}
 	return (flag);
