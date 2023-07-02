@@ -6,28 +6,27 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 02:49:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:03:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "built_in.h"
 
-static char	*ft_av_env_help(char ***av, t_lst *ev)
+static char	**ft_av_env_help(char ***av, t_lst *ev)
 {
 	int		i;
 	t_lst	*to_push;
 	char	**env;
 
-	st = NULL;
 	while (**av != NULL)
 	{
 		i = ft_str_find(**av, '=');
-		if (i == 0)
+		if (i == -1)
 			break ;
 		ft_unset_unit(**av, ev, 0);
 		to_push = mk_lst(**av, F_DATA_CHAR, i);
 		if (to_push == NULL)
-			return (NULL)
+			return (NULL);
 		lst_push(&ev, to_push);
 		(*av)++;
 	}
@@ -62,7 +61,7 @@ int	ft_av_env(char **av, t_lst *ev)
 	return (cal_flag(flag));
 }
 
-int	ft_av_exit(char *s)
+int	ft_av_exit(char *data)
 {
 	long long	res;
 	int			sign;

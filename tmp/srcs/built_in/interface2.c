@@ -6,22 +6,21 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 03:09:00 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:00:24 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "built_in.h"
 
+extern int	g_status;
+
 int	ft_env(char **av, char **env, t_lst *ev)
 {
-	t_lst	*val;
-	int		status;
-
 	if (av != NULL && *av != NULL)
 		return (ft_av_env(av, ev));
 	while (*env != NULL)
 	{
-		ft_putstr_fd(env, 1);
+		ft_putstr_fd(*env, 1);
 		env++;
 	}
 	return (0);

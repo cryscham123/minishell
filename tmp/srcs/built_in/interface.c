@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 03:09:21 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:01:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_export(char **av, t_lst *ev)
 	flag = 0;
 	while (*av != NULL)
 	{
-		flag = ft_av_validate_ev(*av, ev);
+		flag = ft_av_validate_ev(*av);
 		if (flag == 0)
 		{
 			to_push = mk_lst(*av, F_DATA_CHAR, ft_str_find(*av, '='));
@@ -93,7 +93,7 @@ int	ft_unset(char **av, t_lst *ev)
 	flag = 0;
 	while (*av != NULL)
 	{
-		flag = ft_av_validate_ev(*av, ev);
+		flag = ft_av_validate_ev(*av);
 		if (flag == F_EV_NO_VALUE)
 		{
 			ft_unset_unit(*av, ev, flag);

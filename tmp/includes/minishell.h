@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 00:43:32 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:57:37 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,18 +66,16 @@ typedef struct s_token
 	int		fd[2];
 }	t_token;
 
-/**
 int		ft_echo(char **av);
 int		ft_cd(char **av, t_lst *ev);
 int		ft_pwd(void);
 int		ft_export(char **av, t_lst *ev);
 int		ft_unset(char **av, t_lst *ev);
 int		ft_exit(char **av);
-int		ft_env(char **av, t_lst *ev);
+int		ft_env(char **av, char **env, t_lst *ev);
 int		ft_exe(t_lst *tv, t_lst *ev);
 int		ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked);
-int		ft_built_in_cmd(char **argv, t_lst *ev);
-**/
+int		ft_built_in_cmd(char **argv, char **env, t_lst *ev);
 t_lst	*ft_heredoc(char *del, int mode, t_lst *ev);
 int		ft_lst_size(t_lst *lst);
 t_lst	*mk_lst(void *data, int data_type, int info);
