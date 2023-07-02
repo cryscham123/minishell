@@ -6,7 +6,7 @@
 #    By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/07 06:51:22 by hyunghki          #+#    #+#              #
-#    Updated: 2023/07/03 03:13:11 by hyunghki         ###   ########.fr        #
+#    Updated: 2023/07/03 04:37:25 by hyunghki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,6 +81,7 @@ re:
 
 clean:
 	rm -f $(OBJS)
+	rm -f $(BOBJS)
 
 fclean:
 	make clean

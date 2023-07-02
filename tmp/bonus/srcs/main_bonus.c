@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe.h                                              :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/01 02:30:19 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:28:18 by hyunghki         ###   ########.fr       */
+/*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
+/*   Updated: 2023/07/03 04:34:44 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXE_H
-# define EXE_H
+#include "minishell_bonus.h"
 
-# include "minishell.h"
-# define F_STATUS_NO_BUILTIN -3
-# define F_EXIT_STATUS_ACCESS 126
-# define F_EXIT_STATUS_EXE 127
-# define F_ERROR_NOT_FILE "Not A File...\n"
-# define F_ERROR_EXE "Command Not Found...\n"
+int	g_status;
 
-void	ft_exe_extern(char *path, char **av, char **env);
+int	main(int argc, char **argv, char **env)
+{
+	t_lst	*ev;
 
-#endif
+	(void)argv;
+	if (argc != 1)
+		return (ft_error(F_ERROR_ARG, F_EXIT_STATUS_ARG));
+	ev = mk_ev(env);
+	if (ev == NULL)
+		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+	while (1)
+		ft_parse(ev);
+	return (0);
+}
