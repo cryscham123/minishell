@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 14:17:05 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 04:34:32 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 00:51:04 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,19 +122,13 @@ t_lst	*ft_heredoc(char *del, int mode, t_lst *ev)
 	{
 		file_name = ft_itoa(++heredoc_num, 1);
 		if (file_name == NULL)
-		{
-			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 			return (NULL);
-		}
 		if (access(file_name, F_OK) != 0)
 			break ;
 		free(file_name);
 	}
 	if (heredoc_num == 2147483647)
-	{
-		ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 		return (NULL);
-	}
 	if (open_heredoc(file_name, del, mode, ev) != 0)
 		return (NULL);
 	return (mk_lst(file_name, F_DATA_CHAR, F_HEREDOC));

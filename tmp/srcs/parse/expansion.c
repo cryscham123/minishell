@@ -6,116 +6,108 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 22:01:29 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 05:40:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:40:55 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	ft_replace_ev_help(t_lst **target, t_lst *ev)
+static char	*ft_trans_ev_help(char **s, t_lst *ev)
 {
-	t_lst	*val_str;
 	t_lst	*to_find;
-	char	*val;
+	char	*target;
+	char	tmp;
+	int		i;
 
-	to_find = (*target)->nxt;
-	while (to_find != NULL \
-		&& ft_str_find("| \t><$\'\"=*", *(char *)to_find->data) == -1)
-		to_find = to_find->nxt;
-	if (to_find != NULL && to_find->prev != NULL)
-		to_find->prev->nxt = NULL;
-	val = ft_env_find_lst(ev, target->nxt);
-	if (to_find != NULL && to_find->prev != NULL)
-		to_find->prev->nxt = to_find;
-	if (val == NULL)
-	{
-		lst_replace(*target, to_find, NULL, NULL);
-		return (0);
-	}
-	val_str = mk_str_lst(val);
-	if (val_str == NULL)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
-	lst_replace(*target, to_find, val_str, lst_back(val_str));
-	return (0);
+	(*s)++;
+	i = 0;
+	while ((*s)[i] && ft_str_find("| \t><$\'\"=*", (*s)[i]) == -1)
+		i++;
+	tmp = (*s)[i];
+	(*s)[i] = '\0';
+	to_find = ft_env_find(ev, *s);
+	(*s)[i] = tmp;
+	*s += (i - 1);
+	if (to_find == NULL)
+		return (NULL);
+	target = (char *)to_find->data + (to_find->info + 1);
+	return (target);
 }
 
-static int	ft_replace_ev(t_lst *target, t_lst *ev, int *info)
+static char	*ft_trans_ev(char *s, t_lst *ev, char *ret)
 {
-	char	c;
+	char	*tmp;
 	int		flag;
 
 	flag = 0;
-	while (target != NULL)
+	while (*s)
 	{
-		c = *(char *)target->data;
-		if (c == '\'' && flag != F_DQUOTE)
-		{
-			target->info = F_NO_PARSE;
-			(*info) |= (*info == F_DEL) * F_NO_TRANS;
+		if (*s == '\'' && flag != F_DQUOTE)
 			flag ^= F_QUOTE;
-		}
-		if (c == '\"' && flag != F_QUOTE)
-		{
-			target->info = F_NO_PARSE;
-			(*info) |= (*info == F_DEL) * F_NO_TRANS;
+		if (*s == '\"' && flag != F_QUOTE)
 			flag ^= F_DQUOTE;
-		}
-		if (*info != F_DEL && flag != F_QUOTE && c == '$' \
-			&& ft_replace_ev_help(&target, ev) != 0)
-			return (1);
-		target = target->nxt;
+		if (flag != F_QUOTE && *s == '$' && *(s + 1) != '?')
+			tmp = ft_append(ret, ft_trans_ev_help(&s, ev), 0);
+		else if (flag != F_QUOTE && *s == '$')
+			tmp = ft_trans_ev_help2(&s, ret);
+		else
+			tmp = ft_append(ret, NULL, *s);
+		free(ret);
+		if (tmp == NULL)
+			return (NULL);
+		ret = tmp;
+		s++;
 	}
-	return (0);
+	return (ret);
 }
 
-static t_lst	*ft_trans_help(t_lst *target, t_lst *ev, int *info)
+static t_lst	*ft_trans_help(char *data, int info, t_lst *ev)
 {
 	char	*tmp;
+	t_lst	*lst;
 	t_lst	*ret;
 
-	if (ft_replace_ev(target, ev, info) != 0)
-		return (NULL);
-	if (((*info) & F_DEL) != 0)
+	if (info == F_DEL)
 	{
-		tmp = ft_c_str(target);
+		tmp = ft_delete_quote(data, &info);
 		if (tmp == NULL)
-		{
-			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 			return (NULL);
-		}
-		ret = ft_heredoc(tmp, ((*info & F_NO_TRANS) == 0), ev);
+		ret = ft_heredoc(tmp, ((info & F_NO_TRANS) == 0), ev);
 		free(tmp);
 	}
 	else
-		ret = ft_lst_split_space(ft_lst_trim(target));
-	ft_lst_free(target);
+	{
+		tmp = ft_trans_ev(data, ev, NULL);
+		if (tmp == NULL)
+			return (NULL);
+		lst = ft_split_space(ft_trim(tmp));
+		free(tmp);
+		ret = ft_find_wild(lst, &info, NULL);
+		ft_lst_free(lst);
+	}
 	return (ret);
 }
 
 static t_lst	*ft_trans(t_lst *target, t_lst *ev, t_lst *ret)
 {
-	t_lst	*data;
 	t_lst	*to_push;
 
 	while (target != NULL)
 	{
-		data = mk_str_lst(target->data);
-		if (data == NULL)
+		to_push = ft_trans_help(target->data, target->info, ev);
+		if (to_push == NULL && target->info == F_DEL)
+			return (ft_lst_free(ret));
+		if (to_push != NULL)
 		{
-			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
-			return (ft_lst_free(ret));
-		}
-		to_push = ft_trans_help(data, ev, &target->info);
-		if (to_push == NULL)
-			return (ft_lst_free(ret));
-		if (ft_lst_size(to_push) != 1 && to_push->info != 0)
-		{
-			ft_error(F_ERROR_AMB, F_EXIT_STATUS_ARG);
-			ft_lst_free(to_push);
-			return (ft_lst_free(ret));
+			if (ft_lst_size(to_push) != 1 && to_push->info != 0)
+			{
+				ft_error(F_ERROR_AMB, F_EXIT_STATUS_ARG);
+				ft_lst_free(to_push);
+				return (ft_lst_free(ret));
+			}
+			lst_push(&ret, to_push);
 		}
 		target = target->nxt;
-		lst_push(&ret, to_push);
 	}
 	return (ret);
 }

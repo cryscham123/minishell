@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 03:05:28 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:33:30 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,10 @@ void	*ft_calloc(int size)
 
 	target = malloc(size);
 	if (target == NULL)
+	{
+		ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 		return (NULL);
+	}
 	i = 0;
 	while (i < size)
 	{

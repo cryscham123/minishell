@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 05:37:49 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 00:43:32 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <termios.h>
+# include <dirent.h>
 
 # define F_QUOTE 1
 # define F_DQUOTE 2
@@ -81,8 +82,6 @@ t_lst	*ft_heredoc(char *del, int mode, t_lst *ev);
 int		ft_lst_size(t_lst *lst);
 t_lst	*mk_lst(void *data, int data_type, int info);
 void	lst_push(t_lst **target, t_lst *to_push);
-t_lst	*lst_back(t_lst *lst);
-void	lst_replace(t_lst *to_del, t_lst *to_replace);
 void	lst_delete(t_lst *to_del);
 void	*ft_calloc(int size);
 void	*ft_argv_free(char **argv);
@@ -99,8 +98,7 @@ int		ft_strlen(char *s);
 char	*ft_substr(char *s, int n);
 char	*ft_append(char *s1, char *s2, char middle);
 char	*ft_itoa(int a, int cnt);
-char	*ft_c_str(t_lst *lst);
-t_lst	*mk_str_lst(char *s);
+t_lst	*mk_str_node(char *s, int info);
 t_lst	*mk_ev(char **env);
 t_lst	*ft_env_find(t_lst *ev, char *s);
 char	*ft_env_find_lst(t_lst *ev, t_lst *to_find);
@@ -117,5 +115,8 @@ void	heredoc_signal_handler(int sig);
 int		cal_flag(int ret_val);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag);
 int		ft_expansion(t_token *target, t_lst *ev);
+char	*ft_delete_quote(char *data, int *info);
+t_lst	*ft_find_wild(t_lst *to_find, int *info, t_lst *ret);
+char	*ft_trans_ev_help2(char **s, char *target);
 
 #endif

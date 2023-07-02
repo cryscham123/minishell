@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 05:32:54 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:42:57 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static char	*ft_word_chk(char **s, char *meta)
 		return (NULL);
 	}
 	data = ft_substr(*s, i);
-	if (data == NULL)
-		ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 	(*s) += i;
 	return (data);
 }
@@ -83,7 +81,6 @@ t_lst	*ft_split_space(char *s)
 		to_push = mk_lst(data, F_DATA_CHAR, 0);
 		if (to_push == NULL)
 		{
-			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 			free(data);
 			return (ft_lst_free(target));
 		}
@@ -112,7 +109,7 @@ int	ft_split(char *s, char *meta, int *flag, t_lst **target)
 			if (to_push == NULL)
 			{
 				free(data);
-				return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+				return (1);
 			}
 			lst_push(target, to_push);
 			*flag = 0;

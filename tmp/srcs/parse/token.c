@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 22:01:29 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 05:40:45 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:31:59 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,7 @@ static t_token	*mk_token_node(char *s, t_lst *ev)
 	}
 	target = ft_calloc(sizeof(t_token));
 	if (target == NULL)
-	{
-		ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 		return (NULL);
-	}
 	target->fd[1] = 1;
 	cmp = ft_split_space(s);
 	if (mk_token_node_help(target, cmp) != 0)
@@ -99,7 +96,6 @@ static t_lst	*mk_token_lst_help(t_lst *line, t_lst *ev)
 		to_push = mk_lst(tmp, F_DATA_TOKEN, 0);
 		if (to_push == NULL)
 		{
-			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
 			ft_node_free(tmp, F_DATA_TOKEN, 0);
 			return (ft_lst_free(target));
 		}

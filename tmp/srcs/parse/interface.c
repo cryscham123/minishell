@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 02:16:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 04:26:30 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:15:44 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ void	ft_test(t_lst *tv)
 		{
 			if (redir->info == F_INPUT)
 				ft_putstr_fd("input: ", 1);
-			if (redir->info == F_DEL)
-				ft_putstr_fd("del: ", 1);
+			if (redir->info == F_HEREDOC)
+				ft_putstr_fd("heredoc: ", 1);
 			if (redir->info == F_OUTPUT)
 				ft_putstr_fd("output: ", 1);
 			if (redir->info == F_APPEND)

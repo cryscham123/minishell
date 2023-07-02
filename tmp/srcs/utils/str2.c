@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 04:35:37 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:06:52 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,29 +36,15 @@ char	*ft_itoa(int a, int cnt)
 	if (a < 10)
 	{
 		target = ft_calloc(cnt + 1);
+		if (target == NULL)
+			return (NULL);
 		target[0] = "0123456789"[a % 10];
 		return (target);
 	}
 	target = ft_itoa(a / 10, cnt + 1);
-	target[ft_strlen(target)] = "0123456789"[a % 10];
-	return (target);
-}
-
-char	*ft_c_str(t_lst *lst)
-{
-	char	*target;
-	int		i;
-
-	target = ft_calloc(ft_lst_size(lst) + 1);
 	if (target == NULL)
 		return (NULL);
-	i = 0;
-	while (lst != NULL)
-	{
-		if (lst->info != F_NO_PARSE)
-			target[i++] = *(char *)lst->data;
-		lst = lst->nxt;
-	}
+	target[ft_strlen(target)] = "0123456789"[a % 10];
 	return (target);
 }
 
@@ -84,26 +70,19 @@ char	**mk_argv(t_lst *lst)
 	return (target);
 }
 
-t_lst	*mk_str_lst(char *s)
+t_lst	*mk_str_node(char *s, int info)
 {
-	t_lst	*target;
-	t_lst	*to_push;
-	char	*data;
+	t_lst	*ret;
+	char	*tmp;
 
-	target = NULL;
-	while (*s)
+	tmp = ft_substr(s, -1);
+	if (tmp == NULL)
+		return (NULL);
+	ret = mk_lst(tmp, F_DATA_CHAR, info);
+	if (ret == NULL)
 	{
-		data = ft_substr(s, 1);
-		if (data == NULL)
-			return (ft_lst_free(target));
-		to_push = mk_lst(data, F_DATA_CHAR, 0);
-		if (to_push == NULL)
-		{
-			free(data);
-			return (ft_lst_free(target));
-		}
-		lst_push(&target, to_push);
-		s++;
+		free(tmp);
+		return (NULL);
 	}
-	return (target);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 02:59:57 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 01:15:20 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern int	g_status;
 
 void	ft_putstr_fd(char *s, int fd)
 {
-	while(*s)
+	while (*s)
 	{
 		write(fd, s, 1);
 		s++;
