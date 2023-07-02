@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:33:50 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 04:10:06 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_av_validate_ev(char *s)
 	i = 0;
 	while (s[i] && s[i] != '=')
 	{
-		if (!(i != 0 && s[i] >= '0' && s[i] <= '0') \
+		if (!(i != 0 && s[i] >= '0' && s[i] <= '9') \
 			&& !(s[i] >= 'a' && s[i] <= 'z') \
 			&& !(s[i] >= 'A' && s[i] <= 'Z') && s[i] != '_')
 			return (ft_error(F_ERROR_KEY, F_EV_KEY_ERROR));

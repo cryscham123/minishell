@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 03:16:49 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 04:22:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	ft_av_env(char **av, t_lst *ev)
 	char	**env;
 	int		flag;
 
+	flag = 0;
 	ft_signal(SIG_IGN, SIG_IGN, 0);
 	pid = fork();
 	if (pid < 0)
@@ -50,15 +51,13 @@ int	ft_av_env(char **av, t_lst *ev)
 		if (env == NULL)
 			exit(F_EXIT_STATUS_MEM);
 		if (*av == NULL)
-			flag = ft_env(NULL, env, NULL);
+			exit(ft_env(NULL, env, NULL));
 		else
-			flag = ft_extern_cmd(av, env, ev, 1);
-		ft_argv_free(env);
-		exit(cal_flag(flag));
+			ft_extern_cmd(av, env, ev, 1);
 	}
 	else
 		waitpid(-1, &flag, 0);
-	return (cal_flag(flag));
+	return (flag);
 }
 
 int	ft_av_exit(char *data)

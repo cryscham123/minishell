@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 03:12:59 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 04:04:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_cd(char **av, t_lst *ev)
 {
 	int		flag;
 
-	if (*av == NULL)
+	if (*av == NULL || **av == '\0')
 		return (0);
 	flag = ft_av_validate_dir(av);
 	if (flag != 0)

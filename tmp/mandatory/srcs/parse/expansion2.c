@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 23:15:43 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 00:47:21 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 04:12:44 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ static t_lst	*ft_get_wild(t_lst *ret, int info)
 		item = readdir(dp);
 		if (item == NULL)
 			break ;
-		if (ft_strcmp(item->d_name, ".") == 0 \
-			|| ft_strcmp(item->d_name, "..") == 0)
+		if (*item->d_name == '.')
 			continue ;
 		to_push = mk_str_node(item->d_name, info);
 		if (to_push == NULL)
