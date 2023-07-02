@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 23:15:43 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:33:56 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 05:49:09 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,28 @@ static t_lst	*ft_get_wild(t_lst *ret, int info)
 	return (ret);
 }
 
+static int	ft_is_wild(char *s)
+{
+	int	flag;
+	int	i;
+
+	if (s == NULL)
+		return (0);
+	i = 0;
+	flag = 0;
+	while (s[i])
+	{
+		if (s[i] == '\'' && flag != F_DQUOTE)
+			flag ^= F_QUOTE;
+		else if (s[i] == '\"' && flag != F_QUOTE)
+			flag ^= F_DQUOTE;
+		else if (s[i] != '*' || (s[i] == '*' && flag != 0))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 char	*ft_trans_ev_help2(char **s, char *target)
 {
 	char	*num;
@@ -62,7 +84,7 @@ t_lst	*ft_find_wild(t_lst *to_find, int *info, t_lst *ret)
 	while (to_find != NULL)
 	{
 		tmp = NULL;
-		if (ft_strcmp(to_find->data, "*") == 0)
+		if (ft_is_wild(to_find->data))
 			to_push = ft_get_wild(NULL, *info);
 		else
 		{
