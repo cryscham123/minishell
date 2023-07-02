@@ -29,8 +29,6 @@ void	ft_node_free(void *data, int data_type, int info)
 		return ;
 	if (info == F_HEREDOC)
 		unlink((char *)data);
-	if (data_type == F_DATA_STRING)
-		ft_lst_free(data);
 	else if (data_type == F_DATA_TOKEN)
 	{
 		ft_close(((t_token *)data)->fd, NULL);

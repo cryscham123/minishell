@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 static void	ft_parse_heredoc_env(int fd, char **to_read, t_lst *ev)
 {
 	t_lst	*to_find;
@@ -75,46 +77,42 @@ static int	heredoc_parent_wait(int fd, char *file_name)
 	waitpid(-1, &flag, 0);
 	if (flag != 0)
 	{
+		g_status = 1;
 		close(fd);
 		unlink(file_name);
-		g_status = 1;
+		free(file_name);
 		return (1);
 	}
 	ft_signal(sigint_handler, SIG_IGN, 0);
 	return (0);
 }
 
-static int	open_heredoc(char *file_name, t_lst *f, t_lst *ev)
+static int	open_heredoc(char *file_name, char *del, int mode, t_lst *ev)
 {
-	char	*del;
 	int		fd;
 	pid_t	pid;
 
-	del = ft_c_str(f->data);
-	if (del == NULL)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	fd = open(file_name, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
 	{
-		free(del);
+		free(file_name);
 		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	}
 	pid = fork();
 	if (pid < 0)
 	{
-		free(del);
+		free(file_name);
 		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 	}
 	else if (pid == 0)
-		parse_heredoc(fd, del, ((f->info & F_NO_TRANS) == 0), ev);
-	free(del);
+		parse_heredoc(fd, del, mode, ev);
 	if (heredoc_parent_wait(fd, file_name) != 0)
 		return (1);
 	close(fd);
 	return (0);
 }
 
-int	ft_heredoc(t_lst *f, t_lst *ev)
+t_lst	*ft_heredoc(char *del, int mode, t_lst *ev)
 {
 	char	*file_name;
 	int		heredoc_num;
@@ -124,21 +122,20 @@ int	ft_heredoc(t_lst *f, t_lst *ev)
 	{
 		file_name = ft_itoa(++heredoc_num, 1);
 		if (file_name == NULL)
-			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+		{
+			ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
+			return (NULL);
+		}
 		if (access(file_name, F_OK) != 0)
 			break ;
 		free(file_name);
 	}
 	if (heredoc_num == 2147483647)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
-	if (open_heredoc(file_name, f, ev) != 0)
 	{
-		free(file_name);
-		return (1);
+		ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM);
+		return (NULL);
 	}
-	ft_lst_free(f->data);
-	f->data = file_name;
-	f->data_type = F_DATA_CHAR;
-	f->info = F_HEREDOC;
-	return (0);
+	if (open_heredoc(file_name, del, mode, ev) != 0)
+		return (NULL);
+	return (mk_lst(file_name, F_DATA_CHAR, F_HEREDOC));
 }

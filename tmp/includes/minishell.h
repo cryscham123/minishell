@@ -35,8 +35,7 @@
 # define F_NO_TRANS 256
 # define F_NO_PARSE 512
 # define F_DATA_CHAR 1
-# define F_DATA_STRING 2
-# define F_DATA_TOKEN 4
+# define F_DATA_TOKEN 2
 # define F_EXIT_STATUS_FLAG -1
 # define F_EXIT_STATUS_MEM 1
 # define F_EXIT_STATUS_SYNTAX 1
@@ -44,12 +43,11 @@
 # define F_EXIT_STATUS_FILE 1
 # define F_EXIT_STATUS_BUILTIN -2
 # define F_ERROR_ARG "Too Many Arguments...\n"
+# define F_ERROR_AMB "Ambiguos Arguments...\n"
 # define F_ERROR_MEM "Memmory Is Not Enough...\n"
 # define F_ERROR_SYNTAX "Unexpected Token...\n"
 # define F_ERROR_FILE "No Such File or Directory...\n"
 # define F_ERROR_ACCESS "Permission Denied...\n"
-
-int	g_status;
 
 typedef struct s_lst
 {
@@ -78,11 +76,13 @@ int		ft_env(char **av, t_lst *ev);
 int		ft_exe(t_lst *tv, t_lst *ev);
 int		ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked);
 int		ft_built_in_cmd(char **argv, t_lst *ev);
-int		ft_heredoc(t_lst *f, t_lst *ev);
 **/
+t_lst	*ft_heredoc(char *del, int mode, t_lst *ev);
 int		ft_lst_size(t_lst *lst);
 t_lst	*mk_lst(void *data, int data_type, int info);
 void	lst_push(t_lst **target, t_lst *to_push);
+t_lst	*lst_back(t_lst *lst);
+void	lst_replace(t_lst *to_del, t_lst *to_replace);
 void	lst_delete(t_lst *to_del);
 void	*ft_calloc(int size);
 void	*ft_argv_free(char **argv);
@@ -103,6 +103,7 @@ char	*ft_c_str(t_lst *lst);
 t_lst	*mk_str_lst(char *s);
 t_lst	*mk_ev(char **env);
 t_lst	*ft_env_find(t_lst *ev, char *s);
+char	*ft_env_find_lst(t_lst *ev, t_lst *to_find);
 void	ft_parse(t_lst *ev);
 t_lst	*mk_token_lst(char *s, t_lst *ev);
 int		ft_split(char *s, char *meta, int *flag, t_lst **target);
@@ -115,5 +116,6 @@ void	sigint_handler(int sig);
 void	heredoc_signal_handler(int sig);
 int		cal_flag(int ret_val);
 void	ft_signal(void (*handler_1)(int), void (*handler_2)(int), int flag);
+int		ft_expansion(t_token *target, t_lst *ev);
 
 #endif

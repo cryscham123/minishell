@@ -40,7 +40,7 @@ void	ft_test(t_lst *tv)
 				ft_putstr_fd("append: ", 1);
 			ft_putstr_fd(redir->data, 1);
 			ft_putstr_fd("\n", 1);
-			argv = argv->nxt;
+			redir = redir->nxt;
 		}
 		tv = tv->nxt;
 	}

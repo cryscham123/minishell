@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
 void	sigint_handler(int sig)
 {
 	(void)sig;

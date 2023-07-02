@@ -75,10 +75,7 @@ char	**mk_argv(t_lst *lst)
 	i = 0;
 	while (lst != NULL)
 	{
-		if (lst->data_type == F_DATA_STRING)
-			target[i] = ft_c_str(lst->data);
-		else if (lst->data_type == F_DATA_CHAR)
-			target[i] = ft_substr(lst->data, -1);
+		target[i] = ft_substr(lst->data, -1);
 		if (target[i] == NULL)
 			return (ft_argv_free(target));
 		i++;

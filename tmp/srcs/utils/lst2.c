@@ -6,27 +6,38 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/01 02:59:57 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/01 03:05:44 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern int	g_status;
-
-void	ft_putstr_fd(char *s, int fd)
+t_lst	*lst_back(t_lst *lst)
 {
-	while(*s)
-	{
-		write(fd, s, 1);
-		s++;
-	}
+	if (lst == NULL)
+		return (NULL);
+	while (lst->nxt != NULL)
+		lst = lst->nxt;
+	return (lst);
 }
 
-int	ft_error(char *msg, int exit_status)
+void	lst_replace(t_lst *del_st, t_lst *del_en, t_lst *re_st, t_lst *re_en)
 {
-	ft_putstr_fd(msg, 2);
-	if (exit_status == 1)
-		g_status = exit_status;
-	return (exit_status);
+	if (to_del->prev != NULL)
+	{
+		if (to_replace != NULL)
+			to_del->prev->nxt = to_replace;
+		else
+			to_del->prev->nxt = to_del->nxt;
+		to_del->prev = NULL;
+	}
+	if (to_del->nxt != NULL)
+	{
+		if(to_replace_en != NULL)
+			to_del->nxt->prev = to_replace_en;
+		else
+			to_del->nxt->prev = to_del->prev;
+		to_del->nxt = NULL;
+	}
+	ft_lst_free(to_del);
 }

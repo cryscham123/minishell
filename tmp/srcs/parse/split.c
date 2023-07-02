@@ -49,9 +49,9 @@ static char	*ft_word_chk(char **s, char *meta)
 	i = -1;
 	while ((*s)[++i])
 	{
-		if ((*s)[i] == '\'' && (quote_flag & F_DQUOTE) == 0)
+		if ((*s)[i] == '\'' && quote_flag != F_DQUOTE)
 			quote_flag ^= F_QUOTE;
-		if ((*s)[i] == '\"' && (quote_flag & F_QUOTE) == 0)
+		if ((*s)[i] == '\"' && quote_flag != F_QUOTE)
 			quote_flag ^= F_DQUOTE;
 		if (quote_flag == 0 && ft_str_find(meta, (*s)[i]) != -1)
 			break ;
@@ -73,10 +73,8 @@ t_lst	*ft_split_space(char *s)
 	t_lst	*target;
 	t_lst	*to_push;
 	char	*data;
-	int		i;
 
 	target = NULL;
-	i = 0;
 	while (*s)
 	{
 		data = ft_word_chk(&s, " \t");
@@ -105,19 +103,20 @@ int	ft_split(char *s, char *meta, int *flag, t_lst **target)
 	{
 		if (ft_str_find(meta, *s) != -1 && ft_flag_chk(&s, flag) != 0)
 			return (1);
-		if (*s == '\0')
-			break ;
-		data = ft_word_chk(&s, meta);
-		if (data == NULL)
-			return (1);
-		to_push = mk_lst(data, F_DATA_CHAR, *flag);
-		if (to_push == NULL)
+		if (*s != '\0' && ft_str_find(meta, *s) == -1)
 		{
-			free(data);
-			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+			data = ft_word_chk(&s, meta);
+			if (data == NULL)
+				return (1);
+			to_push = mk_lst(data, F_DATA_CHAR, *flag);
+			if (to_push == NULL)
+			{
+				free(data);
+				return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+			}
+			lst_push(target, to_push);
+			*flag = 0;
 		}
-		lst_push(target, to_push);
-		*flag = 0;
 	}
 	return (0);
 }

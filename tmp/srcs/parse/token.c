@@ -12,6 +12,25 @@
 
 #include "minishell.h"
 
+extern int	g_status;
+
+static void	ft_inject_token(t_token *target, t_lst *to_push)
+{
+	while (to_push != NULL)
+	{
+		if (to_push->info == 0)
+			lst_push(&target->argv, to_push);
+		else
+			lst_push(&target->redir, to_push);
+		to_push = to_push->nxt;
+		if (to_push != NULL && to_push->prev != NULL)
+		{
+			to_push->prev->nxt = NULL;
+			to_push->prev = NULL;
+		}
+	}
+}
+
 static int	mk_token_node_help(t_token *target, t_lst *cmp)
 {
 	int		flag;
@@ -24,15 +43,11 @@ static int	mk_token_node_help(t_token *target, t_lst *cmp)
 	{
 		to_push = NULL;
 		if (ft_split(cmp->data, "><", &flag, &to_push) != 0)
-			return (1);
-		while (to_push != NULL)
 		{
-			if (to_push->info == 0)
-				lst_push(&target->argv, to_push);
-			else
-				lst_push(&target->redir, to_push);
-			to_push = to_push->nxt;
+			ft_lst_free(to_push);
+			return (1);
 		}
+		ft_inject_token(target, to_push);
 		cmp = cmp->nxt;
 	}
 	if (flag != 0)
@@ -64,11 +79,8 @@ static t_token	*mk_token_node(char *s, t_lst *ev)
 		return (ft_lst_free(cmp));
 	}
 	ft_lst_free(cmp);
-	(void)ev;
-	/**
-	if (ft_expansion(target->argv) != 0 || ft_expansion(target->redir) != 0)
-		return (ft_lst_free(target));
-	**/
+	if (ft_expansion(target, ev) != 0)
+		return (NULL);
 	return (target);
 }
 
@@ -111,7 +123,7 @@ t_lst	*mk_token_lst(char *s, t_lst *ev)
 	flag = F_PIPE;
 	line = NULL;
 	if (ft_split(s, "|", &flag, &line) != 0)
-		return (NULL);
+		return (ft_lst_free(line));
 	if (flag != 0)
 	{
 		ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX);
