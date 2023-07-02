@@ -47,7 +47,7 @@ static int	ft_is_wild(char *s)
 	int	flag;
 	int	i;
 
-	if (s == NULL)
+	if (s == NULL || ft_str_find(s, '*') == -1)
 		return (0);
 	i = 0;
 	flag = 0;
