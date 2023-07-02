@@ -16,9 +16,12 @@ int	ft_echo(char **av)
 {
 	int	flag;
 
-	flag = echo_option_chk(*av);
-	if (flag == 1)
+	flag = 0;
+	while (*av != NULL && echo_option_chk(*av) == 1)
+	{
+		flag = 1;
 		av++;
+	}
 	while (*av != NULL)
 	{
 		ft_putstr_fd(*av, 1);
