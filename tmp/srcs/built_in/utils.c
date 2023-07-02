@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:01:48 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:33:50 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ int	ft_set_ev_pwd(char *key, t_lst *ev)
 	target = ft_append(key, pwd, '=');
 	free(pwd);
 	if (target == NULL)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+		return (1);
 	to_push = mk_lst(target, F_DATA_CHAR, ft_strlen(key));
 	if (to_push == NULL)
 	{
 		free(target);
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+		return (1);
 	}
 	ft_unset_unit(target, ev, 0);
 	lst_push(&ev, to_push);
@@ -93,10 +93,11 @@ void	ft_unset_unit(char *s, t_lst *ev, int flag)
 	int		i;
 
 	i = 0;
-	while (flag != F_EV_NO_VALUE && s[i] && s[i] != '=')
-		i++;
 	if (flag != F_EV_NO_VALUE)
+	{
+		i = ft_str_find(s, '=');
 		s[i] = '\0';
+	}
 	lst_delete(ft_env_find(ev, s));
 	if (flag != F_EV_NO_VALUE)
 		s[i] = '=';

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 01:57:37 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:40:36 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int		ft_split(char *s, char *meta, int *flag, t_lst **target);
 t_lst	*ft_split_space(char *s);
 int		ft_pipe(t_lst *tv);
 void	ft_dup2(int *fd, t_lst *tv);
-int		ft_open(t_token *token);
+int		ft_open(t_token *token, t_lst *redir);
 void	ft_close(int *fd, t_lst *tv);
 void	sigint_handler(int sig);
 void	heredoc_signal_handler(int sig);

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:03:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:55:58 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	ft_av_env(char **av, t_lst *ev)
 	{
 		env = ft_av_env_help(&av, ev);
 		if (env == NULL)
-			exit(ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+			exit(F_EXIT_STATUS_MEM);
 		if (*av == NULL)
 			flag = ft_env(NULL, env, NULL);
 		else

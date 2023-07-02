@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 01:54:38 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:57:22 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ void	ft_exe_extern(char *path, char **av, char **env)
 	while (path != NULL)
 	{
 		i = ft_str_find(path, ':');
-		if (i != 0)
+		if (i != -1)
 			path[i] = '\0';
 		target_path = ft_append(path, av[0], '/');
 		if (target_path == NULL)
-			exit(ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+			exit(F_EXIT_STATUS_MEM);
 		chk_access_and_exe(target_path, av, env);
 		free(target_path);
-		if (i == 0)
+		if (i == -1)
 			break ;
 		else
 			path += (i + 1);

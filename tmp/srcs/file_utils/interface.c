@@ -6,27 +6,25 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:35:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:26:01 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_open(t_token *token)
+int	ft_open(t_token *token, t_lst *redir)
 {
-	t_lst	*redir;
 	int		fd;
 	int		direction;
 
-	redir = token->redir;
 	if (redir->info == F_INPUT || redir->info == F_HEREDOC)
 		fd = open(redir->data, O_RDONLY);
 	else if (redir->info == F_OUTPUT)
 		fd = open(redir->data, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	else
 		fd = open(redir->data, O_CREAT | O_RDWR | O_APPEND, 0644);
-	if (fd == -1)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+	if (fd < 0)
+		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
 	direction = (redir->info == F_OUTPUT || redir->info == F_APPEND);
 	if (token->fd[direction] != direction)
 		close(token->fd[direction]);

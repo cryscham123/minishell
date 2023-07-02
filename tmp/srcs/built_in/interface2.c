@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:00:24 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:08:03 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	ft_env(char **av, char **env, t_lst *ev)
 	while (*env != NULL)
 	{
 		ft_putstr_fd(*env, 1);
+		ft_putstr_fd("\n", 1);
 		env++;
 	}
 	return (0);

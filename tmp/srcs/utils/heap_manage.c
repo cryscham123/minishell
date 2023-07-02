@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:33:30 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:36:03 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,6 @@ void	*ft_lst_free(t_lst *lst)
 	while (lst != NULL)
 	{
 		ft_node_free(lst->data, lst->data_type, lst->info);
-		if (lst->prev != NULL)
-			lst->prev->nxt = NULL;
-		if (lst->nxt != NULL)
-			lst->nxt->prev = NULL;
 		tmp = lst;
 		lst = lst->nxt;
 		free(tmp);

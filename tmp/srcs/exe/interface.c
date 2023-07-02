@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:04:44 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 02:55:04 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	ft_redirection(t_token *token, t_lst *redir)
 {
 	while (redir != NULL)
 	{
-		if (ft_open(token) != 0)
+		if (ft_open(token, redir) != 0)
 			return (1);
 		redir = redir->nxt;
 	}
@@ -49,10 +49,14 @@ int	ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked)
 {
 	pid_t	pid;
 	t_lst	*path;
+	char	*target;
 	int		flag;
 
 	flag = 0;
+	target = NULL;
 	path = ft_env_find(ev, "PATH");
+	if (path != NULL)
+		target = path->data + (path->info + 1);
 	if (!is_forked)
 	{
 		ft_signal(SIG_IGN, SIG_IGN, 0);
@@ -60,12 +64,12 @@ int	ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked)
 		if (pid < 0)
 			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 		else if (pid == 0)
-			ft_exe_extern(path->data + (path->info + 1), av, env);
+			ft_exe_extern(target, av, env);
 		else
 			waitpid(-1, &flag, 0);
 	}
 	else
-		ft_exe_extern(path->data + (path->info + 1), av, env);
+		ft_exe_extern(target, av, env);
 	return (flag);
 }
 
