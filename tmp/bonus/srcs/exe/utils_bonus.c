@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:32:49 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 05:20:12 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	ft_exe_extern(char *path, char **av, char **env)
 	int		i;
 
 	ft_signal(SIG_DFL, SIG_DFL, 1);
+	if (*av[0] == '\0')
+		exit(ft_error(F_ERROR_EXE, F_EXIT_STATUS_EXE));
 	chk_access_and_exe(av[0], av, env);
 	while (path != NULL)
 	{
