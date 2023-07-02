@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:50:27 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 03:12:59 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_pwd(void)
 
 	pwd = getcwd(NULL, 0);
 	if (pwd == NULL)
-		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
+		return (ft_error(F_ERROR_ACCESS, F_EXIT_STATUS_FILE));
 	ft_putstr_fd(pwd, 1);
 	ft_putstr_fd("\n", 1);
 	free(pwd);

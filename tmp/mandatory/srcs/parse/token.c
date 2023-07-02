@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 22:01:29 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:31:59 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 03:23:18 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,10 @@ static t_token	*mk_token_node(char *s, t_lst *ev)
 	}
 	ft_lst_free(cmp);
 	if (ft_expansion(target, ev) != 0)
+	{
+		ft_node_free(target, F_DATA_TOKEN, 0);
 		return (NULL);
+	}
 	return (target);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 02:55:58 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/03 03:16:49 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_av_env(char **av, t_lst *ev)
 		else
 			flag = ft_extern_cmd(av, env, ev, 1);
 		ft_argv_free(env);
-		exit(flag);
+		exit(cal_flag(flag));
 	}
 	else
 		waitpid(-1, &flag, 0);
