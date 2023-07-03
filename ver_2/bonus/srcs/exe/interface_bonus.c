@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 07:52:01 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 08:21:47 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,8 @@ int	ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked)
 			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 		else if (pid == 0)
 			ft_exe_extern(target, av, env);
-		waitpid(-1, &flag, 0);
-		if (flag == 2)
-			ft_putstr_fd("\n", 1);
+		else
+			flag = ft_wait_pid(1);
 	}
 	else
 		ft_exe_extern(target, av, env);
@@ -106,6 +105,7 @@ static int	ft_exe_help(t_token *data, t_lst *ev, t_lst *tv, int is_forked)
 int	ft_exe(t_lst *tv, t_lst *ev)
 {
 	pid_t	pid;
+	int		flag;
 	int		n;
 
 	n = ft_lst_size(tv);
@@ -124,5 +124,6 @@ int	ft_exe(t_lst *tv, t_lst *ev)
 		ft_close(((t_token *)tv->data)->fd, NULL);
 		tv = tv->nxt;
 	}
-	return (ft_cal_pipe_exit_status(n, 0));
+	flag = ft_wait_pid(n);
+	return (cal_flag(flag));
 }

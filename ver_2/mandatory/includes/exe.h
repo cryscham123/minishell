@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exe_bonus.h                                        :+:      :+:    :+:   */
+/*   exe.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 02:30:19 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 07:12:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 08:17:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXE_BONUS_H
-# define EXE_BONUS_H
+#ifndef EXE_H
+# define EXE_H
 
-# include "minishell_bonus.h"
+# include "minishell.h"
 
 # define F_STATUS_NO_BUILTIN -3
 # define F_EXIT_STATUS_ACCESS 126
@@ -22,6 +22,6 @@
 # define F_ERROR_EXE "Command Not Found...\n"
 
 void	ft_exe_extern(char *path, char **av, char **env);
-int		ft_cal_pipe_exit_status(int n, int flag);
+int		ft_wait_pid(int n);
 
 #endif

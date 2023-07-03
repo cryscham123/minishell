@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   minishell_bonus.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 06:58:12 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 08:24:02 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef MINISHELL_BONUS_H
+# define MINISHELL_BONUS_H
 
 # include <stdio.h>
 # include <readline/readline.h>
@@ -34,7 +34,6 @@
 # define F_APPEND 64
 # define F_DEL 128
 # define F_NO_TRANS 256
-# define F_NO_PARSE 512
 # define F_DATA_CHAR 1
 # define F_DATA_TOKEN 2
 # define F_EXIT_STATUS_FLAG -1
