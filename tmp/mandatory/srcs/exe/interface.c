@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 07:11:23 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 07:51:46 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ int	ft_exe(t_lst *tv, t_lst *ev)
 		return (ft_exe_help(tv->data, ev, tv, 0));
 	if (ft_pipe(tv) != 0)
 		return (1);
+	ft_signal(SIG_IGN, SIG_IGN, 0);
 	while (tv != NULL)
 	{
-		ft_signal(SIG_IGN, SIG_IGN, 0);
 		pid = fork();
 		if (pid < 0)
 			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
