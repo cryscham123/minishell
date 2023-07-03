@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/02 23:15:43 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 02:13:55 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 02:29:53 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	wild_pattern_chk_help(char *pattern, char *s, int flag)
 		return (wild_pattern_chk_help(pattern + 1, s, flag ^ F_DQUOTE));
 	if (flag == 0 && *pattern == '*' && *(pattern + 1) != '\0' && *s == '\0')
 		return (wild_pattern_chk_help(pattern + 1, s, flag));
-	if (*pattern == *s)
+	if (*pattern == *s && *s != '*')
 		return (wild_pattern_chk_help(pattern + 1, s + 1, flag));
 	if (flag == 0 && *pattern == '*')
 	{
