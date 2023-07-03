@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 02:16:57 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 06:58:12 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@
 # define F_DEL 128
 # define F_NO_TRANS 256
 # define F_NO_PARSE 512
-# define F_WILD 1024
 # define F_DATA_CHAR 1
 # define F_DATA_TOKEN 2
 # define F_EXIT_STATUS_FLAG -1
@@ -72,11 +71,11 @@ int		ft_cd(char **av, t_lst *ev);
 int		ft_pwd(void);
 int		ft_export(char **av, t_lst *ev);
 int		ft_unset(char **av, t_lst *ev);
-int		ft_exit(char **av);
+int		ft_exit(char **av, int is_forked);
 int		ft_env(t_lst *ev);
 int		ft_exe(t_lst *tv, t_lst *ev);
 int		ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked);
-int		ft_built_in_cmd(char **argv, t_lst *ev);
+int		ft_built_in_cmd(char **argv, t_lst *ev, int is_forked);
 t_lst	*ft_heredoc(char *del, int mode, t_lst *ev);
 int		ft_lst_size(t_lst *lst);
 t_lst	*mk_lst(void *data, int data_type, int info);

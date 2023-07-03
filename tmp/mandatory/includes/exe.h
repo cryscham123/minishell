@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 02:30:19 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:28:18 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 07:07:20 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,5 +22,6 @@
 # define F_ERROR_EXE "Command Not Found...\n"
 
 void	ft_exe_extern(char *path, char **av, char **env);
+int		ft_cal_pipe_exit_status(int n, int flag);
 
 #endif

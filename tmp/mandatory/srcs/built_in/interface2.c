@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:28:34 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 05:33:26 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,18 @@ int	ft_env(t_lst *ev)
 	return (0);
 }
 
-int	ft_exit(char **av)
+int	ft_exit(char **av, int is_forked)
 {
 	int		num;
 
 	num = g_status;
 	if (*av != NULL)
 	{
-		num = ft_av_exit(*av);
+		num = ft_av_exit(*av, is_forked);
 		if (*(av + 1) != NULL)
 			return (ft_error(F_ERROR_ARG, F_EXIT_STATUS_BUILTIN));
 	}
-	ft_putstr_fd("exit\n", 1);
+	if (!is_forked)
+		ft_putstr_fd("exit\n", 1);
 	exit(num);
 }

@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/20 16:57:48 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:29:21 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 07:10:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern int	g_status;
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	printf("\n");
+	ft_putstr_fd("\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -27,7 +27,7 @@ void	sigint_handler(int sig)
 void	heredoc_signal_handler(int sig)
 {
 	(void)sig;
-	printf("\n");
+	ft_putstr_fd("\n", 1);
 	exit(1);
 }
 
@@ -39,10 +39,8 @@ int	cal_flag(int ret_val)
 		return (1);
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
-	if (ret_val == 2)
-		printf("\n");
 	if (ret_val == 3)
-		printf("Quit: %d\n", ret_val);
+		ft_putstr_fd("Quit: 3\n", 1);
 	return (ret_val + 128);
 }
 

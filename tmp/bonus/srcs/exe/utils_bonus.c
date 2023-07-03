@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 05:20:12 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 07:12:04 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,27 @@ void	ft_exe_extern(char *path, char **av, char **env)
 			path += (i + 1);
 	}
 	exit(ft_error(F_ERROR_EXE, F_EXIT_STATUS_EXE));
+}
+
+int	ft_cal_pipe_exit_status(int n, int flag)
+{
+	pid_t	pid;
+	pid_t	pid_tmp;
+	int		is_sigint;
+	int		ret;
+
+	pid = 0;
+	while (n--)
+	{
+		pid_tmp = waitpid(-1, &flag, 0);
+		is_sigint = (flag == 2);
+		if (pid_tmp > pid)
+		{
+			pid = pid_tmp;
+			ret = flag;
+		}
+	}
+	if (is_sigint)
+		ft_putstr_fd("\n", 1);
+	return (cal_flag(ret));
 }

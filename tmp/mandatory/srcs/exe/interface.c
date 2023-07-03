@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:28:44 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 07:11:23 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	ft_redirection(t_token *token, t_lst *redir)
 	return (0);
 }
 
-int	ft_built_in_cmd(char **argv, t_lst *ev)
+int	ft_built_in_cmd(char **argv, t_lst *ev, int is_forked)
 {
 	int		flag;
 
@@ -41,7 +41,7 @@ int	ft_built_in_cmd(char **argv, t_lst *ev)
 	else if (ft_strcmp(argv[0], "env") == 0)
 		flag = ft_env(ev);
 	else if (ft_strcmp(argv[0], "exit") == 0)
-		flag = ft_exit(argv + 1);
+		flag = ft_exit(argv + 1, is_forked);
 	return (flag);
 }
 
@@ -65,8 +65,9 @@ int	ft_extern_cmd(char **av, char **env, t_lst *ev, int is_forked)
 			return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
 		else if (pid == 0)
 			ft_exe_extern(target, av, env);
-		else
-			waitpid(-1, &flag, 0);
+		waitpid(-1, &flag, 0);
+		if (flag == 2)
+			ft_putstr_fd("\n", 1);
 	}
 	else
 		ft_exe_extern(target, av, env);
@@ -90,7 +91,7 @@ static int	ft_exe_help(t_token *data, t_lst *ev, t_lst *tv, int is_forked)
 		fd_tmp[0] = dup(0);
 		fd_tmp[1] = dup(1);
 		ft_dup2(data->fd, tv);
-		flag = ft_built_in_cmd(av, ev);
+		flag = ft_built_in_cmd(av, ev, is_forked);
 		if (flag == F_STATUS_NO_BUILTIN)
 			flag = ft_extern_cmd(av, env, ev, is_forked);
 		ft_argv_free(av);
@@ -106,7 +107,6 @@ int	ft_exe(t_lst *tv, t_lst *ev)
 {
 	pid_t	pid;
 	int		n;
-	int		flag;
 
 	n = ft_lst_size(tv);
 	if (n == 1)
@@ -124,7 +124,5 @@ int	ft_exe(t_lst *tv, t_lst *ev)
 		ft_close(((t_token *)tv->data)->fd, NULL);
 		tv = tv->nxt;
 	}
-	while (n--)
-		waitpid(-1, &flag, 0);
-	return (cal_flag(flag));
+	return (ft_cal_pipe_exit_status(n, 0));
 }
