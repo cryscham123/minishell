@@ -12,14 +12,14 @@
 
 #include "minishell.h"
 
-static char	*ft_trans_ev_help(char **s, t_lst *ev)
+static char	*ft_trans_ev_help(char **s, t_lst *ev, int flag)
 {
 	t_lst	*to_find;
 	char	*target;
 	char	tmp;
 	int		i;
 
-	if (*(*s + 1) == '\'' || *(*s + 1) == '\"')
+	if (flag == 0 && (*(*s + 1) == '\'' || *(*s + 1) == '\"'))
 		return (NULL);
 	(*s)++;
 	i = 0;
@@ -49,7 +49,7 @@ static char	*ft_trans_ev(char *s, t_lst *ev, char *ret)
 		if (*s == '\"' && flag != F_QUOTE)
 			flag ^= F_DQUOTE;
 		if (flag != F_QUOTE && *s == '$' && *(s + 1) != '?')
-			tmp = ft_append(ret, ft_trans_ev_help(&s, ev), 0);
+			tmp = ft_append(ret, ft_trans_ev_help(&s, ev, flag), 0);
 		else if (flag != F_QUOTE && *s == '$')
 			tmp = ft_trans_ev_help2(&s, ret);
 		else
