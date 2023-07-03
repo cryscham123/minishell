@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:31:13 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 02:16:21 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define F_DEL 128
 # define F_NO_TRANS 256
 # define F_NO_PARSE 512
+# define F_WILD 1024
 # define F_DATA_CHAR 1
 # define F_DATA_TOKEN 2
 # define F_EXIT_STATUS_FLAG -1
@@ -96,7 +97,7 @@ int		ft_strlen(char *s);
 char	*ft_substr(char *s, int n);
 char	*ft_append(char *s1, char *s2, char middle);
 char	*ft_itoa(int a, int cnt);
-t_lst	*mk_str_node(char *s, int info);
+t_lst	*mk_str_node(char *s, int info, int del_quote);
 t_lst	*mk_ev(char **env);
 t_lst	*ft_env_find(t_lst *ev, char *s);
 char	*ft_env_find_lst(t_lst *ev, t_lst *to_find);

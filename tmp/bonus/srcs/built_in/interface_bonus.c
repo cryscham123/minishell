@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:32:22 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 02:15:38 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_export(char **av, t_lst *ev)
 		flag = ft_av_validate_ev(*av);
 		if (flag == 0)
 		{
-			to_push = mk_str_node(*av, ft_str_find(*av, '='));
+			to_push = mk_str_node(*av, ft_str_find(*av, '='), 0);
 			if (to_push == NULL)
 				return (1);
 			ft_unset_unit(*av, ev, flag);

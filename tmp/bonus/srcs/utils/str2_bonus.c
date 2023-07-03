@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:35:50 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 02:15:01 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,15 @@ char	**mk_argv(t_lst *lst)
 	return (target);
 }
 
-t_lst	*mk_str_node(char *s, int info)
+t_lst	*mk_str_node(char *s, int info, int del_quote)
 {
 	t_lst	*ret;
 	char	*tmp;
 
-	tmp = ft_substr(s, -1);
+	if (del_quote)
+		tmp = ft_delete_quote(s, &info);
+	else
+		tmp = ft_substr(s, -1);
 	if (tmp == NULL)
 		return (NULL);
 	ret = mk_lst(tmp, F_DATA_CHAR, info);
@@ -83,6 +86,32 @@ t_lst	*mk_str_node(char *s, int info)
 	{
 		free(tmp);
 		return (NULL);
+	}
+	return (ret);
+}
+
+char	*ft_delete_quote(char *data, int *info)
+{
+	char	*ret;
+	int		i;
+	int		flag;
+
+	i = 0;
+	flag = 0;
+	ret = ft_calloc(ft_strlen(data) + 1);
+	if (ret == NULL)
+		return (NULL);
+	while (*data)
+	{
+		if (*data == '\'' && flag != F_DQUOTE)
+			flag ^= F_QUOTE;
+		else if (*data == '\"' && flag != F_QUOTE)
+			flag ^= F_DQUOTE;
+		else
+			ret[i++] = *data;
+		if (info != NULL && *info == F_DEL && flag != 0)
+			(*info) |= F_NO_TRANS;
+		data++;
 	}
 	return (ret);
 }
