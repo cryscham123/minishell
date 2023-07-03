@@ -19,6 +19,8 @@ static char	*ft_trans_ev_help(char **s, t_lst *ev)
 	char	tmp;
 	int		i;
 
+	if (*(*s + 1) == '\'' || *(*s + 1) == '\"')
+		return (NULL);
 	(*s)++;
 	i = 0;
 	while ((*s)[i] && ft_str_find("| \t><$\'\"=*", (*s)[i]) == -1)

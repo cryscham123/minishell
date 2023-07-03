@@ -12,54 +12,6 @@
 
 #include "built_in.h"
 
-static char	**ft_av_env_help(char ***av, t_lst *ev)
-{
-	int		i;
-	t_lst	*to_push;
-	char	**env;
-
-	while (**av != NULL)
-	{
-		i = ft_str_find(**av, '=');
-		if (i == -1)
-			break ;
-		ft_unset_unit(**av, ev, 0);
-		to_push = mk_lst(**av, F_DATA_CHAR, i);
-		if (to_push == NULL)
-			return (NULL);
-		lst_push(&ev, to_push);
-		(*av)++;
-	}
-	env = mk_argv(ev->nxt);
-	return (env);
-}
-
-int	ft_av_env(char **av, t_lst *ev)
-{
-	pid_t	pid;
-	char	**env;
-	int		flag;
-
-	flag = 0;
-	ft_signal(SIG_IGN, SIG_IGN, 0);
-	pid = fork();
-	if (pid < 0)
-		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
-	else if (pid == 0)
-	{
-		env = ft_av_env_help(&av, ev);
-		if (env == NULL)
-			exit(F_EXIT_STATUS_MEM);
-		if (*av == NULL)
-			exit(ft_env(NULL, env, NULL));
-		else
-			ft_extern_cmd(av, env, ev, 1);
-	}
-	else
-		waitpid(-1, &flag, 0);
-	return (flag);
-}
-
 int	ft_av_exit(char *data)
 {
 	long long	res;

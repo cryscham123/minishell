@@ -23,7 +23,7 @@ static int	ft_redirection(t_token *token, t_lst *redir)
 	return (0);
 }
 
-int	ft_built_in_cmd(char **argv, char **env, t_lst *ev)
+int	ft_built_in_cmd(char **argv, t_lst *ev)
 {
 	int		flag;
 
@@ -39,7 +39,7 @@ int	ft_built_in_cmd(char **argv, char **env, t_lst *ev)
 	else if (ft_strcmp(argv[0], "unset") == 0)
 		flag = ft_unset(argv + 1, ev);
 	else if (ft_strcmp(argv[0], "env") == 0)
-		flag = ft_env(argv + 1, env, ev);
+		flag = ft_env(ev);
 	else if (ft_strcmp(argv[0], "exit") == 0)
 		flag = ft_exit(argv + 1);
 	return (flag);
@@ -90,7 +90,7 @@ static int	ft_exe_help(t_token *data, t_lst *ev, t_lst *tv, int is_forked)
 		fd_tmp[0] = dup(0);
 		fd_tmp[1] = dup(1);
 		ft_dup2(data->fd, tv);
-		flag = ft_built_in_cmd(av, env, ev);
+		flag = ft_built_in_cmd(av, ev);
 		if (flag == F_STATUS_NO_BUILTIN)
 			flag = ft_extern_cmd(av, env, ev, is_forked);
 		ft_argv_free(av);

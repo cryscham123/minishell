@@ -14,15 +14,14 @@
 
 extern int	g_status;
 
-int	ft_env(char **av, char **env, t_lst *ev)
+int	ft_env(t_lst *ev)
 {
-	if (av != NULL && *av != NULL)
-		return (ft_av_env(av, ev));
-	while (*env != NULL)
+	ev = ev->nxt;
+	while (ev != NULL)
 	{
-		ft_putstr_fd(*env, 1);
+		ft_putstr_fd(ev->data, 1);
 		ft_putstr_fd("\n", 1);
-		env++;
+		ev = ev->nxt;
 	}
 	return (0);
 }

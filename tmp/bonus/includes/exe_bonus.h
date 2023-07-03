@@ -13,7 +13,8 @@
 #ifndef EXE_BONUS_H
 # define EXE_BONUS_H
 
-# include "minishell.h"
+# include "minishell_bonus.h"
+
 # define F_STATUS_NO_BUILTIN -3
 # define F_EXIT_STATUS_ACCESS 126
 # define F_EXIT_STATUS_EXE 127
