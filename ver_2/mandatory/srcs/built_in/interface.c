@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 02:15:46 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:11:59 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,11 @@ int	ft_cd(char **av, t_lst *ev)
 	flag = ft_av_validate_dir(av);
 	if (flag != 0)
 		return (1);
-	if (ft_set_ev_pwd("OLDPWD", ev) != 0)
-		return (1);
+	flag = ft_set_ev_pwd("OLDPWD", ev);
 	chdir(*av);
-	if (ft_set_ev_pwd("PWD", ev) != 0)
-		return (1);
-	return (0);
+	if (flag == 0)
+		flag = ft_set_ev_pwd("PWD", ev);
+	return (flag);
 }
 
 int	ft_pwd(void)

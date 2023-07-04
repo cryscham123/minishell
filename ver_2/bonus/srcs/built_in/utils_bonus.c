@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/17 17:28:20 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:32:21 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:11:48 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,8 @@ int	ft_set_ev_pwd(char *key, t_lst *ev)
 	t_lst	*to_push;
 
 	pwd = getcwd(NULL, 0);
-	if (pwd == NULL && ft_strcmp("PWD", key) == 0)
-		ft_error(F_ERROR_FILE, 0);
 	if (pwd == NULL)
-		return (0);
+		return (ft_error(F_ERROR_FILE, F_EXIT_STATUS_FILE));
 	target = ft_append(key, pwd, '=');
 	free(pwd);
 	if (target == NULL)

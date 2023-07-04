@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:29:12 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/04 09:09:14 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_lst	*ft_split_space(char *s)
 	target = NULL;
 	while (*s)
 	{
-		data = ft_word_chk(&s, " \t");
+		data = ft_word_chk(&s, " \t\n");
 		if (data == NULL)
 			return (ft_lst_free(target));
 		to_push = mk_lst(data, F_DATA_CHAR, 0);
@@ -85,7 +85,7 @@ t_lst	*ft_split_space(char *s)
 			return (ft_lst_free(target));
 		}
 		lst_push(&target, to_push);
-		while (*s && (*s == ' ' || *s == '\t'))
+		while (*s && (*s == ' ' || *s == '\t' || *s == '\n'))
 			s++;
 	}
 	return (target);
