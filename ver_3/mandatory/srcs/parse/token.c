@@ -14,61 +14,45 @@
 
 extern int	g_status;
 
-static void	ft_inject_token(t_token *target, t_lst *to_push)
+static t_token	*mk_token_node(t_lst **splitted, t_lst *ev, t_token *ret)
 {
-	while (to_push != NULL)
-	{
-		if (to_push->info == 0)
-			lst_push(&target->argv, to_push);
-		else
-			lst_push(&target->redir, to_push);
-		to_push = to_push->nxt;
-		if (to_push != NULL && to_push->prev != NULL)
-		{
-			to_push->prev->nxt = NULL;
-			to_push->prev = NULL;
-		}
-	}
-}
-
-static t_token	*mk_token_node(t_lst **piped, int *flag, t_lst *ev)
-{
-	t_token	*ret;
 	t_lst	*tmp;
-	t_lst	*to_push;
 
 	ret = ft_calloc(sizeof(t_token));
 	if (ret == NULL)
 		return (NULL);
 	ret->fd[1] = 1;
-	tmp = *piped;
-	tmp->info = 0;
-	while (tmp != NULL && tmp->info != F_PIPE)
+	tmp = *splitted;
+	tmp->info &= ~F_PIPE;
+	while (tmp != NULL && (tmp->info & F_PIPE) == 0)
 	{
-		to_push = NULL;
-		if (ft_split(tmp->data, "><", flag, &to_push) != 0)
-			return (ft_node_free(ret, F_DATA_TOKEN, 0));
-		ft_inject_token(ret, to_push);
+		if (tmp->info == 0)
+			lst_push(&ret->argv, tmp);
+		else
+			lst_push(&ret->redir, tmp);
 		tmp = tmp->nxt;
+		if (tmp != NULL && tmp->prev != NULL)
+		{
+			tmp->prev->nxt = NULL;
+			tmp->prev = NULL;
+		}
 	}
-	if (*flag != 0)
-		ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX);
-	if (*flag != 0 || ft_expansion(ret, ev) != 0)
+	if (ft_expansion(ret, ev) != 0)
 		return (ft_node_free(ret, F_DATA_TOKEN, 0));
-	*piped = tmp;
+	*splitted = tmp;
 	return (ret);
 }
 
-static t_lst	*mk_token_lst_help(t_lst *piped, t_lst *ev, int flag)
+static t_lst	*mk_token_lst_help(t_lst *splitted, t_lst *ev)
 {
 	t_lst	*ret;
 	t_lst	*to_push;
 	t_token	*token;
 
 	ret = NULL;
-	while (piped != NULL)
+	while (splitted != NULL)
 	{
-		token = mk_token_node(&piped, &flag, ev);
+		token = mk_token_node(&splitted, ev, NULL);
 		if (token == NULL)
 			return (ft_lst_free(ret));
 		to_push = mk_lst(token, F_DATA_TOKEN, 0);
@@ -79,11 +63,6 @@ static t_lst	*mk_token_lst_help(t_lst *piped, t_lst *ev, int flag)
 		}
 		lst_push(&ret, to_push);
 	}
-	if (flag != 0)
-	{
-		ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX);
-		return (ft_lst_free(ret));
-	}
 	return (ret);
 }
 
@@ -91,25 +70,24 @@ t_lst	*mk_token_lst(t_lst *target, t_lst *ev)
 {
 	int		flag;
 	t_lst	*ret;
-	t_lst	*piped;
+	t_lst	*splitted;
 	t_lst	*to_push;
 
-	piped = NULL;
+	splitted = NULL;
 	flag = F_PIPE;
 	while (target != NULL)
 	{
 		to_push = NULL;
-		if (ft_split(target->data, "|", &flag, &to_push) != 0)
-			return (ft_lst_free(piped));
-		lst_push(&piped, to_push);
+		if (ft_split(target->data, "|><", &flag, &to_push) != 0)
+			return (ft_lst_free(splitted));
+		lst_push(&splitted, to_push);
 		target = target->nxt;
 	}
 	if (flag != 0)
 	{
 		ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX);
-		return (ft_lst_free(piped));
+		return (ft_lst_free(splitted));
 	}
-	ret = mk_token_lst_help(piped, ev, 0);
-	ft_lst_free(piped);
+	ret = mk_token_lst_help(splitted, ev);
 	return (ret);
 }

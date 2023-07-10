@@ -94,7 +94,7 @@ bonus:
 	@make WITH_BONUS=1 all
 
 $(NAME): $(OBJ_FILE)
-	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS) $(DEBUG_FLAGS)
+	$(CC) -o $@ $^ $(LDFLAGS) $(LIBS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE) $(DEBUG_FLAGS)
+	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDE)

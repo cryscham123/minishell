@@ -37,7 +37,7 @@ t_lst	*ft_trans_dollar(char **s, t_lst *ev, int flag)
 		return (NULL);
 	(*s)++;
 	i = 0;
-	while ((*s)[i] && ft_str_find("&| \t><$\'\"=*", (*s)[i]) == -1)
+	while ((*s)[i] && ft_str_find("()&| \t><$\'\"=*", (*s)[i]) == -1)
 		i++;
 	tmp = (*s)[i];
 	(*s)[i] = '\0';

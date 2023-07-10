@@ -25,7 +25,7 @@ static void	ft_parse_heredoc_env(int fd, char **to_read, t_lst *ev)
 	(*to_read)++;
 	while ((*to_read)[i])
 	{
-		if (ft_str_find("| \t><$\'\"*", (*to_read)[i]) != -1)
+		if (ft_str_find("()|& \t><$\'\"*", (*to_read)[i]) != -1)
 			break ;
 		i++;
 	}

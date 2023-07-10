@@ -14,27 +14,18 @@
 
 int	ft_flag_chk(char **s, int *flag)
 {
-	if (*flag != 0)
-	{
-		*flag = 0;
+	if (**s == '|' && *flag == 0)
+		*flag |= F_PIPE;
+	else if (**s == '>' && *(*s + 1) == '>' && ((*flag) & ~F_PIPE) == 0)
+		*flag |= F_APPEND;
+	else if (**s == '>' && ((*flag) & ~F_PIPE) == 0)
+		*flag |= F_OUTPUT;
+	else if (**s == '<' && *(*s + 1) == '<' && ((*flag) & ~F_PIPE) == 0)
+		*flag |= F_DEL;
+	else if (**s == '<' && ((*flag) & ~F_PIPE) == 0)
+		*flag |= F_INPUT;
+	else
 		return (ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX));
-	}
-	if (**s == '|')
-		*flag = F_PIPE;
-	if (**s == '>')
-	{
-		if (*(*s + 1) == '>')
-			*flag = F_APPEND;
-		else
-			*flag = F_OUTPUT;
-	}
-	if (**s == '<')
-	{
-		if (*(*s + 1) == '<')
-			*flag = F_DEL;
-		else
-			*flag = F_INPUT;
-	}
-	(*s) += 1 + (*flag == F_APPEND || *flag == F_DEL);
+	(*s) += 1 + (((*flag) & F_APPEND) || ((*flag) & F_DEL));
 	return (0);
 }
