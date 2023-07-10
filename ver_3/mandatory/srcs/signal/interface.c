@@ -17,7 +17,7 @@ extern int	g_status;
 void	sigint_handler(int sig)
 {
 	(void)sig;
-	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("\n", 2);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
@@ -27,7 +27,7 @@ void	sigint_handler(int sig)
 void	heredoc_signal_handler(int sig)
 {
 	(void)sig;
-	ft_putstr_fd("\n", 1);
+	ft_putstr_fd("\n", 2);
 	exit(1);
 }
 
@@ -40,7 +40,7 @@ int	cal_flag(int ret_val)
 	if (WIFEXITED(ret_val))
 		return (WEXITSTATUS(ret_val));
 	if (ret_val == 3)
-		ft_putstr_fd("Quit: 3\n", 1);
+		ft_putstr_fd("Quit: 3\n", 2);
 	return (ret_val + 128);
 }
 

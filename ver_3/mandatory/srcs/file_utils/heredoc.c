@@ -51,7 +51,7 @@ static void	parse_heredoc(int fd, char *del, int mode, t_lst *ev)
 		ft_signal(heredoc_signal_handler, SIG_IGN, 0);
 		target = readline("\e[34mheredoc>\e[0m \e[s");
 		if (target == NULL)
-			ft_putstr_fd("\e[u\e[B\e[A", 1);
+			ft_putstr_fd("\e[u\e[B\e[A", 2);
 		if (target == NULL || ft_strcmp(del, target) == 0)
 			break ;
 		tmp = target;

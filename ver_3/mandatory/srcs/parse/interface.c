@@ -41,7 +41,7 @@ void	ft_parse(t_lst *ev)
 	line = readline("\e[95mminishell$\e[0m \e[s");
 	if (line == NULL)
 	{
-		ft_putstr_fd("\e[u\e[B\e[Aexit\n", 1);
+		ft_putstr_fd("\e[u\e[B\e[Aexit\n", 2);
 		exit(0);
 	}
 	if (*line)
