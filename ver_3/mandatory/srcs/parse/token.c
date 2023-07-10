@@ -51,7 +51,9 @@ static t_token	*mk_token_node(t_lst **piped, int *flag, t_lst *ev)
 		ft_inject_token(ret, to_push);
 		tmp = tmp->nxt;
 	}
-	if (ft_expansion(ret, ev) != 0)
+	if (*flag != 0)
+		ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX);
+	if (*flag != 0 || ft_expansion(ret, ev) != 0)
 		return (ft_node_free(ret, F_DATA_TOKEN, 0));
 	*piped = tmp;
 	return (ret);
