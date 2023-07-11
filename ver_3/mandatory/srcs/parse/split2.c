@@ -6,7 +6,7 @@
 /*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 09:42:12 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/11 09:42:15 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:09:31 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ int	ft_flag_chk(char **s, int *flag)
 	else if (**s == '|' && *flag == 0)
 		*flag |= F_PIPE;
 	else if (**s == '&' && *(*s + 1) == '&' && *flag == 0)
-		*flag |= F_PIPE;
-	else if (**s == '&')
-		return (0);
+		*flag |= F_AND;
 	else if (**s == '>' && *(*s + 1) == '>' && ((*flag) & ~link_flag) == 0)
 		*flag |= F_APPEND;
 	else if (**s == '>' && ((*flag) & ~link_flag) == 0)

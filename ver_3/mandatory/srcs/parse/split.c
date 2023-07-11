@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:22 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/11 09:42:54 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:09:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ int	ft_split(char *s, char *meta, int *flag, t_lst **target)
 	{
 		if (ft_str_find(meta, *s) != -1 && ft_flag_chk(&s, flag) != 0)
 			return (1);
-		if (*s != '\0' && (*flag == 0 || ft_str_find(meta, *s) == -1))
+		if (*s != '\0' && ft_str_find(meta, *s) == -1)
 		{
 			data = ft_word_chk(&s, meta);
 			if (data == NULL)

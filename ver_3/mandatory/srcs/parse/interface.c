@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 02:16:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:29:07 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:32:12 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_lst	*mk_command(char *line, t_lst *ev)
 	target = ft_split_space(line);
 	if (target == NULL)
 		return (NULL);
-	ret = mk_token_lst(target, ev);
+	ret = mk_cmd_compounds(target, ev);
 	ft_lst_free(target);
 	return (ret);
 }

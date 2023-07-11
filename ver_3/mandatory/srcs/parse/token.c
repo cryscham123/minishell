@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 22:01:29 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:29:16 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:32:36 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static t_token	*mk_token_node(t_lst **splitted, t_lst *ev, t_token *ret)
 		return (NULL);
 	ret->fd[1] = 1;
 	tmp = *splitted;
-	tmp->info &= ~F_PIPE;
-	while (tmp != NULL && (tmp->info & F_PIPE) == 0)
+	tmp->info &= ~(F_PIPE + F_OR + F_AND);
+	while (tmp != NULL && (tmp->info & (F_PIPE + F_OR + F_AND)) == 0)
 	{
 		if (tmp->info == 0)
 			lst_push(&ret->argv, tmp);
@@ -66,7 +66,7 @@ static t_lst	*mk_token_lst_help(t_lst *splitted, t_lst *ev)
 	return (ret);
 }
 
-t_lst	*mk_token_lst(t_lst *target, t_lst *ev)
+t_lst	*mk_cmd_compounds(t_lst *target, t_lst *ev)
 {
 	int		flag;
 	t_lst	*ret;
@@ -78,7 +78,7 @@ t_lst	*mk_token_lst(t_lst *target, t_lst *ev)
 	while (target != NULL)
 	{
 		to_push = NULL;
-		if (ft_split(target->data, "|><", &flag, &to_push) != 0)
+		if (ft_split(target->data, "|&><", &flag, &to_push) != 0)
 			return (ft_lst_free(splitted));
 		lst_push(&splitted, to_push);
 		target = target->nxt;

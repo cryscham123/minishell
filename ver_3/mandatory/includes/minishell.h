@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 07:05:47 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/11 09:10:48 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:32:38 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ t_lst	*mk_ev(char **env);
 t_lst	*ft_env_find(t_lst *ev, char *s);
 char	*ft_env_find_lst(t_lst *ev, t_lst *to_find);
 void	ft_parse(t_lst *ev);
-t_lst	*mk_token_lst(t_lst *target, t_lst *ev);
+t_lst	*mk_cmd_compounds(t_lst *target, t_lst *ev);
 int		ft_split(char *s, char *meta, int *flag, t_lst **target);
 int		ft_flag_chk(char **s, int *flag);
 t_lst	*ft_split_space(char *s);
