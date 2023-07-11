@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expansion.c                                        :+:      :+:    :+:   */
+/*   split2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: hyunghki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 22:01:29 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/04 02:13:14 by hyunghki         ###   ########.fr       */
+/*   Created: 2023/07/11 09:42:12 by hyunghki          #+#    #+#             */
+/*   Updated: 2023/07/11 09:42:15 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,14 @@ int	ft_flag_chk(char **s, int *flag)
 	int	link_flag;
 
 	link_flag = F_PIPE + F_OR + F_AND;
-	if (**s == '|' && *flag == 0)
+	if (**s == '|' && *(*s + 1) == '|' && *flag == 0)
+		*flag |= F_OR;
+	else if (**s == '|' && *flag == 0)
 		*flag |= F_PIPE;
+	else if (**s == '&' && *(*s + 1) == '&' && *flag == 0)
+		*flag |= F_PIPE;
+	else if (**s == '&')
+		return (0);
 	else if (**s == '>' && *(*s + 1) == '>' && ((*flag) & ~link_flag) == 0)
 		*flag |= F_APPEND;
 	else if (**s == '>' && ((*flag) & ~link_flag) == 0)
@@ -29,6 +35,6 @@ int	ft_flag_chk(char **s, int *flag)
 		*flag |= F_INPUT;
 	else
 		return (ft_error(F_ERROR_SYNTAX, F_EXIT_STATUS_SYNTAX));
-	(*s) += 1 + (((*flag) & F_APPEND) || ((*flag) & F_DEL));
+	(*s) += 1 + (**s == *(*s + 1));
 	return (0);
 }

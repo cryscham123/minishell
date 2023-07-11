@@ -6,7 +6,7 @@
 /*   By: hyunghki <hyunghki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/16 14:09:31 by hyunghki          #+#    #+#             */
-/*   Updated: 2023/07/03 04:28:56 by hyunghki         ###   ########.fr       */
+/*   Updated: 2023/07/11 17:49:46 by hyunghki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,16 +56,11 @@ int	ft_pipe(t_lst *tv)
 {
 	int	fd_tmp[2];
 
-	while (tv != NULL)
-	{
-		if (tv->nxt != NULL)
-		{
-			if (pipe(fd_tmp) < 0)
-				return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
-			((t_token *)tv->data)->fd[1] = fd_tmp[1];
-			((t_token *)tv->nxt->data)->fd[0] = fd_tmp[0];
-		}
-		tv = tv->nxt;
-	}
+	if (tv->nxt == NULL)
+		return (0);
+	if (pipe(fd_tmp) < 0)
+		return (ft_error(F_ERROR_MEM, F_EXIT_STATUS_MEM));
+	((t_token *)tv->data)->fd[1] = fd_tmp[1];
+	((t_token *)tv->nxt->data)->fd[0] = fd_tmp[0];
 	return (0);
 }
